@@ -3,11 +3,11 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Eric Vaz — Full Professor · Geography &amp; Environmental Studies</title>
-<meta name="description" content="Dr. Eric Vaz — Full Professor of Geography and Environmental Studies at Toronto Metropolitan University. Research in spatial analysis, GIScience, regional science, and applied machine learning. Seven Springer monographs and 90+ peer-reviewed publications." />
+<title>Eric Vaz — Spatial Intelligence for Real Estate, Markets & Regional Risk</title>
+<meta name="description" content="Dr. Eric Vaz — Full Professor at Toronto Metropolitan University and a leading voice in applied spatial analysis. Two decades of work on real estate valuation, market geography, regional risk, and location intelligence. Seven Springer monographs and 90+ peer-reviewed publications." />
 <meta name="author" content="Eric Vaz" />
-<meta property="og:title" content="Eric Vaz — Full Professor, Geography &amp; Environmental Studies" />
-<meta property="og:description" content="Scholar of spatial analysis, GIScience, and regional science. Seven Springer monographs and 90+ peer-reviewed publications. Based in Toronto." />
+<meta property="og:title" content="Eric Vaz — Spatial Intelligence &amp; Location Analytics" />
+<meta property="og:description" content="Real estate analytics, market geography, regional risk, and applied machine learning. Full Professor, Toronto Metropolitan University. Seven Springer monographs and 90+ peer-reviewed publications." />
 <meta property="og:type" content="profile" />
 <meta property="og:url" content="https://ericvaz.com" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -80,20 +80,29 @@
     justify-content: space-between;
     align-items: center;
     backdrop-filter: blur(14px);
-    background: rgba(10, 22, 40, 0.72);
-    border-bottom: 1px solid var(--line-soft);
-    transition: padding 0.3s ease;
+    background: rgba(245, 241, 232, 0.7);
+    border-bottom: 1px solid rgba(10, 22, 40, 0.08);
+    transition: padding 0.3s ease, background 0.3s ease, border-color 0.3s ease;
   }
-  nav.scrolled { padding: 14px 56px; }
+  nav.scrolled {
+    padding: 14px 56px;
+    background: rgba(10, 22, 40, 0.78);
+    border-bottom-color: var(--line-soft);
+  }
+  nav.scrolled .nav-logo { color: var(--ivory); }
+  nav.scrolled .nav-links a { color: var(--text-muted); }
+  nav.scrolled .nav-links a:hover { color: var(--gold); }
   .nav-logo {
     font-family: 'Cormorant Garamond', serif;
     font-size: 22px;
     font-weight: 500;
     letter-spacing: 0.18em;
-    color: var(--ivory);
+    color: var(--navy-deep);
     text-decoration: none;
+    transition: color 0.3s ease;
   }
-  .nav-logo .dot { color: var(--gold); margin: 0 8px; }
+  .nav-logo .dot { color: var(--gold-deep, #8a6f1f); margin: 0 8px; }
+  nav.scrolled .nav-logo .dot { color: var(--gold); }
   .nav-links {
     display: flex;
     gap: 28px;
@@ -101,15 +110,17 @@
     list-style: none;
   }
   .nav-links a {
-    color: var(--text-muted);
+    color: var(--navy-deep);
+    opacity: 0.72;
     text-decoration: none;
     font-size: 11.5px;
-    font-weight: 400;
+    font-weight: 500;
     letter-spacing: 0.15em;
     text-transform: uppercase;
-    transition: color 0.25s ease;
+    transition: color 0.25s ease, opacity 0.25s ease;
   }
-  .nav-links a:hover { color: var(--gold); }
+  .nav-links a:hover { color: var(--gold-deep, #8a6f1f); opacity: 1; }
+  nav.scrolled .nav-links a { opacity: 1; font-weight: 400; }
 
   .hero {
     min-height: 100vh;
@@ -217,6 +228,75 @@
   .hero-meta-item a:hover {
     color: var(--gold);
     border-bottom-color: var(--gold);
+  }
+
+  /* Hero split layout — text + portrait */
+  .hero {
+    background: var(--ivory);
+    color: var(--navy-deep);
+  }
+  .hero::before {
+    background-image:
+      linear-gradient(rgba(10, 22, 40, 0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(10, 22, 40, 0.04) 1px, transparent 1px);
+  }
+  .hero::after { display: none; }
+  .hero-eyebrow span { color: var(--navy-deep); opacity: 0.55; }
+  .hero-eyebrow .bar { background: var(--gold-deep, #8a6f1f); opacity: 0.9; }
+  .hero h1.hero-title { color: var(--navy-deep); }
+  .hero-role { color: var(--gold-deep, #8a6f1f); }
+  .hero-lede { color: var(--navy-deep); opacity: 0.78; }
+  .hero-meta { border-top-color: rgba(10, 22, 40, 0.16); }
+  .hero-meta-item strong { color: var(--navy-deep); opacity: 0.5; }
+  .hero-meta-item { color: var(--navy-deep); opacity: 0.85; }
+  .hero-meta-item a { color: var(--navy-deep); border-bottom-color: rgba(10, 22, 40, 0.25); }
+  .hero-meta-item a:hover { color: var(--gold-deep, #8a6f1f); border-bottom-color: var(--gold-deep, #8a6f1f); }
+
+  .hero-split {
+    display: grid;
+    grid-template-columns: 1.45fr 1fr;
+    gap: 80px;
+    align-items: center;
+  }
+  .hero-text { min-width: 0; }
+  .hero-portrait-wrap {
+    position: relative;
+    opacity: 0;
+    animation: fadeUp 1.1s 0.6s forwards;
+  }
+  .hero-portrait-frame {
+    position: relative;
+    aspect-ratio: 4 / 5;
+    overflow: hidden;
+    background: transparent;
+  }
+  .hero-portrait-frame img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center 18%;
+    transition: transform 1.6s cubic-bezier(0.2, 0.6, 0.2, 1);
+  }
+  .hero-portrait-frame:hover img { transform: scale(1.025); }
+  .hero-portrait-tag { display: none; }
+  .hero-portrait-caption {
+    margin-top: 18px;
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 14px;
+    color: var(--navy-deep);
+    opacity: 0.6;
+    text-align: right;
+    letter-spacing: 0.02em;
+  }
+  .hero-portrait-caption span {
+    color: var(--gold-deep, #8a6f1f);
+    font-style: normal;
+    letter-spacing: 0.18em;
+    font-size: 10px;
+    text-transform: uppercase;
+    margin-right: 8px;
+    opacity: 1;
   }
 
   section {
@@ -509,6 +589,280 @@
     font-weight: 300;
   }
 
+  /* Practice */
+  .practice-intro {
+    max-width: 760px;
+    font-size: 17px;
+    line-height: 1.7;
+    color: var(--text-muted);
+    margin-bottom: 56px;
+    font-weight: 300;
+  }
+  .practice-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: var(--line-soft);
+    border: 1px solid var(--line-soft);
+    margin-bottom: 64px;
+  }
+  .practice-card {
+    background: var(--navy-deep);
+    padding: 44px 38px 40px;
+    transition: background 0.3s ease;
+  }
+  .practice-card:hover { background: var(--navy); }
+  .practice-card-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10.5px;
+    letter-spacing: 0.28em;
+    color: var(--gold);
+    margin-bottom: 22px;
+  }
+  .practice-card h3 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 26px;
+    font-weight: 500;
+    line-height: 1.2;
+    color: var(--ivory);
+    margin-bottom: 16px;
+    letter-spacing: -0.01em;
+  }
+  .practice-card h3 em {
+    font-style: italic;
+    color: var(--gold);
+  }
+  .practice-card p {
+    font-size: 15px;
+    line-height: 1.7;
+    color: var(--text-muted);
+    font-weight: 300;
+  }
+  .practice-card ul {
+    list-style: none;
+    margin-top: 18px;
+    padding: 0;
+  }
+  .practice-card ul li {
+    font-size: 13.5px;
+    line-height: 1.55;
+    color: var(--text-dim);
+    padding: 8px 0;
+    border-top: 1px solid var(--line-soft);
+    font-weight: 300;
+  }
+  .practice-card ul li:first-child { border-top: none; }
+
+  .practice-feature {
+    display: grid;
+    grid-template-columns: 0.85fr 1.15fr;
+    gap: 56px;
+    align-items: stretch;
+    padding: 56px 48px;
+    background: linear-gradient(180deg, var(--navy) 0%, var(--navy-deep) 100%);
+    border: 1px solid var(--line);
+    position: relative;
+  }
+  .practice-feature::before {
+    content: '';
+    position: absolute;
+    top: -1px;
+    left: -1px;
+    width: 56px;
+    height: 1px;
+    background: var(--gold);
+  }
+  .practice-feature-eyebrow {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10.5px;
+    letter-spacing: 0.28em;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-bottom: 18px;
+  }
+  .practice-feature h3 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 38px;
+    font-weight: 400;
+    line-height: 1.1;
+    color: var(--ivory);
+    margin-bottom: 14px;
+    letter-spacing: -0.015em;
+  }
+  .practice-feature h3 em { font-style: italic; color: var(--gold); }
+  .practice-feature .lede {
+    font-size: 16px;
+    line-height: 1.7;
+    color: var(--text-muted);
+    font-weight: 300;
+  }
+  .practice-feature-side {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 22px;
+    border-left: 1px solid var(--line-soft);
+    padding-left: 48px;
+  }
+  .practice-stat {
+    display: flex;
+    align-items: baseline;
+    gap: 16px;
+  }
+  .practice-stat-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 34px;
+    color: var(--gold);
+    font-weight: 500;
+    min-width: 80px;
+  }
+  .practice-stat-label {
+    font-size: 13px;
+    color: var(--text-muted);
+    letter-spacing: 0.02em;
+    line-height: 1.4;
+  }
+  .practice-feature-link {
+    margin-top: 14px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--gold);
+    text-decoration: none;
+    border-bottom: 1px solid var(--line);
+    padding-bottom: 6px;
+    align-self: flex-start;
+    transition: border-color 0.25s ease, color 0.25s ease;
+  }
+  .practice-feature-link:hover { color: var(--gold-bright); border-bottom-color: var(--gold); }
+
+  .practice-disclosure {
+    margin-top: 48px;
+    padding: 22px 28px;
+    border: 1px solid var(--line-soft);
+    background: rgba(10, 22, 40, 0.5);
+    font-size: 12.5px;
+    line-height: 1.65;
+    color: var(--text-dim);
+    font-weight: 300;
+    font-family: 'Inter Tight', sans-serif;
+  }
+  .practice-disclosure strong {
+    color: var(--gold);
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    font-size: 10.5px;
+    text-transform: uppercase;
+    display: block;
+    margin-bottom: 8px;
+  }
+
+  /* Other Writing */
+  .writing {
+    background: var(--navy-deep);
+    border-top: 1px solid var(--line-soft);
+    border-bottom: 1px solid var(--line-soft);
+  }
+  .writing-intro {
+    max-width: 720px;
+    font-size: 17px;
+    line-height: 1.7;
+    color: var(--text-muted);
+    margin-bottom: 80px;
+    font-weight: 300;
+  }
+  .writing-intro em {
+    color: var(--ivory);
+    font-style: italic;
+  }
+  .writing-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 96px;
+  }
+  .piece {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 64px;
+    align-items: flex-start;
+  }
+  .piece-meta {
+    position: sticky;
+    top: 100px;
+    padding-top: 8px;
+  }
+  .piece-venue {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10.5px;
+    letter-spacing: 0.28em;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-bottom: 18px;
+    display: block;
+  }
+  .piece-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(34px, 3.6vw, 46px);
+    font-weight: 400;
+    color: var(--ivory);
+    line-height: 1.05;
+    letter-spacing: -0.012em;
+    margin-bottom: 18px;
+  }
+  .piece-title em { font-style: italic; color: var(--gold); }
+  .piece-attrib {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 16px;
+    color: var(--text-dim);
+    line-height: 1.5;
+  }
+  .piece-attrib a {
+    color: var(--gold);
+    font-style: normal;
+    text-decoration: none;
+    border-bottom: 1px solid rgba(212, 175, 55, 0.35);
+    transition: border-color 0.25s ease;
+  }
+  .piece-attrib a:hover { border-bottom-color: var(--gold); }
+  .piece-body {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 19px;
+    line-height: 1.7;
+    color: var(--text-muted);
+    font-weight: 400;
+    max-width: 660px;
+  }
+  .piece-body p { margin-bottom: 1.4em; }
+  .piece-body p:last-child { margin-bottom: 0; }
+  .piece-body p:first-child::first-letter {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 4em;
+    float: left;
+    line-height: 0.85;
+    padding: 0.05em 0.12em 0 0;
+    color: var(--gold);
+    font-weight: 500;
+  }
+  .piece-readmore {
+    margin-top: 28px;
+    padding-top: 22px;
+    border-top: 1px solid var(--line-soft);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+  }
+  .piece-readmore a {
+    color: var(--gold);
+    text-decoration: none;
+    border-bottom: 1px solid var(--line);
+    padding-bottom: 5px;
+    transition: border-color 0.25s ease, color 0.25s ease;
+  }
+  .piece-readmore a:hover { color: var(--gold-bright); border-bottom-color: var(--gold); }
+
   /* Recognition */
   .cred-grid {
     display: grid;
@@ -576,12 +930,17 @@
 
   .testimonials-grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(6, 1fr);
     gap: 1px;
     background: var(--line-soft);
     border: 1px solid var(--line-soft);
-    min-height: 380px;
   }
+
+  .testimonial:nth-child(1) { grid-column: span 2; grid-row: 1; animation-delay: 0.1s; }
+  .testimonial:nth-child(2) { grid-column: span 2; grid-row: 1; animation-delay: 0.22s; }
+  .testimonial:nth-child(3) { grid-column: span 2; grid-row: 1; animation-delay: 0.34s; }
+  .testimonial:nth-child(4) { grid-column: span 3; grid-row: 2; animation-delay: 0.46s; }
+  .testimonial:nth-child(5) { grid-column: span 3; grid-row: 2; animation-delay: 0.58s; }
 
   .testimonial {
     background: var(--navy);
@@ -594,10 +953,6 @@
     transform: translateY(12px);
     animation: fadeUp 0.8s ease forwards;
   }
-
-  .testimonial:nth-child(1) { animation-delay: 0.1s; }
-  .testimonial:nth-child(2) { animation-delay: 0.25s; }
-  .testimonial:nth-child(3) { animation-delay: 0.4s; }
 
   .testimonial-mark {
     font-family: 'Cormorant Garamond', serif;
@@ -1470,6 +1825,7 @@
   @media (max-width: 1024px) {
     .about-grid, .speaking-grid, .contact-layout { grid-template-columns: 1fr; gap: 48px; }
     .themes-grid, .cred-grid, .testimonials-grid, .dash-secondary { grid-template-columns: 1fr; }
+    .testimonial { grid-column: 1 !important; grid-row: auto !important; }
     .dash-stats { grid-template-columns: repeat(2, 1fr); }
     .about-meta { position: static; }
     .contact-map { height: 360px; }
@@ -1479,9 +1835,19 @@
     .nav-links a { font-size: 10.5px; letter-spacing: 0.1em; }
     section { padding: 80px 28px; }
     .hero { padding: 110px 28px 60px; }
+    .hero-split { grid-template-columns: 1fr; gap: 56px; }
+    .hero-portrait-wrap { max-width: 420px; margin: 0 auto; width: 100%; }
+    .hero-portrait-caption { text-align: left; }
 
     .book { grid-template-columns: 1fr; gap: 8px; padding: 0; }
     .books-grid { grid-template-columns: repeat(2, 1fr); gap: 36px 24px; }
+    .practice-grid { grid-template-columns: 1fr; }
+    .practice-feature { grid-template-columns: 1fr; padding: 44px 32px; gap: 36px; }
+    .practice-feature-side { border-left: none; border-top: 1px solid var(--line-soft); padding-left: 0; padding-top: 36px; }
+    .piece { grid-template-columns: 1fr; gap: 32px; }
+    .piece-meta { position: static; }
+    .piece-body { font-size: 17px; }
+    .writing-grid { gap: 72px; }
     .pub { grid-template-columns: 1fr; gap: 6px; }
     .pub-venue { text-align: left; max-width: none; }
     .dash-chart-wrap { padding: 32px 24px 32px; }
@@ -1516,7 +1882,9 @@
     <li><a href="#about">About</a></li>
     <li><a href="#research">Research</a></li>
     <li><a href="#books">Books</a></li>
+    <li><a href="#practice">Practice</a></li>
     <li><a href="#recognition">Recognition</a></li>
+    <li><a href="#writing">Writing</a></li>
     <li><a href="#voices">Voices</a></li>
     <li><a href="#publications">Publications</a></li>
     <li><a href="#speaking">Speaking</a></li>
@@ -1526,31 +1894,43 @@
 
 <section class="hero" id="top">
   <div class="hero-inner">
-    <div class="hero-eyebrow">
-      <div class="bar"></div>
-      <span>Full Professor · Geography &amp; Environmental Studies</span>
-    </div>
-    <h1 class="hero-title">Eric Vaz</h1>
-    <div class="hero-role">
-      Spatial analysis &middot; GIScience &middot; Regional science &middot; Applied machine learning
-    </div>
-    <p class="hero-lede">
-      I am a geographer and spatial scientist working at the intersection of computational methods, regional dynamics, and the geography of human habitat. My research asks how spatial data and machine learning can sharpen decisions about cities, regions, health, and the places people inhabit.
-    </p>
+    <div class="hero-split">
+      <div class="hero-text">
+        <div class="hero-eyebrow">
+          <div class="bar"></div>
+          <span>Spatial Intelligence · Real Estate · Regional Risk</span>
+        </div>
+        <h1 class="hero-title">Eric Vaz</h1>
+        <div class="hero-role">
+          Real estate analytics &middot; Market geography &middot; Regional risk &middot; Applied machine learning
+        </div>
+        <p class="hero-lede">
+          I am a spatial scientist working on the questions investors, operators, and policymakers ask of place — where to build, where to lend, where to enter a market, and where the next risk is concentrating. Two decades of academic research on spatial data and machine learning, applied to the decisions that move capital across cities and regions.
+        </p>
 
-    <div class="hero-meta">
-      <div class="hero-meta-item">
-        <strong>Position</strong>
-        Full Professor, Toronto Metropolitan University
+        <div class="hero-meta">
+          <div class="hero-meta-item">
+            <strong>Position</strong>
+            Full Professor, Toronto Metropolitan University
+          </div>
+          <div class="hero-meta-item">
+            <strong>Based</strong>
+            Toronto, Canada
+          </div>
+          <div class="hero-meta-item">
+            <strong>Profiles</strong>
+            <a href="https://scholar.google.com/citations?user=EfpbSEYAAAAJ&hl=en" target="_blank" rel="noopener">Google Scholar</a> &nbsp;·&nbsp;
+            <a href="https://www.linkedin.com/in/ericnvaz/" target="_blank" rel="noopener">LinkedIn</a>
+          </div>
+        </div>
       </div>
-      <div class="hero-meta-item">
-        <strong>Based</strong>
-        Toronto, Canada
-      </div>
-      <div class="hero-meta-item">
-        <strong>Profiles</strong>
-        <a href="https://scholar.google.com/citations?user=EfpbSEYAAAAJ&hl=en" target="_blank" rel="noopener">Google Scholar</a> &nbsp;·&nbsp;
-        <a href="https://www.linkedin.com/in/ericnvaz/" target="_blank" rel="noopener">LinkedIn</a>
+
+      <div class="hero-portrait-wrap">
+        <div class="hero-portrait-frame">
+          <div class="hero-portrait-tag">Toronto · 2026</div>
+          <img src="portrait.png" alt="Portrait of Eric Vaz" loading="eager" />
+        </div>
+        <div class="hero-portrait-caption"><span>Note</span>Geography is motion.</div>
       </div>
     </div>
   </div>
@@ -1561,7 +1941,7 @@
     <div class="section-head">
       <span class="section-num">01 /</span>
       <span class="section-eyebrow">About</span>
-      <h2>A geographer's reading of the <em>world we inhabit</em>.</h2>
+      <h2>Reading the structure of <em>place, capital, and risk</em>.</h2>
     </div>
 
     <div class="about-grid">
@@ -1590,19 +1970,19 @@
 
       <div class="about-body">
         <p>
-          Geography, properly practiced, is not description. It is a discipline for reading the structure of the world — how people, ideas, and capital arrange themselves across space, and what those arrangements reveal about the choices societies make.
+          Geography, properly practiced, is not description. It is a discipline for reading how people, capital, and risk arrange themselves across space — and what those arrangements tell us about which decisions will hold and which will break. My work treats spatial data as decision infrastructure: for the investor weighing a market, the lender pricing a portfolio, the operator choosing a site, and the policymaker allocating against constraint.
         </p>
         <p>
-          I am a <strong>Full Professor</strong> in the Department of Geography and Environmental Studies at Toronto Metropolitan University, where I also directed the <strong>Laboratory for Geocomputation</strong> and served as Graduate Program Director for the Master of Spatial Analysis. Before Toronto, I led the <strong>GIScience Research Group</strong> at Heidelberg University in Germany, and earlier held positions at the University of the Algarve and NOVA University of Lisbon, where I earned my doctorate.
+          I am a <strong>Full Professor</strong> in the Department of Geography and Environmental Studies at Toronto Metropolitan University, where I directed the <strong>Laboratory for Geocomputation</strong> and served as Graduate Program Director for the Master of Spatial Analysis. Before Toronto, I led the <strong>GIScience Research Group</strong> at Heidelberg University, and earlier held positions at the University of the Algarve and NOVA University of Lisbon, where I earned my doctorate in Information Management.
         </p>
         <p>
-          Across two decades I have written <strong>seven Springer monographs</strong> and more than <strong>ninety peer-reviewed articles</strong> in spatial analysis, GIScience, and regional science. I currently serve on the editorial boards of <em>Humanities &amp; Social Sciences Communications</em> (Springer Nature), <em>Habitat International</em> (Elsevier), <em>REGION</em>, and <em>Data</em>, among others, and was Editor-in-Chief of the <em>Canadian Journal of Regional Science</em>.
+          Across two decades I have written <strong>seven Springer monographs</strong> and more than <strong>ninety peer-reviewed articles</strong> spanning real estate valuation, market and retail geography, regional risk, and applied spatial machine learning. I currently serve on the editorial boards of <em>Humanities &amp; Social Sciences Communications</em> (Springer Nature), <em>Habitat International</em> (Elsevier), <em>REGION</em>, and <em>Data</em>, and was Editor-in-Chief of the <em>Canadian Journal of Regional Science</em>.
         </p>
         <p>
           In 2012 I was named a <strong>Rising Star</strong> by the Regional Science Association International. In 2023 I was ranked among the top scholars globally in the field of Human Habitat by ScholarGPS. My work has been highlighted by <strong>NASA Earth Observatory</strong> and <strong>Elsevier</strong>. From 2018 to 2021 I served as <strong>President of the Canadian Regional Science Association</strong>.
         </p>
         <p>
-          Alongside my scholarship I contribute to the wider community of practice — reviewing for national funding councils, serving on scientific committees in Canada and Europe, and delivering invited lectures on GeoAI, regional intelligence, and the spatial dimensions of contemporary challenges.
+          I move regularly between scholarship and practice. Alongside research and graduate teaching, I deliver invited lectures on GeoAI and regional intelligence, advise on the design of spatial data products, and translate academic methods — hedonic models, spatial machine learning, satellite-derived indicators — into tools that institutions can act on.
         </p>
       </div>
     </div>
@@ -1618,49 +1998,49 @@
     </div>
 
     <p class="themes-intro">
-      My work moves across several connected domains. Each is a distinct research tradition with its own methods and journals, but together they trace a single question: how does space structure the problems we care about, and what can computation tell us that narrative alone cannot?
+      My work moves across several connected domains, but it traces a single question: how does space structure the problems that decision-makers face — in real estate, finance, infrastructure, public health, and policy — and what can spatial computation tell us that intuition or non-spatial models cannot?
     </p>
 
     <div class="themes-grid">
       <div class="theme">
         <div class="theme-num">I.</div>
-        <h3>GIScience &amp; Computational Geography</h3>
-        <p>Spatial machine learning, cellular automata, spatial econometrics, quantum methods in spatial analysis, and the methodological foundations of computational geographic inquiry.</p>
+        <h3>Real Estate &amp; Market Geography</h3>
+        <p>Hedonic valuation, geodemographics, retail and investor location, wealth distribution, and the spatial logics of property and consumer markets. The geography of where capital chooses to land.</p>
       </div>
       <div class="theme">
         <div class="theme-num">II.</div>
-        <h3>Regional &amp; Urban Systems</h3>
-        <p>Land-use change, urban sprawl, metropolitan dynamics, and the role of small and medium towns in the geography of peripheral regions. Where regions move, and why.</p>
+        <h3>Regional Intelligence &amp; Risk</h3>
+        <p>A framework developed across several monographs: how spatial evidence informs regional and urban decisions under uncertainty — investment risk, infrastructure exposure, and the limits of traditional models in the Anthropocene.</p>
       </div>
       <div class="theme">
         <div class="theme-num">III.</div>
-        <h3>Business &amp; Market Geography</h3>
-        <p>Retail location, geodemographics, wealth distribution, and the spatial logics of consumer and investor behaviour. The geography of commerce as a window on urban structure.</p>
+        <h3>GeoAI &amp; Computational Geography</h3>
+        <p>Spatial machine learning, cellular automata, spatial econometrics, and quantum methods in spatial analysis — the methodological toolkit that lets data of place speak to questions of value, risk, and growth.</p>
       </div>
       <div class="theme">
         <div class="theme-num">IV.</div>
-        <h3>Spatial Epidemiology &amp; Health</h3>
-        <p>Injury landscapes, access to care, environmental determinants of well-being, and the spatial dimensions of mental health and social pathology in urban settings.</p>
+        <h3>Urban &amp; Regional Systems</h3>
+        <p>Land-use change, urban sprawl, metropolitan dynamics, and the role of small and medium towns in the geography of peripheral regions. Where regions move, why, and what that means for those exposed to the move.</p>
       </div>
       <div class="theme">
         <div class="theme-num">V.</div>
-        <h3>Environmental &amp; Climate Geography</h3>
-        <p>Wetland and habitat change, coastal erosion, climate resilience, and the anthropogenic and natural forces reshaping the physical landscape.</p>
+        <h3>Spatial Epidemiology &amp; Health</h3>
+        <p>Injury landscapes, access to care, and the spatial structure of well-being and pathology in cities — work that increasingly speaks to insurers, urban operators, and population-health planners.</p>
       </div>
       <div class="theme">
         <div class="theme-num">VI.</div>
-        <h3>Heritage &amp; Cultural Landscapes</h3>
-        <p>Urban pressure on heritage sites, archaeological geography, and the cultural assets that anchor regional identity under conditions of rapid change.</p>
+        <h3>Environmental &amp; Climate Risk</h3>
+        <p>Wetland and habitat change, coastal erosion, and the climate forces reshaping the physical landscape — read as inputs to asset risk, insurability, and the changing geography of liveable place.</p>
       </div>
       <div class="theme">
         <div class="theme-num">VII.</div>
-        <h3>Regional Intelligence &amp; Policy</h3>
-        <p>A framework I have developed across several books: how geographic evidence can inform regional and urban policy in the Anthropocene, where traditional models break down.</p>
+        <h3>Heritage &amp; Cultural Landscapes</h3>
+        <p>Urban pressure on heritage sites, archaeological geography, and the cultural assets that anchor regional identity — and tourism economies — under conditions of rapid change.</p>
       </div>
       <div class="theme">
         <div class="theme-num">VIII.</div>
-        <h3>Happiness &amp; Subjective Geography</h3>
-        <p>The spatial structure of subjective well-being — where people report feeling happy, and what the geographies of that sentiment reveal about the places we build.</p>
+        <h3>Subjective Geography</h3>
+        <p>The spatial structure of subjective well-being. Where people report feeling happy, what those geographies reveal about the places we build, and what they imply for the markets that serve them.</p>
       </div>
     </div>
   </div>
@@ -1779,10 +2159,78 @@
   </div>
 </section>
 
-<section id="recognition" class="reveal">
+<section id="practice" class="reveal">
   <div class="section-inner">
     <div class="section-head">
       <span class="section-num">04 /</span>
+      <span class="section-eyebrow">Applied Practice</span>
+      <h2>Where research meets <em>decisions that move capital</em>.</h2>
+    </div>
+
+    <p class="practice-intro">
+      Two decades of academic methods are most useful when they shape decisions outside the academy. Alongside scholarship, I work — in personal capacity, distinct from my university role — at the boundary where spatial analysis informs how institutions value, locate, and de-risk their footprint in cities and regions.
+    </p>
+
+    <div class="practice-grid">
+      <div class="practice-card">
+        <div class="practice-card-num">— 01</div>
+        <h3>Real Estate &amp; <em>Valuation Intelligence</em></h3>
+        <p>Hedonic and machine-learning approaches to residential and commercial valuation; neighbourhood scoring; geodemographic segmentation for portfolio and brokerage applications.</p>
+        <ul>
+          <li>Investor &amp; brokerage analytics</li>
+          <li>Market-entry feasibility</li>
+          <li>Submarket and asset-class scoring</li>
+        </ul>
+      </div>
+      <div class="practice-card">
+        <div class="practice-card-num">— 02</div>
+        <h3>Regional Risk &amp; <em>Spatial Diligence</em></h3>
+        <p>Climate exposure, flood and canopy indicators from satellite imagery, demographic trajectories, and infrastructure stress — translated for institutional investors, insurers, and public agencies.</p>
+        <ul>
+          <li>Climate &amp; ESG-relevant covariates</li>
+          <li>Emerging-market location intelligence</li>
+          <li>Spatial risk scoring at neighbourhood scale</li>
+        </ul>
+      </div>
+      <div class="practice-card">
+        <div class="practice-card-num">— 03</div>
+        <h3>Advisory &amp; <em>Speaking</em></h3>
+        <p>Independent advisory on the design of spatial data products, GeoAI integration, and the methodological backbone of regional intelligence platforms. Keynotes and executive sessions on the same.</p>
+        <ul>
+          <li>Methodological &amp; product advisory</li>
+          <li>Executive education on GeoAI</li>
+          <li>Keynote &amp; roundtable engagements</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="practice-feature">
+      <div>
+        <div class="practice-feature-eyebrow">Featured Venture · Personal Capacity</div>
+        <h3>TerraSignal — <em>regional intelligence as a product</em>.</h3>
+        <p class="lede">
+          TerraSignal is a real estate and regional intelligence platform I co-founded to translate two decades of spatial research into reports and dashboards that buyers, investors, and brokers can act on. It pairs hedonic-style valuation with satellite-derived environmental indicators and neighbourhood-scale machine learning, and is currently live across Windsor-Essex (Canada) and Lagos (Nigeria), with international expansion underway.
+        </p>
+      </div>
+      <div class="practice-feature-side">
+        <div class="practice-stat"><span class="practice-stat-num">28</span><span class="practice-stat-label">districts mapped in Windsor-Essex<br/>live B2C reports via Stripe</span></div>
+        <div class="practice-stat"><span class="practice-stat-num">15</span><span class="practice-stat-label">neighbourhoods, Lagos beta<br/>diaspora investor focus</span></div>
+        <div class="practice-stat"><span class="practice-stat-num">3</span><span class="practice-stat-label">tiers of subscription<br/>solo · team · brokerage</span></div>
+        <a class="practice-feature-link" href="https://terrasignal.ca" target="_blank" rel="noopener">Visit terrasignal.ca →</a>
+      </div>
+    </div>
+
+    <div class="practice-disclosure">
+      <strong>Disclosure</strong>
+      Applied work, advisory mandates, and TerraSignal are undertaken in personal capacity and are independent of Toronto Metropolitan University. The University is identified for biographical reference only and does not endorse, sponsor, or assume any responsibility for these activities. All engagements are conducted in compliance with applicable institutional policy on outside professional activity and conflict of interest.
+    </div>
+  </div>
+</section>
+
+<section id="recognition" class="reveal">
+  <div class="section-inner">
+    <div class="section-head">
+      <span class="section-num">05 /</span>
       <span class="section-eyebrow">Recognition</span>
       <h2>Editorial service, honours, and <em>scholarly standing</em>.</h2>
     </div>
@@ -1826,10 +2274,82 @@
 </section>
 
 <!-- TESTIMONIALS -->
+<section id="writing" class="writing reveal">
+  <div class="section-inner">
+    <div class="section-head">
+      <span class="section-num">06 /</span>
+      <span class="section-eyebrow">Other Writing</span>
+      <h2>Fiction, &amp; the <em>geographies of feeling</em>.</h2>
+    </div>
+
+    <p class="writing-intro">
+      Alongside academic writing, I write short fiction. The pieces tend to circle the same questions as the research — <em>place, memory, the strange attachments people form to small geographies</em> — but follow them through people rather than through data. A small selection appears below.
+    </p>
+
+    <div class="writing-grid">
+
+      <article class="piece">
+        <div class="piece-meta">
+          <span class="piece-venue">Flash Fiction North</span>
+          <h3 class="piece-title"><em>Finger</em></h3>
+          <div class="piece-attrib">
+            Flash fiction.<br/>Published in <a href="https://www.flashfictionnorth.com/fictionarchive" target="_blank" rel="noopener">Flash Fiction North</a>, 2025.
+          </div>
+        </div>
+        <div class="piece-body">
+          <p>There is this strange lingering sensation on the tip of my finger. This finger has pointed all its life in the right direction. Sometimes, wrong directions, too. Most of all, this finger, which now nudges toward a corner made of plastic, pointed my two daughters toward the constellations. "See Aries rising slowly northwest of that tree, right over there." Her eager smile juxtaposed with a yawn at 10 pm. The other rascal runs back through the cabin. Well, that very finger, stretching towards something that feels like a button, no less, once held a lock of hair with my wife's smile open and shining brightly over an Aegean sunset. In winter, it cleaned the frozen bits off my old Suzuki Samurai, anno 1987, second hand, when my house was the size of a washroom.</p>
+          <p>I wish my finger hadn't aged with blemishes, some of them caught by surprise, with a reverie of the unknown. With a cadence of blame and a tainting of time. I've often cut my nails and cleaned the corners of that finger with my grandfather's pocketknife. Now, it resides quietly next to me, encumbered by no movement. This finger dug potatoes in spring and scraped the corners of too many pages of things useless to memorize in college. It followed the minuscule handwriting of my advisor's notes hastily, with red curvilinear ink, only to celebrate my dissertation's defence three years later.</p>
+          <p>Time has surprised me, and so has my finger in its ruggedness, marking the passage of things beyond my wildest imagination when I was caught up in a tenure-track position and finally became tenured. This finger pointed nonchalantly and half-tipsy at my best friend and colleague during twenty Christmas parties, and with some hesitation, wrote notes on the sexiest beast I could muster sitting next to me in LaGuardia — flight of several hours, direction unknown, who cared.</p>
+          <p>It did a fairly good job of not being totally butchered by an electric saw while cutting a Christmas tree in the sticks, and it mustered its way out of a shady accident, which I swear wasn't my fault. As I look at it resting on this very red button tied to the rim of the bed, I can't help but wonder how lucky of a bastard my index finger has been. Its nail, as usual, cleverly cut. As days go softly here with a hospital gown and someone trims it just right for me, I can't help but wonder, in the last days of yearning freedom and the upset stomach that bewilders my hands, will I be so lucky as having it point towards the sun when I am gone? For now, it serves to call the nurse as I, as well as the finger, do go too gentle into that good night.</p>
+        </div>
+      </article>
+
+      <article class="piece">
+        <div class="piece-meta">
+          <span class="piece-venue">Flash Fiction North</span>
+          <h3 class="piece-title"><em>Salam in the Garage</em></h3>
+          <div class="piece-attrib">
+            Flash fiction.<br/>Published in <a href="https://www.flashfictionnorth.com/fictionarchive" target="_blank" rel="noopener">Flash Fiction North</a>, July 2025.
+          </div>
+        </div>
+        <div class="piece-body">
+          <p>It was 5:08 p.m. when I pulled in. Tavira Plaza's underground garage yawned cool and shadowed, echoing with the low boom of bass. Portuguese summer. A Peugeot — dented, silver, tired — sat idling across two spots. Its windows were open. Inside, three young men. South Asian, maybe Pakistani. Loud Arabic trap throbbed from a speaker duct-taped to the dash. Tires dirty, hood clean. One of them leaned out the window, flicking ash from a cigarette. The other laughed too loud at something on a phone.</p>
+          <p>And I — I was supposed to just walk past. Like everyone else, the groceries done. My newspaper resting between my arm, just coincidental of its own space of being very much Portuguese. Proper Lisbon sway, eclectic gaze, espresso and Tom Ford — Grey Vetiver. <em>Sapatos de vela</em>. But I didn't. I slowed my step. A half-second of fear, not for safety, but for being misunderstood. My autism does go beyond the facade of intentions. The unmasking. I could still turn around. Just get my coffee and go home. Be a man of silence. Dream mitigation. But my soul tugged forward. My body shrugged. I stepped into the wave of music and raised my hand lightly to my chest.</p>
+          <p>"Salam alaikum," I said. Not performative. Not exaggerated. Just honest. I was unmasked. "I read the Qur'an. I'm not Muslim… but I found peace in it."</p>
+          <p>The music didn't stop — but the world did. It left an empty space. The boy in the passenger seat blinked. His smirk collapsed into something soft. The one smoking straightened in his seat, like someone remembering their own name. The driver nodded — once, slow. The space became the warmth of sand dunes.</p>
+          <p>"Wa alaikum salam, senhor," he replied, in Portuguese-accented Arabic. "That… that means a lot." Broken English.</p>
+          <p>I smiled. I wasn't there to convert or praise or correct. I was just one proud Canadian-Portuguese man speaking to another man in exile. Caught between the providence of Tim Hortons and the scent of summer. "Shukran," I added.</p>
+          <p>The driver turned down the music. Not off. Just… lower. And for a moment — beneath the concrete and dust, under the weight of difference — two worlds that touch.</p>
+          <p>I walked on. Espresso and Pedras Salgadas still to be had. Groceries still to buy. But the air behind me now buzzed not with trap beats, but with something older. Something holy. Back in my car, Paulo Gonzo sings <em>"É nas pedras da calçada que a canção nos sai melhor."</em> Bismillah to the good people of love.</p>
+        </div>
+      </article>
+
+      <article class="piece">
+        <div class="piece-meta">
+          <span class="piece-venue">White Wall Review</span>
+          <h3 class="piece-title"><em>A Grave and a Pebble</em></h3>
+          <div class="piece-attrib">
+            Short fiction.<br/>Published in <a href="https://whitewallreview.com/a-grave-and-a-pebble/" target="_blank" rel="noopener">White Wall Review</a>, January 2025.
+          </div>
+        </div>
+        <div class="piece-body">
+          <p>Whenever I ventured north from Keswick, past Craigmawr Beach, I felt the cool breeze from Cook's Bay urge me onward. The ethereal quality of Lake Simcoe seemed to wash over me and soften the edges of my memories. Near the boundary of Georgina Island, I always found myself drawn to a solitary grave. As I recalled from my younger days, the grave had sat in a meadow facing the lake's southern expanse for centuries, nameless and unmarked. Its headstone bore faint carvings, with only a few letters still visible — an "E" in the first name and a "W" and "T" in the last. The snow and rain had worn away most of the inscription, leaving the rest of the name lost to time, and no colour remained to bring clarity to the weathered stone.</p>
+          <p>Moss had formed a green path leading eastward from the grave, inviting the curious to explore. About thirty years ago, another grave appeared beside it — a woman was laid to rest there, yet she remained as nameless as her eternal neighbour.</p>
+          <p>Without a sense of foreboding, the neighbours had always viewed her behaviour as rather sullen. Each evening, she would stand overlooking the bay, beyond the picket fence that separated the hill from where the sky met the sea. Her lips moved in a murmur, sounding more like a prayer than anything else. Her expression — somewhere between devotion and eagerness — was enigmatic as she held a weathered stone between her fingers, chanting words that hinted at Gaelic origins…</p>
+          <div class="piece-readmore">
+            <a href="https://whitewallreview.com/a-grave-and-a-pebble/" target="_blank" rel="noopener">Read the full story at White Wall Review →</a>
+          </div>
+        </div>
+      </article>
+
+    </div>
+  </div>
+</section>
+
 <section id="voices" class="testimonials reveal">
   <div class="section-inner">
     <div class="section-head">
-      <span class="section-num">05 /</span>
+      <span class="section-num">07 /</span>
       <span class="section-eyebrow">Voices</span>
       <h2>Reflections from <em>peers and collaborators</em>.</h2>
     </div>
@@ -1846,7 +2366,7 @@
 <section id="publications" class="dashboard reveal">
   <div class="section-inner">
     <div class="section-head">
-      <span class="section-num">06 /</span>
+      <span class="section-num">08 /</span>
       <span class="section-eyebrow">Publications Dashboard</span>
       <h2>A quantitative portrait of <em>two decades of scholarship</em>.</h2>
     </div>
@@ -1887,11 +2407,11 @@
       <div class="pubs-controls-title">Complete <em>publication list</em></div>
       <div class="pubs-filters" id="pub-filters">
         <button class="pub-filter active" data-filter="all">All</button>
-        <button class="pub-filter" data-filter="giscience">GIScience</button>
+        <button class="pub-filter" data-filter="business">Real Estate &amp; Markets</button>
         <button class="pub-filter" data-filter="regional">Regional</button>
-        <button class="pub-filter" data-filter="business">Business</button>
+        <button class="pub-filter" data-filter="giscience">GeoAI</button>
         <button class="pub-filter" data-filter="health">Health</button>
-        <button class="pub-filter" data-filter="environment">Environment</button>
+        <button class="pub-filter" data-filter="environment">Climate &amp; Environment</button>
         <button class="pub-filter" data-filter="heritage">Heritage</button>
       </div>
     </div>
@@ -1922,7 +2442,7 @@
 <section id="speaking" class="speaking reveal">
   <div class="section-inner">
     <div class="section-head">
-      <span class="section-num">07 /</span>
+      <span class="section-num">09 /</span>
       <span class="section-eyebrow">Invited Lectures</span>
       <h2>Recent <em>invited addresses</em>.</h2>
     </div>
@@ -1955,7 +2475,7 @@
 <section id="contact" class="contact reveal">
   <div class="section-inner">
     <div class="section-head">
-      <span class="section-num">08 /</span>
+      <span class="section-num">10 /</span>
       <span class="section-eyebrow">Contact</span>
       <h2>For <em>correspondence</em> and collaboration.</h2>
     </div>
@@ -1976,7 +2496,7 @@
 
       <div class="contact-info">
         <p class="contact-lede">
-          I welcome notes from scholars, students, journalists, and institutions on matters connected to my research. I read everything that comes through, and reply to what I can.
+          I welcome notes from scholars, students, journalists, and institutions on matters connected to my research, my published work, and selectively, advisory engagements undertaken in personal capacity. I read everything that comes through, and reply to what I can.
         </p>
 
       <div class="contact-channels">
@@ -1994,7 +2514,7 @@
   <div class="footer-inner">
     <div class="footer-logo">Eric <em>Vaz</em></div>
     <div class="footer-meta">
-      A personal academic page. University affiliation identified for biographical reference and does not represent the views of any affiliated institution.<br/>
+      A personal academic page. University affiliation is identified for biographical reference only and does not represent the views of, nor any endorsement by, Toronto Metropolitan University. Applied work, advisory engagements, and TerraSignal are conducted in personal capacity and independently of the University.<br/>
       © 2026 Eric Vaz. All rights reserved.
     </div>
   </div>
@@ -2010,29 +2530,36 @@
    Three will be randomly displayed on each page load.
    =======================================================*/
 const TESTIMONIALS = [
-  // PENDING — waiting on approved text from the endorser
-  // Keep `approved: false` entries here for your own reference;
-  // they will NOT appear on the site until `approved: true`.
   {
-    approved: false,
-    quote: "[pending — draft sent, awaiting reply]",
-    name: "André Torre",
-    title: "Distinguished Research Professor, INRAE · Université Paris-Saclay<br/>Sporck Chair in Geography 2025–26, University of Liège<br/>Managing Editor, Journal of Regional and Urban Economics"
+    approved: true,
+    quote: "Eric's work bridges regional science, spatial analysis and geocomputation. He gravitates toward the study of complex systems and translates his insights and way of thinking into leading-edge research and applied education.",
+    name: "Dr. Tony Hernandez",
+    title: "Director &amp; Eaton Chair in Retailing, Centre for the Study of Commercial Activity<br/>Professor, School of Retail Management &amp; Department of Real Estate Management<br/>Ted Rogers School of Management, Toronto Metropolitan University"
   },
   {
-    approved: false,
-    quote: "[pending — draft sent, awaiting reply]",
-    name: "Peter Nijkamp",
-    title: "Professor of Regional Economics &amp; Economic Geography (emeritus), VU Amsterdam<br/>Spinoza Prize Laureate · Founder's Medal, RSAI<br/>Member, Royal Netherlands Academy of Arts &amp; Sciences"
+    approved: true,
+    quote: "I have worked with Eric Vaz for many years, on research at the intersection of spatial analysis, regional science, and the geography of cities. He is a solid and creative scholar, equally at ease with quantitative rigour and with the larger questions that give scientific research its meaning. His sustained contribution to our field is genuine and substantial.",
+    name: "Dr. Peter Nijkamp",
+    title: "Professor of Regional Economics &amp; Economic Geography (emeritus), VU Amsterdam<br/>Spinoza Prize Laureate &middot; Founder's Medal, Regional Science Association International<br/>Vice-President, The Regional Science Academy"
+  },
+  {
+    approved: true,
+    quote: "Eric Vaz is one of the most original voices in contemporary spatial analysis. His command of computational methods, combined with a deep reading of regional dynamics, has consistently produced work that is both methodologically rigorous and substantively ambitious. I have valued our exchanges over the years. He is the kind of scholar whose perspective genuinely advances the field.",
+    name: "Dr. André Torre",
+    title: "Distinguished Research Professor, INRAE &middot; Université Paris-Saclay<br/>Sporck Chair in Geography 2025–26, University of Liège<br/>Managing Editor, <em>Journal of Regional and Urban Economics</em> &middot; ERSA Prize 2026"
+  },
+  {
+    approved: true,
+    quote: "Over the better part of a decade, Eric has brought the rigour of spatial analysis to questions that matter clinically — injury landscapes, the geography of self-harm, access to care. Together, we've produced unique findings for regions and urban areas, bridging health sciences, medicine, and geography. He is a generous collaborator and a serious scholar, and his contributions to injury epidemiology have real consequences for how we think about prevention.",
+    name: "Dr. Michael D. Cusimano",
+    title: "Professor of Neurosurgery, Education and Public Health, University of Toronto<br/>Director, Injury Prevention Research Office &middot; St. Michael's Hospital &middot; Unity Health Toronto<br/>Recipient, University of Toronto President's Impact Award"
+  },
+  {
+    approved: true,
+    quote: "I was Eric's research assistant as an undergrad and still draw on what I learned. He taught spatial thinking as a way of understanding the world around us, not as a set of abstract techniques. Years into engineering at scale, I continue to leverage his insights in the technology and systems I help shape.",
+    name: "Daniel Galati",
+    title: "Software Development Manager, Amazon<br/>YouTuber, <em>Be a Better Dev</em>"
   }
-  // When replies arrive, change `approved: true` and paste the
-  // exact approved quote between the quotes below. Example:
-  // {
-  //   approved: true,
-  //   quote: "The exact words Peter sent back.",
-  //   name: "Peter Nijkamp",
-  //   title: "...as above..."
-  // },
 ];
 
 /* =======================================================
@@ -2116,7 +2643,7 @@ const PUBLICATIONS = [
   { year: 2011, title: "The use of gravity concepts for agricultural land-use dynamics: The Algarve", authors: "Vaz, E., Noronha, T., Nijkamp, P.", venue: "International Journal of Foresight and Innovation Policy", themes: ["regional","environment"] }
 ];
 
-/* ============= RENDER TESTIMONIALS (randomized, max 3) ============= */
+/* ============= RENDER TESTIMONIALS (all, in curated order) ============= */
 function renderTestimonials() {
   const approved = TESTIMONIALS.filter(t => t.approved);
   const grid = document.getElementById('testimonials-grid');
@@ -2128,11 +2655,7 @@ function renderTestimonials() {
     return;
   }
 
-  // Shuffle and take up to 3
-  const shuffled = approved.slice().sort(() => Math.random() - 0.5);
-  const show = shuffled.slice(0, 3);
-
-  grid.innerHTML = show.map(t => `
+  grid.innerHTML = approved.map(t => `
     <div class="testimonial">
       <div>
         <div class="testimonial-mark">&ldquo;</div>
@@ -2145,11 +2668,7 @@ function renderTestimonials() {
     </div>
   `).join('');
 
-  if (approved.length > 3) {
-    note.innerHTML = `Drawn from <span style="color:var(--gold);">${approved.length}</span> endorsements <span class="dot"></span> three shown at a time`;
-  } else {
-    note.innerHTML = '';
-  }
+  note.innerHTML = `<span style="color:var(--gold);">${approved.length}</span> endorsements <span class="dot"></span> from peers, collaborators &amp; alumni`;
 }
 
 /* ============= RENDER DASHBOARD ============= */
