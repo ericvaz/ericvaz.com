@@ -1,6 +1,6 @@
 # ericvaz.com
 
-Personal academic website for Eric Vaz, Full Professor of Geography and Environmental Studies at Toronto Metropolitan University.
+Personal website for Eric Vaz, Full Professor of Geography and Environmental Studies at Toronto Metropolitan University, founder-advisor, and geospatial intelligence specialist.
 
 ## Structure
 
@@ -9,23 +9,41 @@ Personal academic website for Eric Vaz, Full Professor of Geography and Environm
 ├── index.html          Single-file site (HTML + CSS + JS inline)
 ├── CNAME               Custom domain config for GitHub Pages
 ├── .nojekyll           Disables Jekyll processing
+├── robots.txt          Crawler directives
+├── sitemap.xml         Sitemap for search engines
 └── covers/             Springer monograph cover images
-    ├── 978-3-030-36479-3.webp   Regional Intelligence (2020)
-    ├── 978-3-031-19871-7.webp   Geography of Happiness (2023)
-    ├── 978-3-031-24731-6.webp   Regional & Urban Change — Ontario (2023)
-    ├── 978-3-031-76906-1.webp   Regional Knowledge Economies (2024)
-    ├── 978-3-032-19210-3.webp   Regional & Urban Change — Northern Canada (2026)
-    ├── 978-3-319-95135-5.webp   Resilience & Regional Dynamics (2018)
-    └── 978-3-662-62177-6.webp   Sustainable Development in Southern Europe (2020)
 ```
+
+## Page sections
+
+01 About, 02 Research, 03 Books, 04 Practice, 05 Selected Projects,
+06 UK & Europe, 07 Recognition, 08 Publications, 09 Speaking, 10 Contact.
+Writing and Voices appear as unnumbered supporting sections.
 
 ## Updating
 
-**Publications:** Edit the `PUBLICATIONS` array near the bottom of `index.html`. Append new entries with year, title, authors, venue, and theme tags (`giscience`, `regional`, `business`, `health`, `environment`, `heritage`).
+**Publications:** Edit the `PUBLICATIONS` array near the bottom of `index.html`. The
+dashboard list is a curated selection; the headline figure (90+) is set as a fixed
+value in the `.dash-stats` block and does not auto-count the array.
 
-**Testimonials:** Edit the `TESTIMONIALS` array near the bottom of `index.html`. Change `approved: false` to `approved: true` and paste the approved quote. Up to three are randomly displayed on each visit.
+**Headline stats:** Edit the four `.dash-stat` values directly in `index.html`
+(Peer-Reviewed Articles, Monographs & Edited Volumes, Years of Research & Advisory,
+Citations).
 
-**Books:** Add new cover to the `/covers` folder and a new entry to the `.books-grid` section in `index.html`.
+**Testimonials:** Edit the `TESTIMONIALS` array. Three are randomly displayed per visit.
+
+**Books:** Add a cover to `/covers` and a new entry to the `.books-grid` section.
+
+**Projects:** Edit the `#ventures` section markup directly. These are personal projects, framed as independent work in personal capacity.
+
+## SEO
+
+`index.html` includes meta description, Open Graph and Twitter card tags, a canonical
+URL, and JSON-LD `Person` structured data. Update `sitemap.xml` `lastmod` on major edits.
+
+## Style note
+
+Prose avoids em dashes and en dashes; use commas, colons, or parentheses instead.
 
 ## Deployment
 

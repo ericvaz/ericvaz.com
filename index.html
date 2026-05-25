@@ -3,13 +3,65 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Eric Vaz — Spatial Intelligence for Real Estate, Markets & Regional Risk</title>
-<meta name="description" content="Dr. Eric Vaz — Full Professor at Toronto Metropolitan University and a leading voice in applied spatial analysis. Two decades of work on real estate valuation, market geography, regional risk, and location intelligence. Seven Springer monographs and 90+ peer-reviewed publications." />
+<title>Eric Vaz | Spatial Intelligence, GeoAI &amp; Real Estate Analytics</title>
+<meta name="description" content="Eric Vaz is a Full Professor of Geography and founder-advisor working at the intersection of spatial intelligence, real estate analytics, regional risk, GeoAI, and applied machine learning." />
 <meta name="author" content="Eric Vaz" />
-<meta property="og:title" content="Eric Vaz — Spatial Intelligence &amp; Location Analytics" />
-<meta property="og:description" content="Real estate analytics, market geography, regional risk, and applied machine learning. Full Professor, Toronto Metropolitan University. Seven Springer monographs and 90+ peer-reviewed publications." />
+<meta name="keywords" content="Eric Vaz, spatial intelligence, GeoAI, real estate analytics, regional risk, housing intelligence, PropTech, location intelligence, applied machine learning, geospatial consulting, expert witness, advisory" />
+<meta name="robots" content="index, follow" />
+<link rel="canonical" href="https://ericvaz.com/" />
+
+<meta property="og:title" content="Eric Vaz | Spatial Intelligence, GeoAI &amp; Real Estate Analytics" />
+<meta property="og:description" content="Full Professor of Geography and founder-advisor working at the intersection of spatial intelligence, real estate analytics, regional risk, GeoAI, and applied machine learning." />
 <meta property="og:type" content="profile" />
-<meta property="og:url" content="https://ericvaz.com" />
+<meta property="og:url" content="https://ericvaz.com/" />
+<meta property="og:site_name" content="Eric Vaz" />
+<meta property="og:image" content="https://ericvaz.com/portrait.png" />
+<meta property="og:image:alt" content="Portrait of Eric Vaz" />
+<meta property="og:locale" content="en_GB" />
+
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="Eric Vaz | Spatial Intelligence, GeoAI &amp; Real Estate Analytics" />
+<meta name="twitter:description" content="Full Professor of Geography and founder-advisor working at the intersection of spatial intelligence, real estate analytics, regional risk, GeoAI, and applied machine learning." />
+<meta name="twitter:image" content="https://ericvaz.com/portrait.png" />
+
+<link rel="sitemap" type="application/xml" href="/sitemap.xml" />
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Person",
+  "name": "Eric Vaz",
+  "url": "https://ericvaz.com/",
+  "image": "https://ericvaz.com/portrait.png",
+  "jobTitle": "Full Professor of Geography and Environmental Studies",
+  "description": "Full Professor of Geography and founder-advisor working at the intersection of spatial intelligence, real estate analytics, regional risk, GeoAI, and applied machine learning.",
+  "knowsAbout": [
+    "Spatial Intelligence",
+    "GeoAI",
+    "Real Estate Analytics",
+    "Regional Risk",
+    "Housing Intelligence",
+    "Spatial Data Science",
+    "Applied Machine Learning",
+    "Geographic Information Systems",
+    "PropTech"
+  ],
+  "worksFor": {
+    "@type": "CollegeOrUniversity",
+    "name": "Toronto Metropolitan University",
+    "url": "https://www.torontomu.ca/"
+  },
+  "alumniOf": [
+    { "@type": "CollegeOrUniversity", "name": "NOVA University of Lisbon" },
+    { "@type": "CollegeOrUniversity", "name": "Heidelberg University" }
+  ],
+  "sameAs": [
+    "https://scholar.google.com/citations?user=EfpbSEYAAAAJ&hl=en",
+    "https://www.linkedin.com/in/ericnvaz/",
+    "https://www.torontomu.ca/geography/people/faculty/vaz-eric/"
+  ]
+}
+</script>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,500;1,600&family=Inter+Tight:wght@300;400;500;600&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet" />
@@ -228,6 +280,66 @@
   .hero-meta-item a:hover {
     color: var(--gold);
     border-bottom-color: var(--gold);
+  }
+
+  /* Hero call-to-action buttons */
+  .hero-cta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+    margin-bottom: 56px;
+    opacity: 0;
+    animation: fadeUp 1s 0.78s forwards;
+  }
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    text-decoration: none;
+    padding: 13px 22px;
+    border: 1px solid transparent;
+    transition: background 0.25s ease, color 0.25s ease, border-color 0.25s ease;
+  }
+  .btn-primary {
+    background: var(--navy-deep);
+    color: var(--ivory);
+    border-color: var(--navy-deep);
+  }
+  .btn-primary:hover {
+    background: var(--gold-deep, #8a6f1f);
+    border-color: var(--gold-deep, #8a6f1f);
+    color: var(--ivory);
+  }
+  .btn-ghost {
+    background: transparent;
+    color: var(--navy-deep);
+    border-color: rgba(10, 22, 40, 0.28);
+  }
+  .btn-ghost:hover {
+    border-color: var(--gold-deep, #8a6f1f);
+    color: var(--gold-deep, #8a6f1f);
+  }
+  /* Buttons on dark sections */
+  .on-dark .btn-primary {
+    background: var(--gold);
+    border-color: var(--gold);
+    color: var(--navy-deep);
+  }
+  .on-dark .btn-primary:hover {
+    background: var(--gold-bright);
+    border-color: var(--gold-bright);
+  }
+  .on-dark .btn-ghost {
+    color: var(--text-muted);
+    border-color: var(--line);
+  }
+  .on-dark .btn-ghost:hover {
+    color: var(--gold);
+    border-color: var(--gold);
   }
 
   /* Hero split layout — text + portrait */
@@ -736,6 +848,150 @@
     transition: border-color 0.25s ease, color 0.25s ease;
   }
   .practice-feature-link:hover { color: var(--gold-bright); border-bottom-color: var(--gold); }
+
+  /* ===== Ventures section ===== */
+  .ventures-intro {
+    font-size: 17px;
+    line-height: 1.7;
+    color: var(--text-muted);
+    max-width: 820px;
+    margin-bottom: 56px;
+    font-weight: 300;
+  }
+  .ventures-group { margin-bottom: 44px; }
+  .ventures-group:last-child { margin-bottom: 0; }
+  .ventures-group-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10.5px;
+    letter-spacing: 0.26em;
+    text-transform: uppercase;
+    color: var(--gold);
+    padding-bottom: 14px;
+    margin-bottom: 24px;
+    border-bottom: 1px solid var(--line-soft);
+  }
+  .ventures-list {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1px;
+    background: var(--line-soft);
+    border: 1px solid var(--line-soft);
+  }
+  .venture-item {
+    background: var(--navy-deep);
+    padding: 30px 32px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    transition: background 0.3s ease;
+  }
+  .venture-item:hover { background: var(--navy); }
+  .venture-item-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 14px;
+  }
+  .venture-item-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 24px;
+    font-weight: 500;
+    color: var(--ivory);
+    letter-spacing: -0.01em;
+  }
+  .venture-item-link {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--gold);
+    text-decoration: none;
+    white-space: nowrap;
+    border-bottom: 1px solid transparent;
+    transition: border-color 0.25s ease;
+  }
+  .venture-item-link:hover { border-bottom-color: var(--gold); }
+  .venture-item p {
+    font-size: 14px;
+    line-height: 1.65;
+    color: var(--text-muted);
+    font-weight: 300;
+  }
+
+  /* ===== Engagement / UK & Europe section ===== */
+  .engagement-layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1px;
+    background: var(--line);
+    border: 1px solid var(--line);
+  }
+  .engagement-statement {
+    background: linear-gradient(180deg, var(--navy) 0%, var(--navy-deep) 100%);
+    padding: 52px 46px;
+  }
+  .engagement-statement .engagement-eyebrow {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10.5px;
+    letter-spacing: 0.26em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 20px;
+  }
+  .engagement-statement h3 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 32px;
+    font-weight: 400;
+    line-height: 1.18;
+    color: var(--ivory);
+    margin-bottom: 20px;
+    letter-spacing: -0.015em;
+  }
+  .engagement-statement h3 em { font-style: italic; color: var(--gold); }
+  .engagement-statement p {
+    font-size: 16px;
+    line-height: 1.7;
+    color: var(--text-muted);
+    font-weight: 300;
+  }
+  .engagement-modes {
+    background: var(--navy-deep);
+    padding: 52px 46px;
+  }
+  .engagement-modes-title {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10.5px;
+    letter-spacing: 0.26em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 22px;
+  }
+  .engagement-modes ul { list-style: none; padding: 0; }
+  .engagement-modes ul li {
+    font-size: 15px;
+    color: var(--text-muted);
+    font-weight: 300;
+    padding: 13px 0 13px 22px;
+    border-top: 1px solid var(--line-soft);
+    position: relative;
+  }
+  .engagement-modes ul li:first-child { border-top: none; }
+  .engagement-modes ul li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 21px;
+    width: 6px;
+    height: 6px;
+    border: 1px solid var(--gold);
+    transform: rotate(45deg);
+  }
+  .engagement-cta {
+    margin-top: 40px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+  }
 
   .practice-disclosure {
     margin-top: 48px;
@@ -1729,6 +1985,51 @@
 
   .contact-lede em { color: var(--gold); font-style: italic; font-weight: 400; }
 
+  .contact-split {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1px;
+    background: var(--line-soft);
+    border: 1px solid var(--line-soft);
+    margin-bottom: 28px;
+  }
+  .contact-split-col {
+    background: var(--navy-deep);
+    padding: 26px 26px 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .contact-split-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold);
+  }
+  .contact-split-text {
+    font-size: 13.5px;
+    line-height: 1.6;
+    color: var(--text-muted);
+    font-weight: 300;
+    flex: 1;
+  }
+  .contact-split-link {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    color: var(--ivory);
+    text-decoration: none;
+    border-bottom: 1px solid var(--line);
+    padding-bottom: 4px;
+    align-self: flex-start;
+    transition: color 0.25s ease, border-color 0.25s ease;
+  }
+  .contact-split-link:hover { color: var(--gold); border-bottom-color: var(--gold); }
+  @media (max-width: 720px) {
+    .contact-split { grid-template-columns: 1fr; }
+  }
+
   .contact-channels {
     display: flex;
     flex-direction: column;
@@ -1843,6 +2144,10 @@
     .books-grid { grid-template-columns: repeat(2, 1fr); gap: 36px 24px; }
     .practice-grid { grid-template-columns: 1fr; }
     .practice-feature { grid-template-columns: 1fr; padding: 44px 32px; gap: 36px; }
+    .ventures-list { grid-template-columns: 1fr; }
+    .engagement-layout { grid-template-columns: 1fr; }
+    .engagement-statement, .engagement-modes { padding: 40px 28px; }
+    .hero-cta { gap: 10px; }
     .practice-feature-side { border-left: none; border-top: 1px solid var(--line-soft); padding-left: 0; padding-top: 36px; }
     .piece { grid-template-columns: 1fr; gap: 32px; }
     .piece-meta { position: static; }
@@ -1881,11 +2186,10 @@
   <ul class="nav-links">
     <li><a href="#about">About</a></li>
     <li><a href="#research">Research</a></li>
-    <li><a href="#books">Books</a></li>
     <li><a href="#practice">Practice</a></li>
+    <li><a href="#ventures">Ventures</a></li>
+    <li><a href="#engagement">Engagement</a></li>
     <li><a href="#recognition">Recognition</a></li>
-    <li><a href="#writing">Writing</a></li>
-    <li><a href="#voices">Voices</a></li>
     <li><a href="#publications">Publications</a></li>
     <li><a href="#speaking">Speaking</a></li>
     <li><a href="#contact">Contact</a></li>
@@ -1905,8 +2209,14 @@
           Real estate analytics &middot; Market geography &middot; Regional risk &middot; Applied machine learning
         </div>
         <p class="hero-lede">
-          I am a spatial scientist working on the questions investors, operators, and policymakers ask of place — where to build, where to lend, where to enter a market, and where the next risk is concentrating. Two decades of academic research on spatial data and machine learning, applied to the decisions that move capital across cities and regions.
+          I help investors, operators, institutions, and policymakers understand where risk, opportunity, and market change concentrate geographically. Two decades of academic research on spatial data and machine learning, applied to the decisions that move capital across cities and regions: where to build, where to lend, where to enter a market, and where the next risk is forming.
         </p>
+
+        <div class="hero-cta">
+          <a href="#engagement" class="btn btn-primary">Advisory &amp; Speaking</a>
+          <a href="https://www.torontomu.ca/geography/people/faculty/vaz-eric/" target="_blank" rel="noopener" class="btn btn-ghost">Academic CV</a>
+          <a href="#contact" class="btn btn-ghost">Contact</a>
+        </div>
 
         <div class="hero-meta">
           <div class="hero-meta-item">
@@ -1970,7 +2280,7 @@
 
       <div class="about-body">
         <p>
-          Geography, properly practiced, is not description. It is a discipline for reading how people, capital, and risk arrange themselves across space — and what those arrangements tell us about which decisions will hold and which will break. My work treats spatial data as decision infrastructure: for the investor weighing a market, the lender pricing a portfolio, the operator choosing a site, and the policymaker allocating against constraint.
+          Geography, properly practiced, is not description. It is a discipline for reading how people, capital, and risk arrange themselves across space, and what those arrangements tell us about which decisions will hold and which will break. My work treats spatial data as decision infrastructure: for the investor weighing a market, the lender pricing a portfolio, the operator choosing a site, and the policymaker allocating against constraint.
         </p>
         <p>
           I am a <strong>Full Professor</strong> in the Department of Geography and Environmental Studies at Toronto Metropolitan University, where I directed the <strong>Laboratory for Geocomputation</strong> and served as Graduate Program Director for the Master of Spatial Analysis. Before Toronto, I led the <strong>GIScience Research Group</strong> at Heidelberg University, and earlier held positions at the University of the Algarve and NOVA University of Lisbon, where I earned my doctorate in Information Management.
@@ -1998,7 +2308,7 @@
     </div>
 
     <p class="themes-intro">
-      My work moves across several connected domains, but it traces a single question: how does space structure the problems that decision-makers face — in real estate, finance, infrastructure, public health, and policy — and what can spatial computation tell us that intuition or non-spatial models cannot?
+      My work moves across several connected domains, but it traces a single question: how does space structure the problems that decision-makers face (in real estate, finance, infrastructure, public health, and policy), and what can spatial computation tell us that intuition or non-spatial models cannot?
     </p>
 
     <div class="themes-grid">
@@ -2010,12 +2320,12 @@
       <div class="theme">
         <div class="theme-num">II.</div>
         <h3>Regional Intelligence &amp; Risk</h3>
-        <p>A framework developed across several monographs: how spatial evidence informs regional and urban decisions under uncertainty — investment risk, infrastructure exposure, and the limits of traditional models in the Anthropocene.</p>
+        <p>A framework developed across several monographs: how spatial evidence informs regional and urban decisions under uncertainty: investment risk, infrastructure exposure, and the limits of traditional models in the Anthropocene.</p>
       </div>
       <div class="theme">
         <div class="theme-num">III.</div>
         <h3>GeoAI &amp; Computational Geography</h3>
-        <p>Spatial machine learning, cellular automata, spatial econometrics, and quantum methods in spatial analysis — the methodological toolkit that lets data of place speak to questions of value, risk, and growth.</p>
+        <p>Spatial machine learning, cellular automata, spatial econometrics, and quantum methods in spatial analysis. Together they form the methodological toolkit that lets data of place speak to questions of value, risk, and growth.</p>
       </div>
       <div class="theme">
         <div class="theme-num">IV.</div>
@@ -2025,17 +2335,17 @@
       <div class="theme">
         <div class="theme-num">V.</div>
         <h3>Spatial Epidemiology &amp; Health</h3>
-        <p>Injury landscapes, access to care, and the spatial structure of well-being and pathology in cities — work that increasingly speaks to insurers, urban operators, and population-health planners.</p>
+        <p>Injury landscapes, access to care, and the spatial structure of well-being and pathology in cities. This is work that increasingly speaks to insurers, urban operators, and population-health planners.</p>
       </div>
       <div class="theme">
         <div class="theme-num">VI.</div>
         <h3>Environmental &amp; Climate Risk</h3>
-        <p>Wetland and habitat change, coastal erosion, and the climate forces reshaping the physical landscape — read as inputs to asset risk, insurability, and the changing geography of liveable place.</p>
+        <p>Wetland and habitat change, coastal erosion, and the climate forces reshaping the physical landscape, read as inputs to asset risk, insurability, and the changing geography of liveable place.</p>
       </div>
       <div class="theme">
         <div class="theme-num">VII.</div>
         <h3>Heritage &amp; Cultural Landscapes</h3>
-        <p>Urban pressure on heritage sites, archaeological geography, and the cultural assets that anchor regional identity — and tourism economies — under conditions of rapid change.</p>
+        <p>Urban pressure on heritage sites, archaeological geography, and the cultural assets that anchor regional identity (and tourism economies) under conditions of rapid change.</p>
       </div>
       <div class="theme">
         <div class="theme-num">VIII.</div>
@@ -2055,7 +2365,7 @@
     </div>
 
     <p class="books-intro">
-      Seven volumes on space, region, and change — spanning peripheral Europe, metropolitan Canada, regional intelligence, the geography of happiness, and the territorial logic of knowledge economies.
+      Seven volumes on space, region, and change, spanning peripheral Europe, metropolitan Canada, regional intelligence, the geography of happiness, and the territorial logic of knowledge economies.
     </p>
 
     <div class="books-grid">
@@ -2070,7 +2380,7 @@
           <span class="book-year">2026</span>
           <span class="book-pub">Springer</span>
         </div>
-        <h4><em>Regional &amp; Urban Change and GIScience</em> — Northern Canada</h4>
+        <h4><em>Regional &amp; Urban Change and GIScience</em>: Northern Canada</h4>
         <p>Nordicity, spatial intelligence, and Indigenous development trajectories across the Canadian North.</p>
       </div>
 
@@ -2096,7 +2406,7 @@
           <span class="book-year">2023</span>
           <span class="book-pub">Springer</span>
         </div>
-        <h4><em>Regional &amp; Urban Change and GIScience</em> — Ontario, Canada</h4>
+        <h4><em>Regional &amp; Urban Change and GIScience</em>: Ontario, Canada</h4>
         <p>A comprehensive spatial diagnosis of Ontario's regional trajectories across four decades.</p>
       </div>
 
@@ -2168,7 +2478,7 @@
     </div>
 
     <p class="practice-intro">
-      Two decades of academic methods are most useful when they shape decisions outside the academy. Alongside scholarship, I work — in personal capacity, distinct from my university role — at the boundary where spatial analysis informs how institutions value, locate, and de-risk their footprint in cities and regions.
+      Two decades of academic methods are most useful when they shape decisions outside the academy. Alongside scholarship, I work (in personal capacity, distinct from my university role) at the boundary where spatial analysis informs how institutions value, locate, and de-risk their footprint in cities and regions.
     </p>
 
     <div class="practice-grid">
@@ -2185,7 +2495,7 @@
       <div class="practice-card">
         <div class="practice-card-num">— 02</div>
         <h3>Regional Risk &amp; <em>Spatial Diligence</em></h3>
-        <p>Climate exposure, flood and canopy indicators from satellite imagery, demographic trajectories, and infrastructure stress — translated for institutional investors, insurers, and public agencies.</p>
+        <p>Climate exposure, flood and canopy indicators from satellite imagery, demographic trajectories, and infrastructure stress, translated for institutional investors, insurers, and public agencies.</p>
         <ul>
           <li>Climate &amp; ESG-relevant covariates</li>
           <li>Emerging-market location intelligence</li>
@@ -2195,34 +2505,97 @@
       <div class="practice-card">
         <div class="practice-card-num">— 03</div>
         <h3>Advisory &amp; <em>Speaking</em></h3>
-        <p>Independent advisory on the design of spatial data products, GeoAI integration, and the methodological backbone of regional intelligence platforms. Keynotes and executive sessions on the same.</p>
+        <p>Independent advisory on spatial methodology, GeoAI integration, and the analytical design of spatial data work. Keynotes and executive sessions on the same.</p>
         <ul>
-          <li>Methodological &amp; product advisory</li>
+          <li>Methodological advisory</li>
           <li>Executive education on GeoAI</li>
           <li>Keynote &amp; roundtable engagements</li>
         </ul>
       </div>
     </div>
 
-    <div class="practice-feature">
-      <div>
-        <div class="practice-feature-eyebrow">Featured Venture · Personal Capacity</div>
-        <h3>TerraSignal — <em>regional intelligence as a product</em>.</h3>
-        <p class="lede">
-          TerraSignal is a real estate and regional intelligence platform I co-founded to translate two decades of spatial research into reports and dashboards that buyers, investors, and brokers can act on. It pairs hedonic-style valuation with satellite-derived environmental indicators and neighbourhood-scale machine learning, and is currently live across Windsor-Essex (Canada) and Lagos (Nigeria), with international expansion underway.
-        </p>
-      </div>
-      <div class="practice-feature-side">
-        <div class="practice-stat"><span class="practice-stat-num">28</span><span class="practice-stat-label">districts mapped in Windsor-Essex<br/>live B2C reports via Stripe</span></div>
-        <div class="practice-stat"><span class="practice-stat-num">15</span><span class="practice-stat-label">neighbourhoods, Lagos beta<br/>diaspora investor focus</span></div>
-        <div class="practice-stat"><span class="practice-stat-num">3</span><span class="practice-stat-label">tiers of subscription<br/>solo · team · brokerage</span></div>
-        <a class="practice-feature-link" href="https://terrasignal.ca" target="_blank" rel="noopener">Visit terrasignal.ca →</a>
+    <div class="practice-disclosure">
+      <strong>Disclosure</strong>
+      Applied and advisory work is undertaken in personal capacity and independently of Toronto Metropolitan University. The University is identified for biographical reference only and does not endorse, sponsor, or assume any responsibility for these activities. All such activity is conducted in keeping with applicable institutional policy on outside professional activity and conflict of interest.
+    </div>
+  </div>
+</section>
+
+<section id="ventures" class="reveal on-dark">
+  <div class="section-inner">
+    <div class="section-head">
+      <span class="section-num">05 /</span>
+      <span class="section-eyebrow">Selected Projects</span>
+      <h2>Independent work, built <em>out of curiosity</em>.</h2>
+    </div>
+
+    <p class="ventures-intro">
+      Alongside research and teaching, I build small projects in personal time. They are exploratory by nature, made to follow an interest rather than a roadmap, and they apply the same instinct that runs through the research: turning an idea into something concrete enough to test.
+    </p>
+
+    <div class="ventures-group">
+      <div class="ventures-group-label">Health, Neurodiversity &amp; Wellbeing</div>
+      <div class="ventures-list">
+        <div class="venture-item">
+          <div class="venture-item-head">
+            <span class="venture-item-name">32Parts</span>
+          </div>
+          <p>An early-stage personal project exploring data-informed approaches to health and wellbeing.</p>
+        </div>
+        <div class="venture-item">
+          <div class="venture-item-head">
+            <span class="venture-item-name">NeuroPilot</span>
+          </div>
+          <p>A concept focused on neurodiversity and attention, designed around how people with differing cognitive styles actually plan and work.</p>
+        </div>
       </div>
     </div>
 
-    <div class="practice-disclosure">
-      <strong>Disclosure</strong>
-      Applied work, advisory mandates, and TerraSignal are undertaken in personal capacity and are independent of Toronto Metropolitan University. The University is identified for biographical reference only and does not endorse, sponsor, or assume any responsibility for these activities. All engagements are conducted in compliance with applicable institutional policy on outside professional activity and conflict of interest.
+    <div class="ventures-group">
+      <div class="ventures-group-label">Creative Technology</div>
+      <div class="ventures-list">
+        <div class="venture-item">
+          <div class="venture-item-head">
+            <span class="venture-item-name">DUAT</span>
+          </div>
+          <p>A narrative card game built around authentic Egyptology, pairing play with a genuine educational layer.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="engagement" class="reveal on-dark">
+  <div class="section-inner">
+    <div class="section-head">
+      <span class="section-num">06 /</span>
+      <span class="section-eyebrow">UK &amp; Europe</span>
+      <h2>Open to <em>collaboration across the UK and Europe</em>.</h2>
+    </div>
+
+    <div class="engagement-layout">
+      <div class="engagement-statement">
+        <div class="engagement-eyebrow">Statement of Interest</div>
+        <h3>Where the <em>research and the practice</em> can travel.</h3>
+        <p>
+          I am open to UK and European collaborations in geospatial AI, real estate analytics, regional risk, housing intelligence, spatial data science, and applied research partnerships. My academic record, editorial standing, and applied product work all carry directly into the questions that European institutions, investors, and public bodies are asking of place.
+        </p>
+      </div>
+      <div class="engagement-modes">
+        <div class="engagement-modes-title">Forms of Collaboration</div>
+        <ul>
+          <li>Visiting appointments</li>
+          <li>Advisory roles</li>
+          <li>Expert witness and litigation support</li>
+          <li>Speaking and executive education</li>
+          <li>Product and research collaborations</li>
+          <li>GeoAI and PropTech consulting</li>
+        </ul>
+        <div class="engagement-cta">
+          <a href="#contact" class="btn btn-primary">Start a Conversation</a>
+          <a href="https://www.linkedin.com/in/ericnvaz/" target="_blank" rel="noopener" class="btn btn-ghost">LinkedIn</a>
+        </div>
+      </div>
     </div>
   </div>
 </section>
@@ -2230,7 +2603,7 @@
 <section id="recognition" class="reveal">
   <div class="section-inner">
     <div class="section-head">
-      <span class="section-num">05 /</span>
+      <span class="section-num">07 /</span>
       <span class="section-eyebrow">Recognition</span>
       <h2>Editorial service, honours, and <em>scholarly standing</em>.</h2>
     </div>
@@ -2277,7 +2650,6 @@
 <section id="writing" class="writing reveal">
   <div class="section-inner">
     <div class="section-head">
-      <span class="section-num">06 /</span>
       <span class="section-eyebrow">Other Writing</span>
       <h2>Fiction, &amp; the <em>geographies of feeling</em>.</h2>
     </div>
@@ -2349,7 +2721,6 @@
 <section id="voices" class="testimonials reveal">
   <div class="section-inner">
     <div class="section-head">
-      <span class="section-num">07 /</span>
       <span class="section-eyebrow">Voices</span>
       <h2>Reflections from <em>peers and collaborators</em>.</h2>
     </div>
@@ -2371,12 +2742,16 @@
       <h2>A quantitative portrait of <em>two decades of scholarship</em>.</h2>
     </div>
 
+    <p class="themes-intro" style="margin-bottom:48px;">
+      The headline figures summarise a research record of 90+ peer-reviewed articles and 7 monographs and edited volumes. The chart and filterable list below draw on a curated set of journal articles, selected to show the spread of work across real estate, regional risk, GeoAI, and related domains.
+    </p>
+
     <!-- Top stats -->
     <div class="dash-stats">
-      <div class="dash-stat"><div class="num" id="stat-total">—</div><div class="label">Peer-Reviewed Articles</div></div>
+      <div class="dash-stat"><div class="num">90+</div><div class="label">Peer-Reviewed Articles</div></div>
       <div class="dash-stat"><div class="num">7</div><div class="label">Monographs &amp; Edited Volumes</div></div>
-      <div class="dash-stat"><div class="num" id="stat-years">—</div><div class="label">Years of Active Publication</div></div>
-      <div class="dash-stat"><div class="num" id="stat-peak">—</div><div class="label">Peak-Year Output</div></div>
+      <div class="dash-stat"><div class="num">20+</div><div class="label">Years of Research &amp; Advisory</div></div>
+      <div class="dash-stat"><div class="num">3,800+</div><div class="label">Citations</div></div>
     </div>
 
     <!-- Bar chart -->
@@ -2404,7 +2779,7 @@
 
     <!-- Filterable publication list -->
     <div class="pubs-controls" id="pubs-controls">
-      <div class="pubs-controls-title">Complete <em>publication list</em></div>
+      <div class="pubs-controls-title">Selected <em>publication list</em></div>
       <div class="pubs-filters" id="pub-filters">
         <button class="pub-filter active" data-filter="all">All</button>
         <button class="pub-filter" data-filter="business">Real Estate &amp; Markets</button>
@@ -2416,7 +2791,7 @@
       </div>
     </div>
 
-    <div class="pubs-count">Showing <span id="count-range">—</span> of <span id="count-total">—</span> publications</div>
+    <div class="pubs-count">Showing <span id="count-range">—</span> of <span id="count-total">—</span> selected publications</div>
 
     <div class="pubs-list" id="pubs-list"></div>
 
@@ -2434,7 +2809,7 @@
 
     <div class="pubs-footer">
       <a href="https://scholar.google.com/citations?user=EfpbSEYAAAAJ&hl=en" target="_blank" rel="noopener">View full record on Google Scholar →</a>
-      <div class="pubs-footer-note">Dashboard based on peer-reviewed journal articles · 2008 – present</div>
+      <div class="pubs-footer-note">Selected peer-reviewed journal articles. The full record (90+ articles) is available via Google Scholar.</div>
     </div>
   </div>
 </section>
@@ -2496,11 +2871,23 @@
 
       <div class="contact-info">
         <p class="contact-lede">
-          I welcome notes from scholars, students, journalists, and institutions on matters connected to my research, my published work, and selectively, advisory engagements undertaken in personal capacity. I read everything that comes through, and reply to what I can.
+          I read everything that comes through, and reply to what I can. To help me route a note quickly, it is useful to know whether it concerns <em>academic work</em> or <em>advisory, speaking, media, and collaboration</em>.
         </p>
 
+        <div class="contact-split">
+          <div class="contact-split-col">
+            <div class="contact-split-label">Academic Correspondence</div>
+            <p class="contact-split-text">Research, published work, graduate study, peer review, and editorial matters.</p>
+            <a href="mailto:evaz@torontomu.ca?subject=Academic%20enquiry" class="contact-split-link">evaz@torontomu.ca →</a>
+          </div>
+          <div class="contact-split-col">
+            <div class="contact-split-label">Advisory, Speaking &amp; Media</div>
+            <p class="contact-split-text">Advisory mandates, expert witness work, speaking, executive education, and product or research collaboration, undertaken in personal capacity.</p>
+            <a href="mailto:evaz@torontomu.ca?subject=Advisory%20%2F%20speaking%20enquiry" class="contact-split-link">evaz@torontomu.ca →</a>
+          </div>
+        </div>
+
       <div class="contact-channels">
-          <a href="mailto:evaz@torontomu.ca" class="contact-channel"><span class="channel-label">Direct</span><span class="channel-value">evaz@torontomu.ca</span></a>
           <a href="https://scholar.google.com/citations?user=EfpbSEYAAAAJ&hl=en" target="_blank" rel="noopener" class="contact-channel"><span class="channel-label">Google Scholar</span><span class="channel-value">View publications</span></a>
           <a href="https://www.linkedin.com/in/ericnvaz/" target="_blank" rel="noopener" class="contact-channel"><span class="channel-label">LinkedIn</span><span class="channel-value">/in/ericnvaz</span></a>
           <a href="https://www.torontomu.ca/geography/people/faculty/vaz-eric/" target="_blank" rel="noopener" class="contact-channel"><span class="channel-label">University Profile</span><span class="channel-value">TMU Faculty page</span></a>
@@ -2514,7 +2901,7 @@
   <div class="footer-inner">
     <div class="footer-logo">Eric <em>Vaz</em></div>
     <div class="footer-meta">
-      A personal academic page. University affiliation is identified for biographical reference only and does not represent the views of, nor any endorsement by, Toronto Metropolitan University. Applied work, advisory engagements, and TerraSignal are conducted in personal capacity and independently of the University.<br/>
+      A personal academic page. University affiliation is identified for biographical reference only and does not represent the views of, nor any endorsement by, Toronto Metropolitan University. Applied and advisory work is conducted in personal capacity and independently of the University.<br/>
       © 2026 Eric Vaz. All rights reserved.
     </div>
   </div>
@@ -2684,13 +3071,9 @@ function renderDashboard() {
   const counts = years.map(y => byYear[y] || 0);
   const max = Math.max(...counts);
   const total = PUBLICATIONS.length;
-  const activeYears = Object.keys(byYear).length;
   const peakYear = years.find(y => byYear[y] === max);
 
-  // Stats
-  document.getElementById('stat-total').textContent = total;
-  document.getElementById('stat-years').textContent = activeYears;
-  document.getElementById('stat-peak').textContent = `${max} · ${peakYear}`;
+  // Selected-publication count for the list below
   document.getElementById('count-total').textContent = total;
 
   // Chart — build y-axis, gridlines, and bars
