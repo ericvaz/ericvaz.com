@@ -177,7 +177,7 @@ y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
   <li class="dis">Cut <span class="sc">&#8984;X</span></li><li class="dis">Copy <span class="sc">&#8984;C</span></li><li class="dis">Paste <span class="sc">&#8984;V</span></li>
 </ul>
 <ul class="menu" id="menu-view"><li class="dis">by Icon</li><li class="dis">by Name</li><li class="dis">by Date</li></ul>
-<ul class="menu" id="menu-special"><li data-act="restart">Restart</li></ul>
+<ul class="menu" id="menu-special"><li data-act="cleanup">Clean Up</li><li class="sep"></li><li data-act="restart">Restart</li></ul>
 <ul class="menu" id="menu-games">
   <li data-act="game" data-game="draw">Draw</li>
   <li data-act="game" data-game="snake">Snake</li>
@@ -662,10 +662,12 @@ function makeIconDraggable(ic){
  ic.addEventListener("pointerup",end);ic.addEventListener("pointercancel",end);
 }
 document.querySelectorAll("#desk > .icon").forEach(ic=>{
+ ic.dataset.homeLeft=ic.style.left;ic.dataset.homeTop=ic.style.top;
  makeIconDraggable(ic);
  bindOpen(ic,()=>openFromIcon(ic));
 });
 desk.addEventListener("click",()=>document.querySelectorAll(".icon.sel").forEach(i=>i.classList.remove("sel")));
+function cleanUp(){document.querySelectorAll("#desk > .icon").forEach(ic=>{if(ic.dataset.homeLeft){ic.style.left=ic.dataset.homeLeft;ic.style.top=ic.dataset.homeTop;}else{ic.style.left="";ic.style.top="";}ic.classList.remove("sel");});}
 
 /* about box (apple menu) */
 function openAbout(){
@@ -703,6 +705,7 @@ document.querySelectorAll(".menu li").forEach(li=>{
    else if(a==="opensys")openFolder("system");
    else if(a==="terminal")openTerminal();
    else if(a==="game")openGame(li.dataset.game);
+   else if(a==="cleanup")cleanUp();
    else if(a==="restart"){try{localStorage.removeItem("terraos.visited");}catch(e){}location.reload();}
  });
 });
