@@ -794,7 +794,7 @@ tick();setInterval(tick,15000);
 /* ---- boot: typed intro first visit only ---- */
 const BOOT_MSG="Hello. This is the information age that made my screen turn greyscale. To reconsider computation in the age of AI, this is the beginning of the return. Enjoy the website.";
 function firstVisit(){ try{ if(localStorage.getItem("terraos.visited"))return false; localStorage.setItem("terraos.visited","1"); return true; }catch(e){ return true; } }
-function finishBoot(){const b=$("#boot");b.classList.add("hide");setTimeout(()=>b.style.display="none",450); if(window.__terraChimeReady)window.__terraChimeReady();}
+function finishBoot(){const b=$("#boot");b.classList.add("hide");setTimeout(()=>b.style.display="none",450);}
 function runLoader(ms){
  const b=$("#boot"); b.classList.add("welcome-mode");
  const bar=$("#boot .loadbar i"), pct=$("#boot .loadpct");
@@ -821,39 +821,6 @@ window.addEventListener("load",()=>{
  (function type(){ if(i<=BOOT_MSG.length){ term.innerHTML=esc(BOOT_MSG.slice(0,i))+'<span class="cur"></span>'; i++; setTimeout(type, i<3?260:60); }
    else { setTimeout(()=>runLoader(6500), 4500); } })();
 });
-
-/* ---- startup chime: original synth chord, plays as the loader finishes (autoplay-safe) ---- */
-(function(){
- var ctx=null, played=false, loaderDone=false;
- function ensure(){ if(!ctx){ var AC=window.AudioContext||window.webkitAudioContext; if(AC)ctx=new AC(); } return ctx; }
- function chord(c){
-   var now=c.currentTime;
-   var g=c.createGain(); g.connect(c.destination);
-   g.gain.setValueAtTime(0.0001,now);
-   g.gain.exponentialRampToValueAtTime(0.42,now+0.25);
-   g.gain.setValueAtTime(0.42,now+4.2);
-   g.gain.exponentialRampToValueAtTime(0.0001,now+5.6);
-   [130.81,196.00,261.63,329.63,392.00,523.25].forEach(function(f,k){
-     var o=c.createOscillator(); o.type="triangle"; o.frequency.value=f;
-     var og=c.createGain(); og.gain.value=k<2?0.5:0.85; o.connect(og); og.connect(g);
-     o.start(now+k*0.18); o.stop(now+5.7);
-   });
-   var s=c.createOscillator(); s.type="sine"; s.frequency.value=783.99;
-   var sg=c.createGain(); sg.gain.value=0.16; s.connect(sg); sg.connect(g);
-   s.start(now+1.0); s.stop(now+5.7);
- }
- function maybePlay(){
-   if(played||!loaderDone) return;
-   var c=ensure(); if(!c||c.state!=="running") return;
-   played=true;
-   window.removeEventListener("pointerdown",unlock); window.removeEventListener("keydown",unlock);
-   chord(c);
- }
- function unlock(){ var c=ensure(); if(!c) return; if(c.state==="suspended"){ var p=c.resume(); if(p&&p.then){p.then(maybePlay);} else {maybePlay();} } else { maybePlay(); } }
- window.addEventListener("pointerdown",unlock);
- window.addEventListener("keydown",unlock);
- window.__terraChimeReady=function(){ loaderDone=true; maybePlay(); };
-})();
 
 const tpl=document.createElement("div");tpl.id="tpl-doc";tpl.style.display="none";tpl.innerHTML=GLYPH.doc;document.body.appendChild(tpl);
 </script>
