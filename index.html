@@ -141,12 +141,16 @@ img{image-rendering:auto}
 
 .hint-touch{display:none;position:fixed;bottom:8px;left:0;right:0;text-align:center;font-size:11px;color:#fff;z-index:8000}
 @media (max-width:760px){
- body{overflow:auto}#desk{position:static;padding:14px 10px 60px}
+ body{overflow:auto}#desk{position:static;padding:14px 10px 60px;text-align:center}
  .icon{position:static!important;display:inline-block;width:80px;margin:6px}
  #hd,#evdoc,#trash{position:static}
- .win{position:static!important;width:100%!important;margin:12px 0;box-shadow:none}
+ .win{position:static!important;width:100%!important;margin:12px 0;box-shadow:none;text-align:left}
  .win .body{max-height:none!important}.hint-touch{display:block}
  .win .resize{display:none}
+ #menubar{padding:0 4px}
+ #menubar .mi[data-menu="file"],#menubar .mi[data-menu="edit"],#menubar .mi[data-menu="view"],#menubar .mi[data-menu="special"]{display:none}
+ #menubar .mi{padding:0 9px;font-size:13px}
+ .menu{max-width:94vw}
 }
 </style>
 <script type="text/javascript">
