@@ -102,6 +102,11 @@ img{image-rendering:auto}
 .rstatus{font-family:var(--chicago);font-size:11px;color:#222}
 .rvol{font-family:var(--chicago);font-size:11px;display:flex;gap:8px;align-items:center}
 .rstation{font-family:var(--read);font-size:12px;border:2px solid #000;background:#fff;padding:3px}
+.np-body{background:#cfcfcf!important;display:flex;flex-direction:column;gap:8px;padding:10px;max-height:none}
+.np-bar{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+.np-name{font-family:var(--read);font-size:12px;border:2px solid #000;background:#fff;padding:2px 6px;width:120px}
+.np-ext{font-family:var(--chicago);font-size:11px;color:#555;margin-left:-4px}
+.np-ta{width:100%;min-height:300px;resize:vertical;border:2px solid #000;background:#fff;padding:10px;font-family:var(--read);font-size:14px;line-height:1.5;color:#111;box-sizing:border-box;outline:none}
 .rvolr{accent-color:#000}
 .meta{border-collapse:collapse;width:100%;margin:0 0 14px;font-family:var(--read);font-size:13px}
 .meta td{border-bottom:1px solid #ccc;padding:4px 8px;vertical-align:top}
@@ -198,6 +203,7 @@ y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
 </ul>
 <ul class="menu" id="menu-utilities">
   <li data-act="radio">Radio</li>
+  <li data-act="notepad">Notepad</li>
 </ul>
 
 <div id="desk">
@@ -689,6 +695,27 @@ function openRadio(){
  var cl=$(".close",w);if(cl)cl.addEventListener("click",function(){try{audio.pause();audio.src="";}catch(e){}});
 }
 
+function openNotepad(){
+ if(openWins["notepad"]){focusWin(openWins["notepad"]);return;}
+ var w=document.createElement("div");w.className="win np-win";
+ var c=cascade();w.style.left=c.left+"px";w.style.top=c.top+"px";w.style.zIndex=++ztop;w.style.width="480px";
+ w.innerHTML=frame("Notepad",null);
+ var body=$(".body",w);body.classList.add("np-body");
+ body.innerHTML='<div class="np-bar"><button class="gbtn np-new">New</button><button class="gbtn np-open">Open</button><button class="gbtn np-save">Save .txt</button><input class="np-name" value="untitled" spellcheck="false"><span class="np-ext">.txt</span></div><textarea class="np-ta" spellcheck="false" placeholder="Type here&hellip;"></textarea><input type="file" class="np-file" accept=".txt,text/plain" style="display:none">';
+ var ta=$(".np-ta",body),nm=$(".np-name",body),file=$(".np-file",body);
+ $(".np-new",body).addEventListener("click",function(){ if(ta.value&&!confirm("Clear the document?"))return; ta.value="";nm.value="untitled";ta.focus(); });
+ $(".np-open",body).addEventListener("click",function(){file.click();});
+ file.addEventListener("change",function(){ var f=file.files[0]; if(!f)return; var r=new FileReader(); r.onload=function(){ta.value=r.result; nm.value=(f.name||"untitled").replace(/[.]txt$/i,"");}; r.readAsText(f); file.value=""; });
+ $(".np-save",body).addEventListener("click",function(){
+   var fn=(nm.value||"untitled").replace(/[^a-zA-Z0-9 ._-]/g,"_")||"untitled";
+   var blob=new Blob([ta.value],{type:"text/plain;charset=utf-8"});
+   var url=URL.createObjectURL(blob);
+   var a=document.createElement("a");a.href=url;a.download=fn+".txt";document.body.appendChild(a);a.click();document.body.removeChild(a);
+   setTimeout(function(){URL.revokeObjectURL(url);},1500);
+ });
+ mountWin(w,"notepad");setTimeout(function(){ta.focus();},50);
+}
+
 function makeIconDraggable(ic){
  let sx,sy,ox,oy,moved=false,active=false;
  ic.addEventListener("pointerdown",e=>{
@@ -750,6 +777,7 @@ document.querySelectorAll(".menu li").forEach(li=>{
    else if(a==="opensys")openFolder("system");
    else if(a==="terminal")openTerminal();
    else if(a==="radio")openRadio();
+   else if(a==="notepad")openNotepad();
    else if(a==="game")openGame(li.dataset.game);
    else if(a==="cleanup")cleanUp();
    else if(a==="restart"){try{localStorage.removeItem("terraos.visited");}catch(e){}location.reload();}
