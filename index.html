@@ -42,7 +42,8 @@ img{image-rendering:auto}
 .icon .glyph{width:48px;height:46px;margin:0 auto;display:block}
 .icon .lbl{display:inline-block;margin-top:3px;font-size:12px;line-height:1.05;padding:1px 3px;max-width:92px;word-wrap:break-word;font-family:var(--chicago)}
 .icon.sel .glyph{filter:invert(1)}.icon.sel .lbl{background:#000;color:#fff}
-#hd{top:14px;right:24px}#evdoc{top:108px;right:18px}#trash{bottom:14px;right:24px}
+.icon.dragging{opacity:.8;z-index:40}
+#trash{bottom:14px;right:24px}
 
 .win{position:absolute;background:#fff;border:2px solid #000;box-shadow:2px 2px 0 rgba(0,0,0,.5);min-width:260px;display:flex;flex-direction:column;z-index:10}
 .win .title{height:20px;display:flex;align-items:center;position:relative;border-bottom:2px solid #000;cursor:grab;
@@ -146,12 +147,40 @@ img{image-rendering:auto}
 <ul class="menu" id="menu-special"><li data-act="restart">Restart</li></ul>
 
 <div id="desk">
-  <div class="icon" id="hd" data-open="system">
+  <div class="icon" id="hd" data-open="system" style="left:24px;top:12px">
     <svg class="glyph" viewBox="0 0 48 46" fill="none" stroke="#000" stroke-width="2">
       <rect x="6" y="12" width="36" height="20" rx="2" fill="#fff"/><rect x="10" y="16" width="20" height="3" fill="#000" stroke="none"/><circle cx="36" cy="22" r="2.2" fill="#000" stroke="none"/></svg>
     <span class="lbl">Terra HD</span>
   </div>
-  <div class="icon" id="evdoc" data-act="ext" data-url="/classic/">
+  <div class="icon" data-doc="about" style="left:24px;top:104px">
+    <svg class="glyph" viewBox="0 0 48 46" fill="none" stroke="#000" stroke-width="2"><path d="M12 4 h18 l8 8 v30 h-26 z" fill="#fff"/><path d="M30 4 v8 h8"/><line x1="17" y1="20" x2="33" y2="20"/><line x1="17" y1="25" x2="33" y2="25"/><line x1="17" y1="30" x2="28" y2="30"/></svg>
+    <span class="lbl">About</span>
+  </div>
+  <div class="icon" data-open="research" style="left:24px;top:196px">
+    <svg class="glyph" viewBox="0 0 48 46" fill="none" stroke="#000" stroke-width="2"><path d="M5 15 h13 l4 4 h21 v22 h-38 z" fill="#fff"/><path d="M5 15 v-3 h11 l4 4" fill="#fff"/></svg>
+    <span class="lbl">Research</span>
+  </div>
+  <div class="icon" data-open="ventures" style="left:24px;top:288px">
+    <svg class="glyph" viewBox="0 0 48 46" fill="none" stroke="#000" stroke-width="2"><path d="M5 15 h13 l4 4 h21 v22 h-38 z" fill="#fff"/><path d="M5 15 v-3 h11 l4 4" fill="#fff"/></svg>
+    <span class="lbl">Ventures</span>
+  </div>
+  <div class="icon" data-open="fiction" style="left:24px;top:380px">
+    <svg class="glyph" viewBox="0 0 48 46" fill="none" stroke="#000" stroke-width="2"><path d="M5 15 h13 l4 4 h21 v22 h-38 z" fill="#fff"/><path d="M5 15 v-3 h11 l4 4" fill="#fff"/></svg>
+    <span class="lbl">Fiction</span>
+  </div>
+  <div class="icon" data-open="books" style="left:128px;top:12px">
+    <svg class="glyph" viewBox="0 0 48 46" fill="none" stroke="#000" stroke-width="2"><path d="M5 15 h13 l4 4 h21 v22 h-38 z" fill="#fff"/><path d="M5 15 v-3 h11 l4 4" fill="#fff"/></svg>
+    <span class="lbl">Books</span>
+  </div>
+  <div class="icon" data-doc="recognition" style="left:128px;top:104px">
+    <svg class="glyph" viewBox="0 0 48 46" fill="none" stroke="#000" stroke-width="2"><path d="M12 4 h18 l8 8 v30 h-26 z" fill="#fff"/><path d="M30 4 v8 h8"/><line x1="17" y1="20" x2="33" y2="20"/><line x1="17" y1="25" x2="33" y2="25"/><line x1="17" y1="30" x2="28" y2="30"/></svg>
+    <span class="lbl">Recognition</span>
+  </div>
+  <div class="icon" data-act="spatstat" style="left:128px;top:196px">
+    <svg class="glyph" viewBox="0 0 48 46" fill="none" stroke="#000" stroke-width="2"><path d="M24 5 L44 23 L24 41 L4 23 Z" fill="#fff"/><path d="M14 23 h20 M24 15 v16"/><circle cx="24" cy="23" r="3" fill="#000" stroke="none"/></svg>
+    <span class="lbl">Spatial Statistics</span>
+  </div>
+  <div class="icon" id="evdoc" data-act="ext" data-url="/classic/" style="left:128px;top:288px">
     <svg class="glyph" viewBox="0 0 48 46" fill="none" stroke="#000" stroke-width="2">
       <path d="M12 4 h18 l8 8 v30 h-26 z" fill="#fff"/><path d="M30 4 v8 h8"/>
       <line x1="17" y1="20" x2="33" y2="20"/><line x1="17" y1="25" x2="33" y2="25"/><line x1="17" y1="30" x2="28" y2="30"/></svg>
@@ -289,13 +318,37 @@ function makeDraggable(w,handle){
  handle.addEventListener("pointerup",end);handle.addEventListener("pointercancel",end);
 }
 function bindOpen(el,fn){
- if(TOUCH){el.addEventListener("click",e=>{e.stopPropagation();fn();});}
- else{el.addEventListener("click",e=>{e.stopPropagation();sel(el);});el.addEventListener("dblclick",e=>{e.stopPropagation();fn();});}
+ if(TOUCH){el.addEventListener("click",e=>{e.stopPropagation();if(el._suppress)return;fn();});}
+ else{el.addEventListener("click",e=>{e.stopPropagation();if(el._suppress)return;sel(el);});el.addEventListener("dblclick",e=>{e.stopPropagation();if(el._suppress)return;fn();});}
 }
 function sel(el){document.querySelectorAll(".icon.sel").forEach(i=>i.classList.remove("sel"));el.classList.add("sel");}
 
+function openFromIcon(ic){
+ if(ic.dataset.open)openFolder(ic.dataset.open);
+ else if(ic.dataset.doc)openDoc(ic.dataset.doc);
+ else if(ic.dataset.act==="ext")go(ic.dataset.url);
+ else if(ic.dataset.act==="spatstat")go(spatstatURL());
+}
+function makeIconDraggable(ic){
+ let sx,sy,ox,oy,moved=false,active=false;
+ ic.addEventListener("pointerdown",e=>{
+   if(matchMedia("(max-width:760px)").matches)return;
+   active=true;moved=false;sx=e.clientX;sy=e.clientY;
+   const r=ic.getBoundingClientRect(),dr=desk.getBoundingClientRect();
+   ox=r.left-dr.left;oy=r.top-dr.top;
+   try{ic.setPointerCapture(e.pointerId);}catch(_){}
+ });
+ ic.addEventListener("pointermove",e=>{
+   if(!active)return;const dx=e.clientX-sx,dy=e.clientY-sy;
+   if(!moved&&Math.abs(dx)+Math.abs(dy)>4){moved=true;ic.classList.add("dragging");ic.style.right="auto";ic.style.bottom="auto";}
+   if(moved){ic.style.left=Math.max(0,ox+dx)+"px";ic.style.top=Math.max(0,oy+dy)+"px";}
+ });
+ const end=()=>{if(!active)return;active=false;ic.classList.remove("dragging");if(moved){ic._suppress=true;setTimeout(()=>{ic._suppress=false;},350);}};
+ ic.addEventListener("pointerup",end);ic.addEventListener("pointercancel",end);
+}
 document.querySelectorAll("#desk > .icon").forEach(ic=>{
- bindOpen(ic,()=>{ if(ic.dataset.open)openFolder(ic.dataset.open); else if(ic.dataset.act==="ext")go(ic.dataset.url); });
+ makeIconDraggable(ic);
+ bindOpen(ic,()=>openFromIcon(ic));
 });
 desk.addEventListener("click",()=>document.querySelectorAll(".icon.sel").forEach(i=>i.classList.remove("sel")));
 
