@@ -84,6 +84,13 @@ img{image-rendering:auto}
 .term-line{display:flex;gap:8px;align-items:baseline}
 .term-ps{color:#6cf;white-space:nowrap}
 .term-in{flex:1;background:transparent;border:0;outline:0;color:#dfe;font-family:inherit;font-size:13px}
+.game-body{background:#cfcfcf!important;padding:8px;display:flex;flex-direction:column;align-items:center;gap:8px;max-height:none}
+.game-bar{display:flex;gap:8px;align-items:center;font-family:var(--chicago);font-size:12px;width:100%;flex-wrap:wrap}
+.gbtn{font-family:var(--chicago);font-size:11px;background:#fff;border:2px solid #000;padding:2px 8px;cursor:pointer;box-shadow:1px 1px 0 #000}
+.gbtn:active{background:#000;color:#fff}
+.gscore{font-family:var(--chicago);font-size:12px}
+.ghint{margin-left:auto;color:#555;font-size:10px}
+.game-cv{background:#fff;border:2px solid #000;image-rendering:pixelated;touch-action:none;max-width:100%}
 .meta{border-collapse:collapse;width:100%;margin:0 0 14px;font-family:var(--read);font-size:13px}
 .meta td{border-bottom:1px solid #ccc;padding:4px 8px;vertical-align:top}
 .meta td.k{font-family:var(--chicago);font-size:12px;width:118px;white-space:nowrap}
@@ -139,6 +146,7 @@ img{image-rendering:auto}
   <div class="mi" data-menu="edit">Edit</div>
   <div class="mi" data-menu="view">View</div>
   <div class="mi" data-menu="special">Special</div>
+  <div class="mi" data-menu="games">Games</div>
   <div class="spacer"></div>
   <div class="clock" id="clock">Tue 12:00 PM</div>
 </div>
@@ -163,6 +171,11 @@ img{image-rendering:auto}
 </ul>
 <ul class="menu" id="menu-view"><li class="dis">by Icon</li><li class="dis">by Name</li><li class="dis">by Date</li></ul>
 <ul class="menu" id="menu-special"><li data-act="restart">Restart</li></ul>
+<ul class="menu" id="menu-games">
+  <li data-act="game" data-game="draw">Draw</li>
+  <li data-act="game" data-game="snake">Snake</li>
+  <li data-act="game" data-game="blocks">Terra Blocks</li>
+</ul>
 
 <div id="desk">
   <div class="icon" id="hd" data-open="system" style="left:24px;top:12px">
@@ -525,6 +538,105 @@ function openTerminal(){
  body.addEventListener("click",()=>inp.focus());
  mountWin(w,"terminal"); setTimeout(()=>inp.focus(),50);
 }
+function openGame(name){
+ const id="game-"+name;
+ if(openWins[id]){focusWin(openWins[id]);return;}
+ const titles={draw:"Draw",snake:"Snake",blocks:"Terra Blocks"};
+ const w=document.createElement("div"); w.className="win game-win";
+ const c=cascade(); w.style.left=c.left+"px"; w.style.top=c.top+"px"; w.style.zIndex=++ztop;
+ w.innerHTML=frame(titles[name]||"Game",null);
+ const body=$(".body",w); body.classList.add("game-body");
+ mountWin(w,id);
+ if(name==="draw") gameDraw(body);
+ else if(name==="snake") gameSnake(body);
+ else if(name==="blocks") gameBlocks(body);
+}
+function gameWrap(body,w,h,bar){
+ body.innerHTML='<div class="game-bar">'+bar+'</div><canvas class="game-cv" width="'+w+'" height="'+h+'"></canvas>';
+ return $(".game-cv",body);
+}
+function alive(cv){ return document.body.contains(cv); }
+function gameDraw(body){
+ const cv=gameWrap(body,320,240,'<button class="gbtn" data-a="pen">Pencil</button><button class="gbtn" data-a="erase">Eraser</button><button class="gbtn" data-a="clear">Clear</button>');
+ const x=cv.getContext("2d"); x.fillStyle="#fff"; x.fillRect(0,0,320,240); x.fillStyle="#000";
+ let tool="pen",down=false;
+ function pos(e){const r=cv.getBoundingClientRect();return [(e.clientX-r.left)*(cv.width/r.width),(e.clientY-r.top)*(cv.height/r.height)];}
+ function dot(e){const a=pos(e),px=a[0],py=a[1]; if(tool==="erase"){x.fillStyle="#fff";x.fillRect(px-6,py-6,12,12);x.fillStyle="#000";} else {x.fillRect(px-1,py-1,3,3);} }
+ cv.addEventListener("pointerdown",e=>{down=true;dot(e);cv.setPointerCapture(e.pointerId);});
+ cv.addEventListener("pointermove",e=>{if(down)dot(e);});
+ cv.addEventListener("pointerup",()=>down=false);
+ body.querySelectorAll(".gbtn").forEach(b=>b.addEventListener("click",()=>{
+   const a=b.dataset.a; if(a==="clear"){x.fillStyle="#fff";x.fillRect(0,0,320,240);x.fillStyle="#000";} else tool=a;
+ }));
+}
+function gameSnake(body){
+ const N=18,C=16,SZ=N*C;
+ const cv=gameWrap(body,SZ,SZ,'<span class="gscore">Score: 0</span><button class="gbtn" data-a="new">New Game</button><span class="ghint">arrow keys</span>');
+ const x=cv.getContext("2d"); const scoreEl=$(".gscore",body);
+ let snake,dir,food,loop,score,dead;
+ function spawn(){let p;do{p=[Math.floor(Math.random()*N),Math.floor(Math.random()*N)];}while(snake&&snake.some(s=>s[0]===p[0]&&s[1]===p[1]));return p;}
+ function reset(){snake=[[9,9],[8,9],[7,9]];dir=[1,0];food=spawn();score=0;dead=false;scoreEl.textContent="Score: 0";}
+ function draw(){
+   x.fillStyle="#fff";x.fillRect(0,0,SZ,SZ);
+   x.fillStyle="#000"; x.fillRect(food[0]*C+3,food[1]*C+3,C-6,C-6);
+   snake.forEach(s=>x.fillRect(s[0]*C+1,s[1]*C+1,C-2,C-2));
+   if(dead){x.fillStyle="rgba(0,0,0,.75)";x.fillRect(0,SZ/2-26,SZ,52);x.fillStyle="#fff";x.font='16px "ChicagoFLF",Geneva,sans-serif';x.textAlign="center";x.fillText("Game Over",SZ/2,SZ/2-4);x.font='11px Geneva,sans-serif';x.fillText("New Game to retry",SZ/2,SZ/2+14);}
+ }
+ function step(){
+   if(dead)return;
+   const h=[snake[0][0]+dir[0],snake[0][1]+dir[1]];
+   if(h[0]<0||h[1]<0||h[0]>=N||h[1]>=N||snake.some(s=>s[0]===h[0]&&s[1]===h[1])){dead=true;draw();return;}
+   snake.unshift(h);
+   if(h[0]===food[0]&&h[1]===food[1]){score+=10;scoreEl.textContent="Score: "+score;food=spawn();} else snake.pop();
+   draw();
+ }
+ function key(e){
+   if(!alive(cv)){document.removeEventListener("keydown",key);clearInterval(loop);return;}
+   const k=e.key; let nd=null;
+   if(k==="ArrowUp")nd=[0,-1];else if(k==="ArrowDown")nd=[0,1];else if(k==="ArrowLeft")nd=[-1,0];else if(k==="ArrowRight")nd=[1,0];
+   if(nd&&(nd[0]!==-dir[0]||nd[1]!==-dir[1])){dir=nd;e.preventDefault();}
+ }
+ reset();draw();
+ document.addEventListener("keydown",key);
+ loop=setInterval(()=>{ if(!alive(cv)){clearInterval(loop);return;} step(); },130);
+ $(".gbtn",body).addEventListener("click",()=>{reset();draw();});
+}
+function gameBlocks(body){
+ const COLS=10,ROWS=20,C=16,W=COLS*C,H=ROWS*C;
+ const cv=gameWrap(body,W,H,'<span class="gscore">Lines: 0</span><button class="gbtn" data-a="new">New Game</button><span class="ghint">arrows: move, up rotate, down drop</span>');
+ const x=cv.getContext("2d"); const scoreEl=$(".gscore",body);
+ const SHAPES=[[[1,1,1,1]],[[1,1],[1,1]],[[0,1,0],[1,1,1]],[[1,0,0],[1,1,1]],[[0,0,1],[1,1,1]],[[1,1,0],[0,1,1]],[[0,1,1],[1,1,0]]];
+ let grid,cur,px,py,lines,loop,dead,dropMs;
+ function collide(s,ox,oy){for(let r=0;r<s.length;r++)for(let c=0;c<s[r].length;c++){if(s[r][c]){const nx=ox+c,ny=oy+r;if(nx<0||nx>=COLS||ny>=ROWS||(ny>=0&&grid[ny][nx]))return true;}}return false;}
+ function newPiece(){cur=SHAPES[Math.floor(Math.random()*SHAPES.length)].map(r=>r.slice());px=Math.floor((COLS-cur[0].length)/2);py=0;if(collide(cur,px,py))dead=true;}
+ function reset(){grid=Array.from({length:ROWS},()=>Array(COLS).fill(0));lines=0;dead=false;dropMs=520;scoreEl.textContent="Lines: 0";newPiece();}
+ function merge(){for(let r=0;r<cur.length;r++)for(let c=0;c<cur[r].length;c++)if(cur[r][c]&&py+r>=0)grid[py+r][px+c]=1;}
+ function clearLines(){let n=0;for(let r=ROWS-1;r>=0;r--){if(grid[r].every(v=>v)){grid.splice(r,1);grid.unshift(Array(COLS).fill(0));n++;r++;}}if(n){lines+=n;scoreEl.textContent="Lines: "+lines;dropMs=Math.max(140,520-lines*12);}}
+ function rotate(){const s=cur,R=s.length,Cc=s[0].length;const n=Array.from({length:Cc},()=>Array(R).fill(0));for(let r=0;r<R;r++)for(let c=0;c<Cc;c++)n[c][R-1-r]=s[r][c];if(!collide(n,px,py))cur=n;}
+ function drop(){if(!collide(cur,px,py+1))py++;else{merge();clearLines();newPiece();}}
+ function draw(){
+   x.fillStyle="#fff";x.fillRect(0,0,W,H);
+   x.strokeStyle="#eee";for(let r=0;r<ROWS;r++)for(let c=0;c<COLS;c++)x.strokeRect(c*C,r*C,C,C);
+   x.fillStyle="#000";
+   for(let r=0;r<ROWS;r++)for(let c=0;c<COLS;c++)if(grid[r][c])x.fillRect(c*C+1,r*C+1,C-2,C-2);
+   if(cur)for(let r=0;r<cur.length;r++)for(let c=0;c<cur[r].length;c++)if(cur[r][c]&&py+r>=0)x.fillRect((px+c)*C+1,(py+r)*C+1,C-2,C-2);
+   if(dead){x.fillStyle="rgba(0,0,0,.75)";x.fillRect(0,H/2-26,W,52);x.fillStyle="#fff";x.font='16px "ChicagoFLF",Geneva,sans-serif';x.textAlign="center";x.fillText("Game Over",W/2,H/2-4);x.font='11px Geneva,sans-serif';x.fillText("New Game to retry",W/2,H/2+14);}
+ }
+ function key(e){
+   if(!alive(cv)){document.removeEventListener("keydown",key);clearInterval(loop);return;}
+   if(dead)return; const k=e.key;
+   if(k==="ArrowLeft"){if(!collide(cur,px-1,py))px--;e.preventDefault();}
+   else if(k==="ArrowRight"){if(!collide(cur,px+1,py))px++;e.preventDefault();}
+   else if(k==="ArrowDown"){drop();e.preventDefault();}
+   else if(k==="ArrowUp"){rotate();e.preventDefault();}
+   draw();
+ }
+ reset();draw();
+ document.addEventListener("keydown",key);
+ loop=setInterval(()=>{ if(!alive(cv)){clearInterval(loop);return;} if(!dead){drop();draw();} },520);
+ $(".gbtn",body).addEventListener("click",()=>{reset();draw();});
+}
+
 function makeIconDraggable(ic){
  let sx,sy,ox,oy,moved=false,active=false;
  ic.addEventListener("pointerdown",e=>{
@@ -583,6 +695,7 @@ document.querySelectorAll(".menu li").forEach(li=>{
    else if(a==="spatstat")go(spatstatURL());
    else if(a==="opensys")openFolder("system");
    else if(a==="terminal")openTerminal();
+   else if(a==="game")openGame(li.dataset.game);
    else if(a==="restart"){try{localStorage.removeItem("terraos.visited");}catch(e){}location.reload();}
  });
 });
