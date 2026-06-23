@@ -1,0 +1,878 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Spatial Statistics — learn it visually, run it here</title>
+<meta name="description" content="A free, interactive platform for learning spatial statistics: progressive modules, real cloud data, and Python you run right in the browser. Moran's I, LISA, kriging and more.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.css">
+<style>:root{
+  --green:#1f9d63; --green-600:#178a54; --green-700:#136e44;
+  --green-50:#e9f6ef; --green-100:#d6efe0; --green-200:#b9e3cb;
+  --ink:#14181f; --ink-2:#2a2f39; --gray:#5f6b7a; --muted:#8b94a3;
+  --bg:#f5f7f9; --card:#ffffff; --line:#e9ecf0; --line-2:#eef1f4;
+  --blue:#3b82c4; --blue-soft:#9cc2e6; --red:#e5573f; --red-soft:#f3a594;
+  --amber:#f0922b;
+  --shadow-sm:0 1px 2px rgba(16,24,40,.05);
+  --shadow:0 1px 2px rgba(16,24,40,.04),0 10px 28px -18px rgba(16,24,40,.30);
+  --shadow-lg:0 24px 60px -30px rgba(16,24,40,.4);
+  --r:16px; --r-sm:12px; --r-xs:9px;
+  --term-bg:#0e1726; --term-fg:#e6eaf2;
+  --sans:"Inter",system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto} *{animation-duration:.001ms!important;transition-duration:.001ms!important}}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);
+  font-size:15px;line-height:1.55;-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none}
+button{font-family:inherit;cursor:pointer}
+h1,h2,h3,h4{margin:0;font-weight:700;letter-spacing:-.02em;line-height:1.15}
+.mono{font-family:var(--mono)}
+img{max-width:100%}
+
+/* ---------------- top bar ---------------- */
+.topbar{position:sticky;top:0;z-index:60;background:rgba(255,255,255,.86);
+  backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+.topbar-in{max-width:1480px;margin:0 auto;padding:.7rem 1.4rem;display:flex;align-items:center;gap:1.4rem}
+.brand{display:flex;align-items:center;gap:.6rem;font-weight:800;font-size:1.12rem;letter-spacing:-.02em}
+.brand .mark{width:30px;height:30px;flex:none}
+.nav{display:flex;gap:.3rem;align-items:center}
+.nav a{padding:.5rem .8rem;border-radius:8px;color:var(--gray);font-weight:600;font-size:.92rem;position:relative}
+.nav a:hover{color:var(--ink);background:var(--bg)}
+.nav a.active{color:var(--green-600)}
+.nav a.active::after{content:"";position:absolute;left:.8rem;right:.8rem;bottom:-.72rem;height:2.5px;
+  background:var(--green);border-radius:2px}
+.topspace{flex:1}
+.search{display:flex;align-items:center;gap:.5rem;background:var(--card);border:1px solid var(--line);
+  border-radius:999px;padding:.5rem .9rem;min-width:230px;color:var(--muted)}
+.search:focus-within{border-color:var(--green-200);box-shadow:0 0 0 3px var(--green-50)}
+.search input{border:0;outline:0;font-family:inherit;font-size:.9rem;color:var(--ink);background:transparent;width:100%}
+.search svg{flex:none}
+.pill{display:inline-flex;align-items:center;gap:.4rem;background:var(--card);border:1px solid var(--line);
+  border-radius:999px;padding:.42rem .8rem;font-weight:600;font-size:.84rem;color:var(--ink-2);white-space:nowrap}
+.pill .flame{filter:saturate(1.2)}
+.icon-btn{width:38px;height:38px;border-radius:50%;border:1px solid var(--line);background:var(--card);
+  display:grid;place-items:center;position:relative;color:var(--gray)}
+.icon-btn .dot{position:absolute;top:8px;right:9px;width:7px;height:7px;border-radius:50%;background:var(--red);border:1.5px solid #fff}
+.avatar{width:38px;height:38px;border-radius:50%;background:var(--ink);color:#fff;display:grid;place-items:center;
+  font-weight:700;font-size:.82rem;letter-spacing:.02em}
+.menu-btn{display:none;width:38px;height:38px;border-radius:10px;border:1px solid var(--line);background:var(--card);place-items:center}
+
+/* ---------------- app layout ---------------- */
+.app{max-width:1480px;margin:0 auto;padding:1.6rem 1.4rem 3rem;display:grid;
+  grid-template-columns:300px minmax(0,1fr);gap:1.6rem;align-items:start}
+.sidebar{position:sticky;top:5.2rem;display:flex;flex-direction:column;gap:1rem}
+.main{min-width:0;display:flex;flex-direction:column;gap:1.4rem}
+
+/* cards */
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow-sm)}
+.pad{padding:1.1rem 1.2rem}
+
+/* progress ring card */
+.ring-card{display:flex;align-items:center;gap:1rem;padding:1.1rem 1.2rem}
+.ring{width:96px;height:96px;flex:none}
+.ring .lbl{font-size:.62rem;fill:var(--muted);font-weight:600}
+.ring .pct{font-size:.92rem;font-weight:800;fill:var(--ink)}
+.stat-col{display:flex;flex-direction:column;gap:.55rem}
+.stat .k{font-size:.72rem;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.04em}
+.stat .v{font-size:1.18rem;font-weight:800;color:var(--green-600);line-height:1.1}
+.stat .v small{color:var(--ink);font-weight:700}
+
+/* section label */
+.s-label{font-size:.74rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;
+  padding:0 .25rem .1rem;display:flex;justify-content:space-between;align-items:center}
+.s-label a{color:var(--green-600);font-weight:700;text-transform:none;letter-spacing:0;font-size:.8rem}
+
+/* learning path */
+.path-list{display:flex;flex-direction:column;gap:.2rem}
+.path{display:flex;align-items:center;gap:.7rem;padding:.55rem .6rem;border-radius:10px;font-weight:600;color:var(--ink-2);
+  border:1px solid transparent;width:100%;background:none;text-align:left}
+.path:hover{background:var(--bg)}
+.path.active{background:var(--green-50);color:var(--green-700);border-color:var(--green-100)}
+.path .tile{width:30px;height:30px;border-radius:9px;display:grid;place-items:center;flex:none;background:var(--bg)}
+.path.active .tile{background:#fff}
+.path .ct{margin-left:auto;font-size:.74rem;color:var(--muted);font-weight:700}
+
+/* weekly goal */
+.goal .bar{height:8px;background:var(--line);border-radius:999px;overflow:hidden;margin:.5rem 0 .5rem}
+.goal .bar > i{display:block;height:100%;background:linear-gradient(90deg,var(--green),var(--green-600));border-radius:999px}
+.goal .row{display:flex;justify-content:space-between;align-items:center;font-weight:700}
+.goal .row .big{font-size:1.05rem}
+.goal .hint{color:var(--muted);font-size:.82rem;font-weight:500}
+.goal .star{width:42px;height:42px;border-radius:50%;background:var(--green-50);display:grid;place-items:center;flex:none}
+
+/* achievements */
+.ach{display:flex;align-items:center;gap:.7rem;padding:.45rem 0}
+.ach + .ach{border-top:1px solid var(--line-2)}
+.ach .ic{width:38px;height:38px;border-radius:50%;display:grid;place-items:center;flex:none}
+.ach .ti{font-weight:700;font-size:.9rem}
+.ach .sub{color:var(--muted);font-size:.78rem}
+.ach .xp{margin-left:auto;color:var(--green-600);font-weight:800;font-size:.82rem;white-space:nowrap}
+.ach.locked{opacity:.45}
+
+/* ---------------- hero ---------------- */
+.hero{position:relative;overflow:hidden;border:1px solid var(--green-100);border-radius:20px;
+  background:linear-gradient(120deg,var(--green-50),#fff 64%);padding:2rem 2rem;
+  display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.05fr);gap:1rem;align-items:center}
+.hero h1{font-size:clamp(2rem,3.6vw,2.9rem);font-weight:800;letter-spacing:-.03em}
+.hero h1 .g{color:var(--green)}
+.hero p{color:var(--gray);font-size:1.02rem;max-width:42ch;margin:.7rem 0 1.2rem}
+.hero .cta{display:flex;gap:.7rem;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;gap:.5rem;font-weight:700;font-size:.95rem;border-radius:11px;
+  padding:.72rem 1.2rem;border:1px solid transparent}
+.btn-primary{background:var(--green);color:#fff}
+.btn-primary:hover{background:var(--green-600)}
+.btn-ghost{background:#fff;border-color:var(--line);color:var(--ink)}
+.btn-ghost:hover{border-color:var(--green-200);color:var(--green-700)}
+.hero-fig{position:relative}
+.hero-fig svg{display:block;width:100%;height:auto;border-radius:14px}
+
+/* ---------------- module library ---------------- */
+.lib-head{display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap}
+.lib-head h2{font-size:1.4rem}
+.lib-head .sub{color:var(--gray);font-size:.95rem;margin-top:.15rem}
+.lib-tools{display:flex;align-items:center;gap:.5rem}
+.select{border:1px solid var(--line);background:#fff;border-radius:10px;padding:.5rem .8rem;font-weight:600;
+  font-size:.86rem;color:var(--ink-2)}
+.toggle{display:flex;border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.toggle button{width:38px;height:36px;border:0;background:#fff;display:grid;place-items:center;color:var(--muted)}
+.toggle button.active{background:var(--green-50);color:var(--green-600)}
+
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:1rem}
+.grid.list{grid-template-columns:1fr}
+.mod{display:flex;flex-direction:column;gap:.7rem;padding:1.1rem;border:1px solid var(--line);border-radius:var(--r);
+  background:#fff;box-shadow:var(--shadow-sm);transition:transform .12s,box-shadow .12s,border-color .12s;text-align:left;width:100%}
+.mod:hover{transform:translateY(-2px);box-shadow:var(--shadow);border-color:var(--green-200)}
+.mod .top{display:flex;gap:.85rem;align-items:flex-start}
+.mod .thumb{width:62px;height:62px;border-radius:13px;background:var(--bg);flex:none;overflow:hidden;border:1px solid var(--line-2)}
+.mod .thumb svg{display:block;width:100%;height:100%}
+.mod h3{font-size:1.02rem;display:flex;gap:.4rem;align-items:baseline}
+.mod h3 .n{color:var(--muted);font-weight:800}
+.mod .desc{color:var(--gray);font-size:.88rem;margin-top:.2rem}
+.mod .foot{display:flex;align-items:center;gap:.8rem;margin-top:auto}
+.mod .lessons{font-size:.8rem;color:var(--muted);font-weight:600;white-space:nowrap}
+.mod .pbar{flex:1;height:6px;background:var(--line);border-radius:999px;overflow:hidden}
+.mod .pbar > i{display:block;height:100%;background:var(--green);border-radius:999px}
+.mod .pct{font-size:.8rem;font-weight:800;color:var(--green-600);white-space:nowrap}
+.mod.soon{opacity:.96}
+.mod.soon .thumb{filter:grayscale(.4) opacity(.8)}
+.badge{display:inline-flex;align-items:center;gap:.3rem;font-size:.68rem;font-weight:800;text-transform:uppercase;
+  letter-spacing:.05em;padding:.18rem .5rem;border-radius:999px}
+.badge.soon{background:var(--bg);color:var(--muted);border:1px solid var(--line)}
+.badge.done{background:var(--green-50);color:var(--green-600)}
+.mod.list .top{align-items:center}
+.mod.list{flex-direction:row;align-items:center}
+.mod.list .body{flex:1}
+.mod.list .foot{margin-top:.4rem}
+
+/* ---------------- featured ---------------- */
+.feat{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.25fr);gap:1.4rem;align-items:center;padding:1.4rem 1.5rem}
+.eyebrow{color:var(--green-600);font-weight:800;font-size:.74rem;letter-spacing:.1em;text-transform:uppercase}
+.feat h2{font-size:1.5rem;margin:.4rem 0 .4rem}
+.feat p{color:var(--gray);max-width:46ch}
+.feat .meta{display:flex;align-items:center;gap:1.1rem;color:var(--muted);font-size:.84rem;font-weight:600;margin:.9rem 0}
+.feat .meta span{display:inline-flex;align-items:center;gap:.35rem}
+.feat-viz{display:grid;grid-template-columns:repeat(3,1fr) 1.1fr;gap:.7rem;align-items:stretch}
+.vp{border:1px solid var(--line);border-radius:12px;padding:.5rem;background:#fff}
+.vp .cap{font-size:.7rem;font-weight:700;color:var(--gray);text-align:center;margin-bottom:.3rem}
+.vp svg{display:block;width:100%;height:auto;border-radius:7px;background:var(--bg)}
+.statbox{border:1px solid var(--green-100);border-radius:12px;padding:.7rem;background:var(--green-50);display:flex;flex-direction:column}
+.statbox .k{font-size:.74rem;font-weight:700;color:var(--green-700)}
+.statbox .v{font-size:1.7rem;font-weight:800;color:var(--green-600);line-height:1}
+.statbox .d{font-size:.74rem;color:var(--green-700);margin:.15rem 0 .4rem}
+
+/* ---------------- module & lesson views ---------------- */
+.view{max-width:1480px;margin:0 auto;padding:1.6rem 1.4rem 4rem}
+.crumb{display:flex;align-items:center;gap:.5rem;color:var(--muted);font-size:.86rem;font-weight:600;margin-bottom:1rem}
+.crumb a:hover{color:var(--green-600)}
+.mod-hero{display:flex;gap:1.2rem;align-items:flex-start;flex-wrap:wrap}
+.mod-hero .thumb{width:84px;height:84px;border-radius:16px;border:1px solid var(--line);overflow:hidden;flex:none}
+.mod-hero h1{font-size:1.9rem}
+.mod-hero p{color:var(--gray);max-width:60ch;margin:.4rem 0 0}
+.lesson-list{display:flex;flex-direction:column;gap:.6rem;margin-top:1.4rem;max-width:760px}
+.li{display:flex;align-items:center;gap:.9rem;padding:.85rem 1rem;border:1px solid var(--line);border-radius:13px;background:#fff;
+  box-shadow:var(--shadow-sm);text-align:left;width:100%}
+.li:hover{border-color:var(--green-200)}
+.li .num{width:30px;height:30px;border-radius:8px;background:var(--bg);display:grid;place-items:center;font-weight:800;
+  color:var(--gray);font-size:.85rem;flex:none}
+.li.done .num{background:var(--green);color:#fff}
+.li .ti{font-weight:700}
+.li .mt{color:var(--muted);font-size:.8rem;font-weight:600}
+.li .go{margin-left:auto;color:var(--muted)}
+
+/* lesson reader */
+.reader{max-width:820px;margin:0 auto}
+.reader .kicker{color:var(--green-600);font-weight:800;font-size:.74rem;letter-spacing:.08em;text-transform:uppercase}
+.reader h1{font-size:2rem;margin:.3rem 0 .3rem}
+.reader .blurb{color:var(--gray);font-size:1.05rem;margin-bottom:1.2rem}
+.prose{font-size:1.02rem;line-height:1.7;color:var(--ink-2)}
+.prose p{margin:.85rem 0}
+.prose ul{padding-left:1.2rem}.prose li{margin:.3rem 0}
+.prose code{font-family:var(--mono);font-size:.84em;background:#eef1f4;padding:.08em .35em;border-radius:5px;color:#28415f}
+.prose h3{margin:1.4rem 0 .3rem;font-size:1.2rem}
+.hh{color:var(--red);font-weight:800}.ll{color:var(--blue);font-weight:800}
+.hl{color:var(--red-soft);font-weight:800}.lh{color:var(--blue-soft);font-weight:800}
+.aside{border-left:3px solid var(--green);background:var(--green-50);padding:.8rem 1.05rem;border-radius:0 10px 10px 0;
+  margin:1.2rem 0;color:var(--ink-2)}
+.aside strong{color:var(--green-700)}
+
+/* code cell */
+.cell{margin:1.3rem 0;border:1px solid var(--line);border-radius:13px;overflow:hidden;background:#fff;box-shadow:var(--shadow)}
+.cell-head{display:flex;align-items:center;gap:.6rem;padding:.5rem .8rem;background:#fbfcfd;border-bottom:1px solid var(--line)}
+.cell-cap{font-family:var(--mono);font-size:.74rem;color:var(--gray);flex:1}
+.cell-cap b{color:var(--ink)}
+.run{font-weight:700;font-size:.8rem;border:0;background:var(--green);color:#fff;padding:.4rem .9rem;border-radius:8px;
+  display:inline-flex;align-items:center;gap:.4rem}
+.run:hover{background:var(--green-600)}
+.run:disabled{background:#c2cad4;cursor:default}
+.run .spin{width:11px;height:11px;border:2px solid rgba(255,255,255,.5);border-top-color:#fff;border-radius:50%;display:none}
+.run.busy .spin{display:inline-block;animation:rot .7s linear infinite}.run.busy .ico{display:none}
+@keyframes rot{to{transform:rotate(360deg)}}
+.editor{background:var(--term-bg)}
+textarea.code{width:100%;border:0;color:var(--term-fg);background:var(--term-bg);padding:.9rem 1rem;resize:vertical;
+  min-height:70px;tab-size:4;outline:none;white-space:pre;overflow-x:auto;font-family:var(--mono);font-size:13.4px;line-height:1.55}
+.CodeMirror{height:auto;background:var(--term-bg);color:var(--term-fg);font-family:var(--mono);font-size:13.4px;line-height:1.55;padding:.4rem .2rem}
+.CodeMirror-gutters{background:var(--term-bg);border:0}.CodeMirror-linenumber{color:#3c4a64}
+.CodeMirror-cursor{border-left:1.5px solid #9fd0ff}
+.cm-s-spat .cm-keyword{color:#ff9e6d}.cm-s-spat .cm-builtin{color:#9fd0ff}.cm-s-spat .cm-string{color:#86e1b0}
+.cm-s-spat .cm-number{color:#f5d479}.cm-s-spat .cm-comment{color:#5f7196;font-style:italic}.cm-s-spat .cm-def{color:#cbb6ff}
+.cm-s-spat .cm-variable-2{color:#cdd9ee}.cm-s-spat .cm-operator{color:#cdd9ee}.CodeMirror-selected{background:#28395a!important}
+.out{border-top:1px dashed var(--line);padding:.2rem .9rem .7rem;display:none}.out.show{display:block}
+.out pre{font-family:var(--mono);font-size:12.7px;line-height:1.5;white-space:pre-wrap;word-break:break-word;color:#243049;margin:.6rem 0}
+.out .err{color:#b2182b;background:#fdf0ee;border-radius:6px;padding:.5rem .7rem}
+.out img{display:block;margin:.6rem auto;border-radius:6px;background:#fff}
+.out .hint{font-family:var(--mono);font-size:11.5px;color:var(--muted)}
+.lesson-nav{display:flex;justify-content:space-between;gap:1rem;margin-top:2rem;border-top:1px solid var(--line);padding-top:1.4rem}
+.complete-btn{display:inline-flex;align-items:center;gap:.5rem;font-weight:700;border-radius:11px;padding:.7rem 1.2rem;
+  border:1px solid var(--green);background:#fff;color:var(--green-700)}
+.complete-btn.is-done{background:var(--green);color:#fff}
+
+/* simple stub / progress views */
+.stub{max-width:640px;margin:3rem auto;text-align:center;color:var(--gray)}
+.stub .em{font-size:2.4rem}
+.stub h2{font-size:1.5rem;margin:.6rem 0 .4rem;color:var(--ink)}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:1rem;margin:1.4rem 0}
+.kpi{background:#fff;border:1px solid var(--line);border-radius:14px;padding:1.1rem}
+.kpi .v{font-size:1.9rem;font-weight:800;color:var(--green-600)}.kpi .k{color:var(--muted);font-weight:600;font-size:.85rem}
+
+/* coffee + footer */
+.coffee-card{display:flex;gap:1rem;align-items:center;flex-wrap:wrap;padding:1.3rem 1.4rem;border:1px solid var(--line);
+  border-radius:var(--r);background:#fff;box-shadow:var(--shadow-sm)}
+.coffee-card .big{font-weight:800;font-size:1.1rem;flex:1;min-width:220px}
+.coffee-card .big span{display:block;color:var(--gray);font-weight:500;font-size:.9rem;margin-top:.2rem}
+.coffee-btn{display:inline-flex;gap:.5rem;align-items:center;font-weight:700;background:var(--amber);color:#3a2a12;
+  border:0;border-radius:999px;padding:.7rem 1.2rem}
+.coffee-btn:hover{filter:brightness(.97)}
+footer{max-width:1480px;margin:0 auto;padding:1.6rem 1.4rem 3rem;color:var(--muted);font-size:.84rem}
+footer a{color:var(--gray);text-decoration:underline}
+
+/* status pill (python) */
+#pystatus{position:fixed;right:14px;bottom:14px;z-index:70;font-family:var(--mono);font-size:.72rem;display:none;
+  align-items:center;gap:.45rem;background:#fff;border:1px solid var(--line);border-radius:999px;padding:.4rem .7rem;
+  box-shadow:var(--shadow)}
+#pystatus.show{display:inline-flex}
+#pystatus .dot{width:8px;height:8px;border-radius:50%;background:var(--amber)}
+#pystatus.ready .dot{background:var(--green)}
+#pystatus.busy .dot{background:var(--blue);animation:pulse .7s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+
+/* ---------------- responsive ---------------- */
+@media (max-width:1080px){
+  .app{grid-template-columns:1fr}
+  .sidebar{position:static;flex-direction:row;flex-wrap:wrap}
+  .sidebar > *{flex:1;min-width:240px}
+  .hero{grid-template-columns:1fr}.hero-fig{order:-1}
+  .feat{grid-template-columns:1fr}
+}
+@media (max-width:760px){
+  .nav,.search,.pill{display:none}
+  .menu-btn{display:grid}
+  .feat-viz{grid-template-columns:repeat(2,1fr)}
+  .hero{padding:1.4rem}
+}
+.nav.open{display:flex;position:absolute;top:60px;left:0;right:0;background:#fff;flex-direction:column;
+  border-bottom:1px solid var(--line);padding:.6rem 1.4rem}
+</style>
+</head>
+<body>
+<header class="topbar" id="topbar"></header>
+<div class="app" id="app"></div>
+<footer>
+  A free learning platform at <a href="https://ericvaz.com/spatstat">ericvaz.com/spatstat</a>.
+  Lessons run real Python in your browser via Pyodide (WebAssembly); data is fetched live from open, CORS-enabled repositories.
+  Progress is stored only in your browser. &copy; Eric Vaz — reuse freely with attribution.
+</footer>
+<div id="pystatus"><span class="dot"></span><span class="txt">Python</span></div>
+
+<script id="curriculum" type="application/json">{"product": {"name": "Spatial Statistics", "domain": "ericvaz.com/spatstat"}, "paths": [{"id": "foundations", "name": "Foundations", "icon": "grid"}, {"id": "patterns", "name": "Patterns", "icon": "dots"}, {"id": "models", "name": "Models", "icon": "layers"}, {"id": "applications", "name": "Applications", "icon": "bolt"}], "modules": [{"id": "spatial-autocorrelation", "n": 1, "path": "foundations", "title": "Spatial Autocorrelation", "blurb": "Understand how spatial relationships create patterns.", "thumb": "autocorr", "status": "active", "lessons": [{"id": "sa-warmup", "title": "Your browser is the computer", "minutes": 4, "interactive": true, "blocks": [{"kind": "prose", "html": "<p>This is a hands-on tour of modern spatial statistics. Every grey panel is a live Python session: NumPy, pandas, SciPy and Matplotlib are already loaded the first time you run something, and the session is shared down the page, so a variable you create in one cell is still around in the next.</p>\n   <p>We will pull real data straight from the cloud, never from a file on a server. Press Run on the cell below to confirm the engine is awake.</p>"}, {"kind": "code", "caption": "Check the runtime", "code": "import sys, numpy as np, pandas as pd, scipy\nprint(\"Python\", sys.version.split()[0])\nprint(\"NumPy\", np.__version__, \"| pandas\", pd.__version__, \"| SciPy\", scipy.__version__)\nprint()\nprint(\"This printed from Python running inside your browser tab.\")\nprint(\"Nothing was sent to a server. Change the text and Run again.\")"}]}, {"id": "sa-data", "title": "Spatial data, fetched from the cloud", "minutes": 8, "interactive": true, "blocks": [{"kind": "prose", "html": "<p>Spatial analysis almost always starts with one of two data models. <em>Point</em> data records a value at a coordinate &mdash; an elevation sounding, an air-quality sensor, a soil core. <em>Areal</em> data attaches a value to a region &mdash; a census tract, a state, a catchment. The questions you can ask, and the tools that answer them, differ between the two.</p>\n   <p>Pyodide ships <code>pyodide.http.open_url</code>, which fetches a text resource over the network and hands it back as a file-like object &mdash; perfect for <code>pandas.read_csv</code> or <code>json.load</code>. The URLs below point at jsDelivr, a CDN that mirrors public GitHub repositories with open CORS headers, so the fetch works from any page.</p>"}, {"kind": "code", "caption": "Load a point dataset and an areal dataset", "code": "from pyodide.http import open_url\nimport pandas as pd, json\n\n# POINTS: 52 topographic elevation soundings on a 6x6 unit field (MASS::topo),\n# the classic teaching set for trend surfaces and kriging.\nTOPO = \"https://cdn.jsdelivr.net/gh/vincentarelbundock/Rdatasets@master/csv/MASS/topo.csv\"\ntopo = pd.read_csv(open_url(TOPO))[[\"x\", \"y\", \"z\"]]\nprint(\"POINTS  topo:\", topo.shape, \"-> columns x, y, z(elevation)\")\nprint(topo.head(3).to_string(index=False))\n\n# AREAS: US states as GeoJSON polygons carrying population density.\nSTATES = \"https://cdn.jsdelivr.net/gh/PublicaMundi/MappingAPI@master/data/geojson/us-states.json\"\ngj = json.load(open_url(STATES))\nprint(\"\\nAREAS   states:\", len(gj[\"features\"]), \"polygons\")\nprint(\"first feature properties:\", gj[\"features\"][0][\"properties\"])"}, {"kind": "aside", "html": "<strong>What changed since the 2010s.</strong> The classic workflow here was R with <code>sp</code> and <code>gstat</code>, reading a local <code>.dat</code> file off your desktop. The 2026 version is Python, the data lives in the cloud under version control, and the whole thing runs in a browser tab. Same statistics &mdash; far less friction."}]}, {"id": "sa-esda", "title": "Look before you model", "minutes": 9, "interactive": true, "blocks": [{"kind": "prose", "html": "<p>Before any statistic, look at the data in space. For the topo points, colour each location by its elevation; for the states, fill each polygon by its value. Two cells, two of the most common maps in the field.</p>"}, {"kind": "code", "caption": "Map the points; check the distribution", "code": "import matplotlib.pyplot as plt\nfig, ax = plt.subplots(1, 2, figsize=(9, 3.6))\nsc = ax[0].scatter(topo.x, topo.y, c=topo.z, cmap=\"viridis\",\n                   s=80, edgecolor=\"k\", linewidth=.4)\nax[0].set(title=\"Elevation soundings\", xlabel=\"x\", ylabel=\"y\")\nax[0].set_aspect(\"equal\")\nplt.colorbar(sc, ax=ax[0], label=\"elevation\")\nax[1].hist(topo.z, bins=12, color=\"#15776A\", edgecolor=\"white\")\nax[1].set(title=\"Distribution of elevation\", xlabel=\"elevation\", ylabel=\"count\")\nplt.tight_layout()"}, {"kind": "prose", "html": "<p>For polygons we need two small helpers: one to pull the coordinate rings out of a GeoJSON feature (a feature may be a single <code>Polygon</code> or a <code>MultiPolygon</code>), and one to find each polygon's centroid &mdash; we'll need centroids in the next lesson. Population density is wildly skewed (New Jersey versus Wyoming), so we analyse its logarithm, and we drop Alaska, Hawaii and Puerto Rico so the neighbour graph isn't distorted by far-flung exclaves. Handling skew and islands is real practice, not a detail.</p>"}, {"kind": "code", "caption": "A choropleth, the honest way (log scale, contiguous states)", "code": "import numpy as np, matplotlib as mpl\nfrom matplotlib.path import Path\nfrom matplotlib.patches import PathPatch\nfrom matplotlib.collections import PatchCollection\n\ndef feature_polys(f):\n    g = f[\"geometry\"]\n    return g[\"coordinates\"] if g[\"type\"] == \"MultiPolygon\" else [g[\"coordinates\"]]\n\ndef state_centroid(f):\n    best, best_area = None, -1\n    for poly in feature_polys(f):\n        r = np.array(poly[0])\n        a = abs(0.5*np.sum(r[:-1,0]*r[1:,1] - r[1:,0]*r[:-1,1]))   # shoelace\n        if a > best_area:\n            best_area, best = a, (r[:,0].mean(), r[:,1].mean())\n    return best\n\ndrop = {\"Alaska\", \"Hawaii\", \"Puerto Rico\"}\nfeats = [f for f in gj[\"features\"] if f[\"properties\"][\"name\"] not in drop]\ndens  = np.array([f[\"properties\"][\"density\"] for f in feats])\ny     = np.log(dens)                                  # the variable we analyse\ncent  = np.array([state_centroid(f) for f in feats])\nprint(len(feats), \"contiguous states + DC\")\nprint(\"raw density spans %.0fx; log() makes it map-able\" % (dens.max()/dens.min()))\n\ndef choropleth(feats, values, title, cmap=\"viridis\"):\n    norm = mpl.colors.Normalize(values.min(), values.max())\n    cm = plt.get_cmap(cmap)\n    fig, ax = plt.subplots(figsize=(7.2, 4.3))\n    patches, colors = [], []\n    for f, v in zip(feats, values):\n        for poly in feature_polys(f):\n            patches.append(PathPatch(Path(np.array(poly[0]))))\n            colors.append(cm(norm(v)))\n    ax.add_collection(PatchCollection(patches, facecolor=colors,\n                                      edgecolor=\"white\", linewidth=.4))\n    ax.autoscale(); ax.set_aspect(1.3); ax.axis(\"off\"); ax.set_title(title)\n    fig.colorbar(mpl.cm.ScalarMappable(norm=norm, cmap=cm), ax=ax, shrink=.7)\n\nchoropleth(feats, y, \"log population density by state\")"}]}, {"id": "sa-weights", "title": "Who is next to whom", "minutes": 9, "interactive": true, "blocks": [{"kind": "prose", "html": "<p>To measure whether nearby places resemble each other, you first have to say what &ldquo;nearby&rdquo; means. That choice is the <strong>spatial weights matrix</strong> <code>W</code>: <code>W[i, j] &gt; 0</code> when <code>j</code> is a neighbour of <code>i</code>. Three common families:</p>\n   <ul>\n     <li><strong>Contiguity</strong> &mdash; share a border (Queen: any shared point; Rook: a shared edge). Natural for polygons.</li>\n     <li><strong>Distance band</strong> &mdash; neighbours within radius <em>d</em>.</li>\n     <li><strong>k-nearest</strong> &mdash; the <em>k</em> closest, guaranteeing every unit has neighbours.</li>\n   </ul>\n   <p>We'll build k-nearest weights from the centroids, because it works straight from geometry and never leaves a unit isolated. Then we <em>row-standardise</em> so each row sums to one &mdash; that turns the weighted sum over neighbours into a neighbour <em>average</em>.</p>"}, {"kind": "code", "caption": "Build W, then form the spatial lag", "code": "from scipy.spatial import cKDTree\nimport numpy as np\n\ndef knn_W(coords, k=6, row_standardize=True):\n    n = len(coords)\n    tree = cKDTree(coords)\n    _, idx = tree.query(coords, k=k+1)        # k+1: the nearest point is itself\n    W = np.zeros((n, n))\n    for i in range(n):\n        for j in idx[i, 1:]:                  # skip self\n            W[i, j] = 1.0\n    if row_standardize:\n        W = W / W.sum(1, keepdims=True)\n    return W\n\nW = knn_W(cent, k=6)\nprint(\"W is\", W.shape, \"| every row sums to 1:\", np.allclose(W.sum(1), 1))\n\n# The spatial lag of y: each state's average neighbour value.\nylag = W @ y\nprint(\"correlation between a state's value and its neighbours' average:\",\n      round(np.corrcoef(y, ylag)[0, 1], 3))"}, {"kind": "aside", "html": "<strong>The lag is the whole game.</strong> Almost every areal spatial statistic &mdash; Moran's I, spatial lag regression, LISA &mdash; is built from <code>W @ y</code>. Get the weights right and the rest follows; get them wrong and every downstream number inherits the mistake."}]}, {"id": "sa-moran", "title": "Spatial autocorrelation", "minutes": 10, "interactive": true, "blocks": [{"kind": "prose", "html": "<p>&ldquo;Everything is related to everything else, but near things are more related than distant things.&rdquo; <strong>Moran's I</strong> turns that into a number: a correlation between each value and the average of its neighbours. It runs from about &minus;1 (a checkerboard) through 0 (no spatial pattern) to +1 (strong clustering).</p>\n   <p>There's no clean theoretical null for most real maps, so we test by <em>permutation</em>: shuffle the values across locations many times, recompute I each time, and see where the real I falls in that reference distribution.</p>"}, {"kind": "code", "caption": "Moran's I + a permutation test", "code": "def morans_I(y, W):\n    z = y - y.mean()\n    S0 = W.sum()\n    return (len(y)/S0) * np.sum(W * np.outer(z, z)) / np.sum(z**2)\n\nI  = morans_I(y, W)\nEI = -1/(len(y)-1)                       # value expected under no autocorrelation\nrng = np.random.default_rng(42)\nref = np.array([morans_I(rng.permutation(y), W) for _ in range(999)])\np = (np.sum(ref >= I) + 1) / (999 + 1)\n\nprint(f\"Moran's I (log density) = {I:.3f}\")\nprint(f\"expected if random      = {EI:.3f}\")\nprint(f\"pseudo p-value          = {p:.3f}  (from 999 permutations)\")\nprint()\nprint(f\"Moran's I on RAW density = {morans_I(dens, W):.3f}  <- skew hides the structure\")\nprint(\"Same map, same neighbours. The log transform is what let us see it.\")"}, {"kind": "prose", "html": "<p>The <strong>Moran scatterplot</strong> makes it visual: standardised value on the x-axis, its spatial lag on the y-axis. The slope of the fitted line <em>is</em> Moran's I. Points in the upper-right are high values surrounded by high values; lower-left, low by low.</p>"}, {"kind": "code", "caption": "The Moran scatterplot", "code": "import matplotlib.pyplot as plt\nzy   = (y - y.mean())/y.std()\nzlag = W @ zy\nfig, ax = plt.subplots(figsize=(4.8, 4.8))\nax.axhline(0, color=\"#aaa\", lw=.8); ax.axvline(0, color=\"#aaa\", lw=.8)\nax.scatter(zy, zlag, s=32, color=\"#14233D\")\nslope = np.polyfit(zy, zlag, 1)[0]\nxs = np.linspace(zy.min(), zy.max(), 2)\nax.plot(xs, slope*xs, color=\"#D6552F\", lw=2,\n        label=f\"slope = Moran's I = {slope:.3f}\")\nax.set(xlabel=\"value (standardised)\", ylabel=\"spatial lag\",\n       title=\"Moran scatterplot\"); ax.legend()"}]}]}, {"id": "morans-i", "n": 2, "path": "foundations", "title": "Moran's I", "blurb": "A deeper dive into global spatial autocorrelation.", "thumb": "moran", "status": "soon", "lessons": []}, {"id": "gearys-c", "n": 3, "path": "foundations", "title": "Geary's C", "blurb": "Alternative measure of spatial dependence.", "thumb": "geary", "status": "soon", "lessons": []}, {"id": "point-pattern", "n": 4, "path": "patterns", "title": "Point Pattern Analysis", "blurb": "Analyze patterns in point locations.", "thumb": "point", "status": "soon", "lessons": []}, {"id": "spatial-regression", "n": 5, "path": "models", "title": "Spatial Regression", "blurb": "Model relationships with spatially referenced data.", "thumb": "regression", "status": "soon", "lessons": []}, {"id": "interpolation", "n": 6, "path": "models", "title": "Interpolation & Kriging", "blurb": "Predict values at unsampled locations.", "thumb": "interp", "status": "active", "lessons": [{"id": "in-trend", "title": "Trend surfaces", "minutes": 9, "interactive": true, "blocks": [{"kind": "prose", "html": "<p>For a continuous field sampled at points, the first question is whether there's a broad <em>drift</em> across the region. A <strong>trend surface</strong> answers it by regressing the measured value on the coordinates. First order fits a tilted plane; second order adds curvature. It's ordinary least squares &mdash; the spatial part is only in the design matrix.</p>"}, {"kind": "code", "caption": "First- and second-order trend surfaces", "code": "import numpy as np, matplotlib.pyplot as plt\nx, yy, z = topo.x.values, topo.y.values, topo.z.values\n\ndef design(x, y, order):\n    cols = [np.ones_like(x)]\n    if order >= 1: cols += [x, y]\n    if order >= 2: cols += [x*x, x*y, y*y]\n    return np.column_stack(cols)\n\nfor o in (1, 2):\n    A = design(x, yy, o)\n    b, *_ = np.linalg.lstsq(A, z, rcond=None)\n    r2 = 1 - np.sum((z - A@b)**2) / np.sum((z - z.mean())**2)\n    print(f\"order {o}: R^2 = {r2:.3f}  ->  explains {r2*100:.0f}% of the variation\")"}, {"kind": "prose", "html": "<p>Fit the second-order surface, draw it as filled contours, and &mdash; just as important &mdash; map the <strong>residuals</strong>. The residuals are what the smooth trend cannot explain, and their spatial structure is exactly what kriging will model next.</p>"}, {"kind": "code", "caption": "The surface, and what it leaves behind", "code": "A = design(x, yy, 2)\nb, *_ = np.linalg.lstsq(A, z, rcond=None)\nresid = z - A @ b\ngx = np.linspace(x.min(), x.max(), 60); gy = np.linspace(yy.min(), yy.max(), 60)\nGX, GY = np.meshgrid(gx, gy)\nGZ = (design(GX.ravel(), GY.ravel(), 2) @ b).reshape(GX.shape)\n\nfig, ax = plt.subplots(1, 2, figsize=(9.2, 3.8))\ncf = ax[0].contourf(GX, GY, GZ, 12, cmap=\"viridis\")\nax[0].scatter(x, yy, c=\"white\", s=12, edgecolor=\"k\")\nax[0].set(title=\"2nd-order trend surface\"); ax[0].set_aspect(\"equal\")\nplt.colorbar(cf, ax=ax[0])\nsc = ax[1].scatter(x, yy, c=resid, cmap=\"RdBu_r\", s=70, edgecolor=\"k\", linewidth=.4)\nax[1].set(title=\"Residuals: structure the trend missed\"); ax[1].set_aspect(\"equal\")\nplt.colorbar(sc, ax=ax[1])\nplt.tight_layout()"}]}, {"id": "in-variogram", "title": "The variogram", "minutes": 10, "interactive": true, "blocks": [{"kind": "prose", "html": "<p>How quickly does similarity fall off with distance? The <strong>empirical semivariogram</strong> answers it: for every pair of points, take half the squared difference in value, then average those within distance bins. Three numbers describe the fitted model &mdash; the <em>nugget</em> (variance at zero distance: noise and micro-scale variation), the <em>sill</em> (the plateau, total variance), and the <em>range</em> (the distance at which points stop being correlated).</p>\n   <p>We compute it on the trend residuals, so the variogram describes the <em>structured</em> part of the field rather than the broad drift.</p>"}, {"kind": "code", "caption": "Empirical variogram + a fitted spherical model", "code": "import numpy as np, matplotlib.pyplot as plt\nfrom scipy.spatial.distance import pdist\nfrom scipy.optimize import curve_fit\n\nA1 = design(x, yy, 1)\nb1, *_ = np.linalg.lstsq(A1, z, rcond=None)\nr = z - A1 @ b1                                  # detrended residuals\nP = np.c_[x, yy]\n\nh = pdist(P)                                     # all pairwise distances\ng = 0.5 * pdist(r.reshape(-1, 1), \"sqeuclidean\") # 0.5*(r_i - r_j)^2 per pair\n\nhmax = h.max() / 2\nedges = np.linspace(0, hmax, 12)\nctr = 0.5*(edges[1:] + edges[:-1])\ngamma = np.array([g[(h>=a)&(h<bnd)].mean() if ((h>=a)&(h<bnd)).any() else np.nan\n                  for a, bnd in zip(edges[:-1], edges[1:])])\nok = ~np.isnan(gamma)\n\ndef spherical(h, c0, c1, a):\n    h = np.asarray(h, float)\n    s = c0 + c1 * (1.5*h/a - 0.5*(h/a)**3)\n    s[h > a] = c0 + c1\n    return s\n\n(c0, c1, a), _ = curve_fit(\n    spherical, ctr[ok], gamma[ok],\n    p0=[gamma[ok].min(), np.ptp(gamma[ok]), hmax*0.6],\n    bounds=([0,0,1e-6], [np.inf]*3), maxfev=10000)\nprint(f\"nugget = {c0:.0f}   sill = {c0+c1:.0f}   range = {a:.2f}\")\n\nhh = np.linspace(0, hmax, 100)\nfig, ax = plt.subplots(figsize=(6.2, 3.9))\nax.plot(ctr[ok], gamma[ok], \"o\", color=\"#14233D\", label=\"empirical\")\nax.plot(hh, spherical(hh, c0, c1, a), color=\"#D6552F\", lw=2, label=\"spherical model\")\nax.set(xlabel=\"distance  h\", ylabel=\"semivariance  \\u03b3(h)\",\n       title=\"Variogram of detrended elevation\"); ax.legend()"}]}, {"id": "in-kriging", "title": "Kriging", "minutes": 11, "interactive": true, "blocks": [{"kind": "prose", "html": "<p><strong>Kriging</strong> predicts the value at an unsampled location as a weighted average of the observations, with weights chosen so the prediction is unbiased and has minimum variance &mdash; and the weights come from the variogram you just fitted. Its signature feature is the second output: a <strong>kriging variance</strong>, low near data and high in the gaps. Interpolators like inverse-distance can't tell you that.</p>\n   <p>We krige the residuals, then add the trend back on &mdash; this is &ldquo;universal kriging&rdquo; done in two transparent steps. The grid is small so it runs in a second or two right here.</p>"}, {"kind": "code", "caption": "Ordinary kriging: prediction and uncertainty", "code": "import numpy as np, matplotlib.pyplot as plt\nfrom scipy.spatial.distance import cdist\n\ndef gamma_fn(h):\n    return spherical(h, c0, c1, a)\n\nP = np.c_[x, yy]; n = len(P)\nK = np.ones((n+1, n+1)); K[:n, :n] = gamma_fn(cdist(P, P)); K[n, n] = 0.0\n\ndef krige(pt):\n    k = np.append(gamma_fn(cdist([pt], P)[0]), 1.0)   # +1 for the unbiasedness constraint\n    w = np.linalg.solve(K, k)\n    return w[:n] @ r, w @ k                            # prediction (residual), variance\n\ngx = np.linspace(x.min(), x.max(), 45); gy = np.linspace(yy.min(), yy.max(), 45)\nGX, GY = np.meshgrid(gx, gy)\nZ = np.zeros_like(GX); V = np.zeros_like(GX)\nfor i in range(GX.shape[0]):\n    for j in range(GX.shape[1]):\n        pred, var = krige([GX[i,j], GY[i,j]])\n        Z[i,j] = pred + np.array([1, GX[i,j], GY[i,j]]) @ b1   # add trend back\n        V[i,j] = var\n\nfig, ax = plt.subplots(1, 2, figsize=(9.6, 3.9))\ncf = ax[0].contourf(GX, GY, Z, 14, cmap=\"viridis\")\nax[0].scatter(x, yy, c=\"white\", s=12, edgecolor=\"k\")\nax[0].set(title=\"Kriged elevation\"); ax[0].set_aspect(\"equal\"); plt.colorbar(cf, ax=ax[0])\ncv = ax[1].contourf(GX, GY, np.sqrt(np.clip(V, 0, None)), 14, cmap=\"magma\")\nax[1].scatter(x, yy, c=\"#39d0ff\", s=10, edgecolor=\"k\")\nax[1].set(title=\"Kriging std. error (uncertainty)\"); ax[1].set_aspect(\"equal\")\nplt.colorbar(cv, ax=ax[1])\nplt.tight_layout()\nprint(\"Notice: error is lowest at the dots and grows where there's no data.\")"}]}]}, {"id": "hot-spot-analysis", "n": 7, "path": "patterns", "title": "Hot Spot Analysis", "blurb": "Identify statistically significant hot and cold spots.", "thumb": "hotspot", "status": "active", "lessons": [{"id": "hs-lisa", "title": "Where the clusters are (LISA)", "minutes": 10, "interactive": true, "blocks": [{"kind": "prose", "html": "<p>A single global statistic hides geography: it tells you clustering exists, not <em>where</em>. <strong>Local Moran's I</strong> (Anselin 1995) computes a contribution for every unit and classifies each into one of four types &mdash; high surrounded by high (<span class=\"hh\">HH</span>, a hot spot), low by low (<span class=\"ll\">LL</span>, a cold spot), or the spatial outliers <span class=\"hl\">HL</span> and <span class=\"lh\">LH</span>. Significance comes from a <em>conditional</em> permutation test: hold unit <em>i</em> fixed and reshuffle only the rest.</p>"}, {"kind": "code", "caption": "Local Moran's I with conditional permutation", "code": "def local_moran(y, W, permutations=199, seed=0):\n    z  = y - y.mean()\n    m2 = np.sum(z**2) / len(y)\n    Ii = (z / m2) * (W @ z)\n    rng = np.random.default_rng(seed)\n    n = len(y); p = np.zeros(n)\n    for i in range(n):\n        nb = np.where(W[i] > 0)[0]\n        wi = W[i, nb]\n        others = np.delete(z, i)\n        sims = np.array([\n            (z[i]/m2) * np.sum(wi * rng.choice(others, size=len(nb), replace=False))\n            for _ in range(permutations)])\n        p[i] = (np.sum(np.abs(sims) >= abs(Ii[i])) + 1) / (permutations + 1)\n    return Ii, p\n\nIi, p = local_moran(y, W, permutations=199)\nzy = (y - y.mean())/y.std(); zlag = W @ zy\nquad = np.where((zy>0)&(zlag>0), \"HH\",\n       np.where((zy<0)&(zlag<0), \"LL\",\n       np.where((zy>0)&(zlag<0), \"HL\", \"LH\")))\nsig = p < 0.05\nfor q in [\"HH\",\"LL\",\"HL\",\"LH\"]:\n    names = [f[\"properties\"][\"name\"] for f,qq,s in zip(feats,quad,sig) if s and qq==q]\n    print(f\"{q}  ({len(names):2d}): {', '.join(names) if names else '-'}\")"}, {"kind": "prose", "html": "<p>Now the payoff &mdash; the <strong>cluster map</strong>. Colour only the statistically significant units by their type; leave the rest grey. This is the map that ends up in the paper.</p>"}, {"kind": "code", "caption": "The LISA cluster map", "code": "colmap = {\"HH\": \"#b2182b\", \"LL\": \"#2166ac\", \"HL\": \"#ef8a62\", \"LH\": \"#67a9cf\"}\ncols = [colmap[q] if s else \"#e9ecef\" for q, s in zip(quad, sig)]\nfig, ax = plt.subplots(figsize=(7.4, 4.4))\npatches = []\npatch_cols = []\nfor f, c in zip(feats, cols):\n    for poly in feature_polys(f):\n        patches.append(PathPatch(Path(np.array(poly[0])))); patch_cols.append(c)\nax.add_collection(PatchCollection(patches, facecolor=patch_cols,\n                                  edgecolor=\"white\", linewidth=.4))\nax.autoscale(); ax.set_aspect(1.3); ax.axis(\"off\")\nax.set_title(\"Local Moran clusters of log population density (p < 0.05)\")\nfrom matplotlib.patches import Patch\nax.legend(handles=[Patch(facecolor=colmap[k], label=k) for k in colmap],\n          loc=\"lower left\", ncol=4, fontsize=8, frameon=False)"}]}]}, {"id": "bayesian", "n": 8, "path": "models", "title": "Bayesian Spatial Models", "blurb": "Incorporate uncertainty with Bayesian approaches.", "thumb": "bayes", "status": "soon", "lessons": []}]}</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/python/python.min.js"></script>
+<script>/* ============================================================
+   Spatial Statistics — learning platform engine
+   Manifest-driven. Flip DEMO=false to track real progress
+   in the visitor's browser (localStorage) instead of showing
+   the populated demo account.
+   ============================================================ */
+const DEMO = true;                 // <— set to false to go live with real per-browser progress
+const BMC  = "ericvaz";            // <— your Buy Me a Coffee handle
+const XP_PER_LESSON = 50;
+const STORE_KEY = "spatstat.v1";
+
+const C = JSON.parse(document.getElementById("curriculum").textContent);
+const MODULES = C.modules;
+const PATHS = C.paths;
+const activeModules = MODULES.filter(m => m.status === "active");
+const allLessons = activeModules.flatMap(m => m.lessons.map(l => ({...l, moduleId:m.id})));
+const lessonById = id => allLessons.find(l => l.id === id);
+const moduleById = id => MODULES.find(m => m.id === id);
+
+/* ---------- state ---------- */
+function safeLS(){ try{ const k="__t"; localStorage.setItem(k,"1"); localStorage.removeItem(k); return true; }catch(e){ return false; } }
+const HAS_LS = safeLS();
+
+function todayISO(){ return new Date().toISOString().slice(0,10); }
+
+function demoState(){
+  // a populated account that mirrors the mockup
+  const done = {};
+  const pick = ["sa-warmup","sa-data","sa-esda","hs-lisa","in-trend"]; // a believable spread
+  let d = new Date(); 
+  pick.forEach((id,i)=>{ const dd=new Date(d); dd.setDate(d.getDate()-(pick.length-i)); done[id]=dd.toISOString().slice(0,10); });
+  // a 12-day streak ending today
+  const dates=[]; for(let i=0;i<12;i++){ const dd=new Date(); dd.setDate(dd.getDate()-i); dates.push(dd.toISOString().slice(0,10)); }
+  return { completed: done, activeDates: dates, weeklyGoal: 6, name: "AR" };
+}
+
+function loadState(){
+  if(DEMO) return demoState();
+  if(HAS_LS){
+    try{ const s=JSON.parse(localStorage.getItem(STORE_KEY)); if(s) return s; }catch(e){}
+  }
+  return { completed:{}, activeDates:[], weeklyGoal:6, name:"" };
+}
+let S = loadState();
+function saveState(){ if(!DEMO && HAS_LS){ try{ localStorage.setItem(STORE_KEY, JSON.stringify(S)); }catch(e){} } }
+
+function markComplete(lessonId){
+  if(S.completed[lessonId]) return;
+  S.completed[lessonId] = todayISO();
+  if(!S.activeDates.includes(todayISO())) S.activeDates.push(todayISO());
+  saveState();
+}
+function markIncomplete(lessonId){ delete S.completed[lessonId]; saveState(); }
+
+/* ---------- gamification math ---------- */
+const isDone = id => !!S.completed[id];
+function moduleProgress(m){
+  const t = m.lessons.length || 0;
+  const d = m.lessons.filter(l=>isDone(l.id)).length;
+  return { done:d, total:t, pct: t? Math.round(100*d/t) : 0 };
+}
+function overall(){
+  const t = allLessons.length, d = allLessons.filter(l=>isDone(l.id)).length;
+  return { done:d, total:t, pct: t? Math.round(100*d/t):0 };
+}
+const totalXP = () => Object.keys(S.completed).length * XP_PER_LESSON;
+function streak(){
+  const set = new Set(S.activeDates);
+  let n=0; let d=new Date();
+  // allow streak to count if active today or yesterday
+  if(!set.has(d.toISOString().slice(0,10))) d.setDate(d.getDate()-1);
+  while(set.has(d.toISOString().slice(0,10))){ n++; d.setDate(d.getDate()-1); }
+  return n;
+}
+function weekDone(){
+  const now=new Date(); const monday=new Date(now); const day=(now.getDay()+6)%7;
+  monday.setDate(now.getDate()-day); monday.setHours(0,0,0,0);
+  return Object.values(S.completed).filter(ds=> new Date(ds) >= monday).length;
+}
+const ACHIEVEMENTS = [
+  {id:"first",   ti:"First Steps",  sub:"Completed your first lesson", xp:50,  ic:"star",  test:()=>overall().done>=1},
+  {id:"explorer",ti:"Map Explorer", sub:"Completed 5 lessons",        xp:150, ic:"map",   test:()=>overall().done>=5},
+  {id:"streak",  ti:"Hot Streak",   sub:"7 days in a row",            xp:200, ic:"flame", test:()=>streak()>=7},
+  {id:"master",  ti:"Module Master",sub:"Finished a whole module",    xp:250, ic:"trophy",test:()=>activeModules.some(m=>{const p=moduleProgress(m);return p.total&&p.done===p.total;})},
+];
+
+/* ---------- tiny helpers ---------- */
+const $ = (s,r=document)=>r.querySelector(s);
+const esc = s => String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+function rng(seed){ let s=seed>>>0; return ()=>{ s=(s*1664525+1013904223)>>>0; return s/4294967296; }; }
+
+/* ---------- SVG generators ---------- */
+function ringSVG(pct){
+  const r=42, c=2*Math.PI*r, off=c*(1-pct/100);
+  return `<svg class="ring" viewBox="0 0 100 100">
+    <circle cx="50" cy="50" r="${r}" fill="none" stroke="#eef1f4" stroke-width="9"/>
+    <circle cx="50" cy="50" r="${r}" fill="none" stroke="#1f9d63" stroke-width="9" stroke-linecap="round"
+      stroke-dasharray="${c.toFixed(1)}" stroke-dashoffset="${off.toFixed(1)}" transform="rotate(-90 50 50)"/>
+    <text class="pct" x="50" y="49" text-anchor="middle">${pct}%</text>
+    <text class="lbl" x="50" y="62" text-anchor="middle">Overall Progress</text></svg>`;
+}
+function dotsField(seed,n,kind,w=120,h=84){
+  const rd=rng(seed); let pts=[];
+  for(let i=0;i<n;i++){
+    let x,y;
+    if(kind==="clustered"){ const cx=w*0.6,cy=h*0.5; x=cx+(rd()-.5)*w*0.34; y=cy+(rd()-.5)*h*0.5; }
+    else if(kind==="dispersed"){ const gx=Math.floor(i% (Math.ceil(Math.sqrt(n)))), gy=Math.floor(i/Math.ceil(Math.sqrt(n)));
+      const step=w/(Math.ceil(Math.sqrt(n))+1); x=step*(gx+1)+(rd()-.5)*step*.5; y=step*(gy+1)+(rd()-.5)*step*.5; }
+    else { x=8+rd()*(w-16); y=8+rd()*(h-16); }
+    pts.push([x,y]);
+  }
+  const col = kind==="clustered" ? "#e5573f" : (kind==="dispersed" ? "#2f9e69":"#3b82c4");
+  let g=`<svg viewBox="0 0 ${w} ${h}">`;
+  for(let gx=12;gx<w;gx+=16) g+=`<line x1="${gx}" y1="0" x2="${gx}" y2="${h}" stroke="#eef1f4" stroke-width="1"/>`;
+  for(let gy=12;gy<h;gy+=16) g+=`<line x1="0" y1="${gy}" x2="${w}" y2="${gy}" stroke="#eef1f4" stroke-width="1"/>`;
+  if(kind==="clustered") g+=`<circle cx="${w*0.6}" cy="${h*0.5}" r="26" fill="#e5573f" opacity=".12"/>`;
+  pts.forEach(p=> g+=`<circle cx="${p[0].toFixed(1)}" cy="${p[1].toFixed(1)}" r="3" fill="${col}"/>`);
+  return g+`</svg>`;
+}
+function thumbSVG(kind){
+  const w=62,h=62;
+  if(kind==="autocorr"){ let g=`<svg viewBox="0 0 ${w} ${h}">`;
+    const cols=["#3b82c4","#3b82c4","#2f9e69"];
+    for(let r=0;r<3;r++)for(let c2=0;c2<4;c2++){ g+=`<circle cx="${10+c2*14}" cy="${14+r*17}" r="4.5" fill="${cols[(r+c2)%3]}"/>`; }
+    return g+`</svg>`; }
+  if(kind==="moran"){ let g=`<svg viewBox="0 0 ${w} ${h}"><line x1="31" y1="6" x2="31" y2="56" stroke="#dfe3e8"/><line x1="6" y1="31" x2="56" y2="31" stroke="#dfe3e8"/>`;
+    const rd=rng(5); for(let i=0;i<11;i++){ const a=(rd()-.4),x=31+a*22,y=31-a*20+(rd()-.5)*8; g+=`<circle cx="${x.toFixed(0)}" cy="${y.toFixed(0)}" r="3" fill="#2f9e69"/>`;} return g+`</svg>`; }
+  if(kind==="geary"){ let g=`<svg viewBox="0 0 ${w} ${h}">`; const rd=rng(9); const p=[];for(let i=0;i<8;i++)p.push([8+rd()*46,8+rd()*46]);
+    for(let i=0;i<p.length-1;i++) g+=`<line x1="${p[i][0]}" y1="${p[i][1]}" x2="${p[i+1][0]}" y2="${p[i+1][1]}" stroke="#cfe7da"/>`;
+    p.forEach(q=>g+=`<circle cx="${q[0].toFixed(0)}" cy="${q[1].toFixed(0)}" r="3.2" fill="#3b82c4"/>`); return g+`</svg>`; }
+  if(kind==="point"){ return dotsField(3,16,"random",62,62); }
+  if(kind==="regression"){ let g=`<svg viewBox="0 0 ${w} ${h}"><line x1="8" y1="52" x2="54" y2="12" stroke="#f0922b" stroke-width="2"/>`;
+    const rd=rng(7); for(let i=0;i<10;i++){ const t=rd(); const x=8+t*46, y=52-t*40+(rd()-.5)*14; g+=`<circle cx="${x.toFixed(0)}" cy="${y.toFixed(0)}" r="3" fill="#3b82c4"/>`;} return g+`</svg>`; }
+  if(kind==="interp"){ let g=`<svg viewBox="0 0 ${w} ${h}">`;
+    const cs=["#2f9e69","#7cc59b","#bfe3cd","#e8f5ee"]; cs.forEach((c2,i)=> g+=`<circle cx="${20+i*6}" cy="${34-i*3}" r="${26-i*5}" fill="${c2}"/>`);
+    return g+`</svg>`; }
+  if(kind==="hotspot"){ let g=`<svg viewBox="0 0 ${w} ${h}">`;
+    g+=`<circle cx="38" cy="30" r="20" fill="#e5573f" opacity=".15"/>`;
+    const rd=rng(11); for(let i=0;i<7;i++){const a=rd()*6.28,r=rd()*12;g+=`<circle cx="${(38+Math.cos(a)*r).toFixed(0)}" cy="${(30+Math.sin(a)*r).toFixed(0)}" r="3" fill="#e5573f"/>`;}
+    for(let i=0;i<4;i++){g+=`<circle cx="${10+rd()*12}" cy="${44+rd()*10}" r="3" fill="#3b82c4"/>`;} return g+`</svg>`; }
+  if(kind==="bayes"){ let g=`<svg viewBox="0 0 ${w} ${h}">`; const nd=[[31,12],[14,30],[48,28],[22,48],[44,48]];
+    for(let i=1;i<nd.length;i++) g+=`<line x1="${nd[0][0]}" y1="${nd[0][1]}" x2="${nd[i][0]}" y2="${nd[i][1]}" stroke="#cfe7da"/>`;
+    nd.forEach((q,i)=>g+=`<circle cx="${q[0]}" cy="${q[1]}" r="${i?4:5.5}" fill="${i?'#3b82c4':'#2f9e69'}"/>`); return g+`</svg>`; }
+  return `<svg viewBox="0 0 ${w} ${h}"></svg>`;
+}
+function heroMapSVG(){
+  const w=560,h=300; const rd=rng(42); let g=`<svg viewBox="0 0 ${w} ${h}">`;
+  g+=`<path d="M70 60 Q 40 150 80 230 Q 220 280 360 250 Q 520 240 500 150 Q 480 50 330 55 Q 180 40 70 60 Z" fill="#eef6f0"/>`;
+  for(let x=90;x<470;x+=26) g+=`<line x1="${x}" y1="70" x2="${x}" y2="240" stroke="#dce7e0" stroke-width="1"/>`;
+  for(let y=80;y<240;y+=26) g+=`<line x1="80" y1="${y}" x2="480" y2="${y}" stroke="#dce7e0" stroke-width="1"/>`;
+  g+=`<circle cx="360" cy="150" r="58" fill="#e5573f" opacity=".14"/><circle cx="360" cy="150" r="30" fill="#e5573f" opacity=".18"/>`;
+  for(let i=0;i<7;i++){const a=rd()*6.28,r=rd()*34;g+=`<circle cx="${(360+Math.cos(a)*r).toFixed(0)}" cy="${(150+Math.sin(a)*r).toFixed(0)}" r="6" fill="#e5573f"/>`;}
+  const cols=["#3b82c4","#2f9e69"]; for(let i=0;i<20;i++){const x=95+rd()*360,y=80+rd()*150; if(Math.hypot(x-360,y-150)<60)continue; g+=`<circle cx="${x.toFixed(0)}" cy="${y.toFixed(0)}" r="6" fill="${cols[i%2]}"/>`;}
+  // dotted grid hint left
+  for(let r=0;r<6;r++)for(let c2=0;c2<5;c2++) g+=`<circle cx="${20+c2*9}" cy="${90+r*9}" r="1.6" fill="#cfe0d4"/>`;
+  // legend
+  g+=`<g transform="translate(${w-86},96)"><rect x="-12" y="-16" width="92" height="120" rx="10" fill="#fff" stroke="#e9ecf0"/>
+    <text x="0" y="0" font-size="11" font-weight="700" fill="#5f6b7a">Value</text>
+    <rect x="0" y="10" width="16" height="48" rx="3" fill="url(#vg)"/>
+    <text x="24" y="20" font-size="10" fill="#5f6b7a">High</text><text x="24" y="56" font-size="10" fill="#5f6b7a">Low</text></g>
+    <defs><linearGradient id="vg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#e5573f"/><stop offset=".5" stop-color="#f3f0ea"/><stop offset="1" stop-color="#3b82c4"/></linearGradient></defs>`;
+  return g+`</svg>`;
+}
+function sparkline(){ const rd=rng(21); let pts=[]; for(let i=0;i<10;i++)pts.push([i*16+6,40-(6+rd()*22)-(i*0.6)]);
+  let d="M"+pts.map(p=>p[0].toFixed(0)+" "+p[1].toFixed(0)).join(" L ");
+  let g=`<svg viewBox="0 0 156 48"><path d="${d}" fill="none" stroke="#1f9d63" stroke-width="2"/>`;
+  pts.forEach(p=>g+=`<circle cx="${p[0].toFixed(0)}" cy="${p[1].toFixed(0)}" r="2.4" fill="#1f9d63"/>`); return g+`</svg>`; }
+
+/* ---------- icons ---------- */
+const IC = {
+  search:'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>',
+  bell:'<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 8a6 6 0 1 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>',
+  grid:'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1f9d63" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>',
+  list:'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/></svg>',
+  dots:'<svg width="16" height="16" viewBox="0 0 24 24" fill="#6f54c9"><circle cx="6" cy="6" r="2"/><circle cx="12" cy="6" r="2"/><circle cx="18" cy="10" r="2"/><circle cx="8" cy="14" r="2"/><circle cx="16" cy="18" r="2"/></svg>',
+  layers:'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#6f54c9" stroke-width="2"><path d="m12 2 9 5-9 5-9-5 9-5Z"/><path d="m3 12 9 5 9-5M3 17l9 5 9-5"/></svg>',
+  bolt:'<svg width="16" height="16" viewBox="0 0 24 24" fill="#f0922b"><path d="M13 2 3 14h7l-1 8 10-12h-7l1-8Z"/></svg>',
+  star:'<svg width="16" height="16" viewBox="0 0 24 24" fill="#1f9d63"><path d="m12 2 3 6.5 7 .9-5 4.8 1.3 7L12 18l-6.6 3.2 1.3-7-5-4.8 7-.9L12 2Z"/></svg>',
+  map:'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1f9d63" stroke-width="2"><path d="M9 4 3 6v14l6-2 6 2 6-2V4l-6 2-6-2Z"/><path d="M9 4v14M15 6v14"/></svg>',
+  flame:'<svg width="16" height="16" viewBox="0 0 24 24" fill="#f0922b"><path d="M12 2s5 4 5 9a5 5 0 0 1-10 0c0-2 1-3 1-3s1 2 2 2c0-3 2-5 2-8Z"/></svg>',
+  trophy:'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1f9d63" stroke-width="2"><path d="M6 4h12v4a6 6 0 0 1-12 0V4Z"/><path d="M6 6H3v2a3 3 0 0 0 3 3M18 6h3v2a3 3 0 0 1-3 3M9 20h6M12 14v6"/></svg>',
+  clock:'<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>',
+  play:'<svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M7 4v16l13-8z"/></svg>',
+  spark:'<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v4M12 18v4M4.9 4.9l2.8 2.8M16.3 16.3l2.8 2.8M2 12h4M18 12h4"/></svg>',
+  chevR:'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 6 6 6-6 6"/></svg>',
+  arrowR:'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>',
+  check:'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m20 6-11 11-5-5"/></svg>',
+};
+
+/* ---------- topbar ---------- */
+function renderTopbar(){
+  $("#topbar").innerHTML = `<div class="topbar-in">
+    <a class="brand" href="#/"><span class="mark">${markSVG()}</span>${esc(C.product.name)}</a>
+    <nav class="nav" id="nav">
+      <a href="#/courses" data-r="courses">Courses</a>
+      <a href="#/" data-r="modules">Modules</a>
+      <a href="#/practice" data-r="practice">Practice</a>
+      <a href="#/progress" data-r="progress">Progress</a>
+    </nav>
+    <div class="topspace"></div>
+    <label class="search"><span>${IC.search}</span><input id="q" placeholder="Search topics or modules…" autocomplete="off"></label>
+    <span class="pill"><span class="flame">${IC.flame}</span>${streak()} day streak</span>
+    <button class="icon-btn" title="Notifications">${IC.bell}<span class="dot"></span></button>
+    <span class="avatar">${esc((S.name||"You").slice(0,2).toUpperCase())}</span>
+    <button class="menu-btn" id="menu">${IC.list}</button>
+  </div>`;
+  $("#q").addEventListener("input",e=>{ SEARCH=e.target.value.trim().toLowerCase(); if(currentRoute().view==="modules") renderModules(); });
+  $("#menu").addEventListener("click",()=>$("#nav").classList.toggle("open"));
+}
+function markSVG(){ return `<svg viewBox="0 0 32 32" fill="none"><rect x="3" y="3" width="26" height="26" rx="8" fill="#e9f6ef"/>
+  <path d="M16 8l7 4v8l-7 4-7-4v-8l7-4Z" fill="#1f9d63"/><path d="M16 12l3.5 2v4L16 20l-3.5-2v-4L16 12Z" fill="#fff"/></svg>`; }
+
+/* ---------- router ---------- */
+let SEARCH=""; let PATH_FILTER="all"; let VIEW_MODE="grid";
+function currentRoute(){
+  const h=(location.hash||"#/").replace(/^#/,"");
+  const parts=h.split("/").filter(Boolean);
+  if(parts.length===0||parts[0]==="modules") return {view:"modules"};
+  if(parts[0]==="module") return {view:"module", id:parts[1]};
+  if(parts[0]==="lesson") return {view:"lesson", moduleId:parts[1], lessonId:parts[2]};
+  if(parts[0]==="progress") return {view:"progress"};
+  if(parts[0]==="courses") return {view:"courses"};
+  if(parts[0]==="practice") return {view:"practice"};
+  return {view:"modules"};
+}
+function setNavActive(view){
+  document.querySelectorAll(".nav a").forEach(a=>a.classList.toggle("active",a.dataset.r===view||(view==="module"&&a.dataset.r==="modules")||(view==="lesson"&&a.dataset.r==="modules")));
+}
+function route(){
+  const r=currentRoute();
+  renderTopbar();
+  setNavActive(r.view);
+  $("#nav").classList.remove("open");
+  if(r.view==="modules") renderDashboard();
+  else if(r.view==="module") renderModule(r.id);
+  else if(r.view==="lesson") renderLesson(r.moduleId,r.lessonId);
+  else if(r.view==="progress") renderProgress();
+  else renderStub(r.view);
+  window.scrollTo(0,0);
+}
+
+/* ---------- dashboard ---------- */
+function renderDashboard(){
+  const o=overall();
+  $("#app").innerHTML = `
+    <aside class="sidebar">${sidebarHTML(o)}</aside>
+    <div class="main">
+      ${heroHTML()}
+      <div>
+        <div class="lib-head">
+          <div><h2>Module Library</h2><div class="sub">Explore modules and build your spatial statistics expertise.</div></div>
+          <div class="lib-tools">
+            <select class="select" id="pathsel">
+              <option value="all">All Modules</option>
+              ${PATHS.map(p=>`<option value="${p.id}" ${PATH_FILTER===p.id?'selected':''}>${esc(p.name)}</option>`).join("")}
+            </select>
+            <div class="toggle">
+              <button id="tg-grid" class="${VIEW_MODE==='grid'?'active':''}" title="Grid">${IC.grid}</button>
+              <button id="tg-list" class="${VIEW_MODE==='list'?'active':''}" title="List">${IC.list}</button>
+            </div>
+          </div>
+        </div>
+        <div id="modgrid" class="grid ${VIEW_MODE==='list'?'list':''}" style="margin-top:1rem"></div>
+      </div>
+      ${featuredHTML()}
+      ${coffeeHTML()}
+    </div>`;
+  bindSidebar(); 
+  $("#pathsel").addEventListener("change",e=>{PATH_FILTER=e.target.value;renderModules();});
+  $("#tg-grid").addEventListener("click",()=>{VIEW_MODE="grid";renderModules();syncToggle();});
+  $("#tg-list").addEventListener("click",()=>{VIEW_MODE="list";renderModules();syncToggle();});
+  bindFeatured();
+  renderModules();
+}
+function syncToggle(){ const g=$("#tg-grid"),l=$("#tg-list"); if(g&&l){g.classList.toggle("active",VIEW_MODE==="grid");l.classList.toggle("active",VIEW_MODE==="list");$("#modgrid").classList.toggle("list",VIEW_MODE==="list");} }
+
+function sidebarHTML(o){
+  const ach=ACHIEVEMENTS.map(a=>({...a,got:a.test()}));
+  const recent=ach.filter(a=>a.got).slice(-2).reverse();
+  const shown=recent.length?recent:ach.slice(0,2).map(a=>({...a,got:false}));
+  const wd=weekDone(), wg=S.weeklyGoal||6;
+  return `
+  <div class="card ring-card">
+    ${ringSVG(o.pct)}
+    <div class="stat-col">
+      <div class="stat"><div class="k">XP</div><div class="v">${totalXP().toLocaleString()}</div></div>
+      <div class="stat"><div class="k">Lessons</div><div class="v"><small>${o.done} / ${o.total}</small></div></div>
+    </div>
+  </div>
+  <div class="card pad">
+    <div class="s-label">Learning Path</div>
+    <div class="path-list">
+      ${PATHS.map(p=>{const ct=MODULES.filter(m=>m.path===p.id).length;
+        return `<button class="path ${PATH_FILTER===p.id?'active':''}" data-path="${p.id}">
+          <span class="tile">${IC[p.icon]||IC.grid}</span>${esc(p.name)}<span class="ct">${ct}</span></button>`;}).join("")}
+    </div>
+  </div>
+  <div class="card pad goal">
+    <div class="s-label">Weekly Goal <a href="#/progress">Edit</a></div>
+    <div class="row"><span class="big">${wd} / ${wg} lessons</span>
+      <span class="star">${IC.star}</span></div>
+    <div class="bar"><i style="width:${Math.min(100,Math.round(100*wd/wg))}%"></i></div>
+    <div class="hint">${wd>=wg?"Goal smashed — nice.":wd>0?"You're on track! Keep it up.":"Set the pace — one lesson to start."}</div>
+  </div>
+  <div class="card pad">
+    <div class="s-label">Recent Achievements</div>
+    ${shown.map(a=>`<div class="ach ${a.got?'':'locked'}">
+      <span class="ic" style="background:var(--green-50)">${IC[a.ic]||IC.star}</span>
+      <div><div class="ti">${esc(a.ti)}</div><div class="sub">${esc(a.sub)}</div></div>
+      <span class="xp">+${a.xp} XP</span></div>`).join("")}
+    <div style="margin-top:.6rem"><a href="#/progress" style="color:var(--green-600);font-weight:700;font-size:.84rem">View all achievements →</a></div>
+  </div>`;
+}
+function bindSidebar(){
+  document.querySelectorAll(".path[data-path]").forEach(b=>b.addEventListener("click",()=>{
+    PATH_FILTER = (PATH_FILTER===b.dataset.path)?"all":b.dataset.path;
+    const sel=$("#pathsel"); if(sel) sel.value=PATH_FILTER;
+    document.querySelectorAll(".path[data-path]").forEach(x=>x.classList.toggle("active",x.dataset.path===PATH_FILTER));
+    renderModules();
+  }));
+}
+function heroHTML(){
+  return `<section class="hero">
+    <div>
+      <h1>Learn spatial<br>statistics <span class="g">visually.</span></h1>
+      <p>Master core concepts through interactive lessons, real cloud data, and progressive modules designed for spatial thinkers.</p>
+      <div class="cta">
+        <a class="btn btn-primary" id="startbtn" href="#/">Start learning ${IC.arrowR}</a>
+        <a class="btn btn-ghost" href="#modgrid">Browse modules</a>
+      </div>
+    </div>
+    <div class="hero-fig">${heroMapSVG()}</div>
+  </section>`;
+}
+function renderModules(){
+  const host=$("#modgrid"); if(!host) return;
+  let list=MODULES.filter(m=>PATH_FILTER==="all"||m.path===PATH_FILTER);
+  if(SEARCH){ list=list.filter(m=>(m.title+" "+m.blurb).toLowerCase().includes(SEARCH)); }
+  if(!list.length){ host.innerHTML=`<div class="stub" style="grid-column:1/-1;margin:2rem auto"><div class="em">🛰️</div><h2>No modules match</h2><p>Try a different search or path.</p></div>`; return; }
+  host.innerHTML=list.map(moduleCard).join("");
+  host.querySelectorAll("[data-go]").forEach(b=>b.addEventListener("click",()=>{ location.hash="#/module/"+b.dataset.go; }));
+}
+function moduleCard(m){
+  const p=moduleProgress(m); const soon=m.status!=="active";
+  const done=p.total&&p.done===p.total;
+  const foot = soon
+    ? `<span class="badge soon">Coming soon</span><span class="pct" style="margin-left:auto;color:var(--muted)">Planned</span>`
+    : `<span class="lessons">${p.total} lesson${p.total!==1?'s':''}</span>
+       <span class="pbar"><i style="width:${p.pct}%"></i></span>
+       ${done?`<span class="badge done">${IC.check} Done</span>`:`<span class="pct">${p.pct}%</span>`}`;
+  return `<button class="mod ${VIEW_MODE==='list'?'list':''} ${soon?'soon':''}" ${soon?'':'data-go="'+m.id+'"'}>
+    <div class="top">
+      <span class="thumb">${thumbSVG(m.thumb)}</span>
+      <div class="body">
+        <h3><span class="n">${m.n}.</span>${esc(m.title)}</h3>
+        <div class="desc">${esc(m.blurb)}</div>
+      </div>
+    </div>
+    <div class="foot">${foot}</div>
+  </button>`;
+}
+function featuredHTML(){
+  return `<section class="card feat">
+    <div>
+      <div class="eyebrow">Featured lesson</div>
+      <h2>Exploring Spatial Autocorrelation</h2>
+      <p>See how similar values cluster in space and why it matters — with code you run right on the page.</p>
+      <div class="meta"><span>${IC.clock} 8 min</span><span>${IC.spark} Interactive</span></div>
+      <button class="btn btn-ghost" id="featbtn">Preview lesson ${IC.play}</button>
+    </div>
+    <div class="feat-viz">
+      <div class="vp"><div class="cap">Dispersed</div>${dotsField(2,16,"dispersed")}</div>
+      <div class="vp"><div class="cap">Random</div>${dotsField(8,16,"random")}</div>
+      <div class="vp"><div class="cap">Clustered</div>${dotsField(5,16,"clustered")}</div>
+      <div class="statbox"><div class="k">Moran's I</div><div class="v">0.68</div><div class="d">Strong positive autocorrelation</div>${sparkline()}</div>
+    </div>
+  </section>`;
+}
+function bindFeatured(){ const b=$("#featbtn"); if(b)b.addEventListener("click",()=>{ const m=activeModules[0]; if(m&&m.lessons[0]) location.hash="#/lesson/"+m.id+"/"+m.lessons[0].id; }); }
+function coffeeHTML(){
+  return `<section class="coffee-card">
+    <div class="big">Found this useful?<span>It's free and always will be. A coffee keeps new modules coming.</span></div>
+    <a class="coffee-btn" href="https://www.buymeacoffee.com/${BMC}" target="_blank" rel="noopener">☕ Buy me a coffee</a>
+  </section>`;
+}
+
+/* ---------- module view ---------- */
+function renderModule(id){
+  const m=moduleById(id);
+  if(!m||m.status!=="active"){ renderStub("modules"); location.hash="#/"; return; }
+  const p=moduleProgress(m);
+  $("#app").innerHTML = `<div class="view" style="grid-column:1/-1">
+    <div class="crumb"><a href="#/">Modules</a> ${IC.chevR} <span>${esc(m.title)}</span></div>
+    <div class="mod-hero">
+      <span class="thumb">${thumbSVG(m.thumb)}</span>
+      <div style="flex:1;min-width:240px">
+        <h1>${m.n}. ${esc(m.title)}</h1>
+        <p>${esc(m.blurb)}</p>
+        <div class="meta" style="display:flex;gap:1rem;color:var(--muted);font-weight:600;font-size:.85rem;margin-top:.7rem">
+          <span>${p.total} lessons</span><span>${p.done} completed</span><span>${p.pct}% done</span></div>
+        <div style="height:6px;background:var(--line);border-radius:999px;max-width:420px;margin-top:.6rem;overflow:hidden">
+          <i style="display:block;height:100%;width:${p.pct}%;background:var(--green);border-radius:999px"></i></div>
+      </div>
+    </div>
+    <div class="lesson-list">
+      ${m.lessons.map((l,i)=>`<button class="li ${isDone(l.id)?'done':''}" data-go="${l.id}">
+        <span class="num">${isDone(l.id)?IC.check:(i+1)}</span>
+        <div><div class="ti">${esc(l.title)}</div><div class="mt">${l.minutes||5} min${l.interactive?' · interactive':''}</div></div>
+        <span class="go">${IC.chevR}</span></button>`).join("")}
+    </div>
+    ${coffeeWrap()}
+  </div>`;
+  document.querySelectorAll(".li[data-go]").forEach(b=>b.addEventListener("click",()=>location.hash="#/lesson/"+m.id+"/"+b.dataset.go));
+}
+function coffeeWrap(){ return `<div style="max-width:760px;margin-top:1.6rem">${coffeeHTML()}</div>`; }
+
+/* ---------- lesson view ---------- */
+function renderLesson(moduleId,lessonId){
+  const m=moduleById(moduleId); const l=m&&m.lessons.find(x=>x.id===lessonId);
+  if(!l){ location.hash="#/module/"+moduleId; return; }
+  const idx=m.lessons.findIndex(x=>x.id===lessonId);
+  const prev=m.lessons[idx-1], next=m.lessons[idx+1];
+  const body=l.blocks.map(renderBlock).join("");
+  $("#app").innerHTML=`<div class="view" style="grid-column:1/-1"><div class="reader">
+    <div class="crumb"><a href="#/">Modules</a> ${IC.chevR} <a href="#/module/${m.id}">${esc(m.title)}</a> ${IC.chevR} <span>${esc(l.title)}</span></div>
+    <div class="kicker">${esc(m.title)} · Lesson ${idx+1}</div>
+    <h1>${esc(l.title)}</h1>
+    ${l.blurb?`<div class="blurb">${l.blurb}</div>`:""}
+    ${body}
+    <div class="lesson-nav">
+      <div>${prev?`<a class="btn btn-ghost" href="#/lesson/${m.id}/${prev.id}">← ${esc(prev.title)}</a>`:""}</div>
+      <button class="complete-btn ${isDone(l.id)?'is-done':''}" id="donebtn">${isDone(l.id)?IC.check+' Completed':'Mark complete'}</button>
+      <div>${next?`<a class="btn btn-primary" href="#/lesson/${m.id}/${next.id}">${esc(next.title)} →</a>`:`<a class="btn btn-primary" href="#/module/${m.id}">Back to module →</a>`}</div>
+    </div>
+  </div></div>`;
+  $("#donebtn").addEventListener("click",()=>{
+    if(isDone(l.id)){ if(!DEMO){markIncomplete(l.id);} } else { markComplete(l.id); }
+    route(); // re-render to reflect progress & achievements
+  });
+  enhanceCells();
+  ensurePython();           // start booting the runtime for this lesson
+  showPyStatus();
+}
+function renderBlock(b){
+  if(b.kind==="prose") return `<div class="prose">${b.html}</div>`;
+  if(b.kind==="aside") return `<div class="aside">${b.html}</div>`;
+  if(b.kind==="code") return `<div class="cell"><div class="cell-head">
+      <div class="cell-cap"><b>${esc(b.caption)}</b></div>
+      <button class="run" disabled><span class="spin"></span><span class="ico">${IC.play}</span><span class="lbl">booting…</span></button>
+    </div><div class="editor"><textarea class="code" spellcheck="false">${esc(b.code)}</textarea></div><div class="out"></div></div>`;
+  return "";
+}
+
+/* ---------- progress / stubs ---------- */
+function renderProgress(){
+  const o=overall();
+  const ach=ACHIEVEMENTS.map(a=>({...a,got:a.test()}));
+  $("#app").innerHTML=`<div class="view" style="grid-column:1/-1">
+    <h1 style="font-size:1.8rem">Your progress</h1>
+    <p style="color:var(--gray);max-width:60ch">${DEMO?"Demo mode is on — these are sample numbers. Set <code>DEMO=false</code> in the file to track real progress in your browser.":"Tracked locally in this browser. Complete lessons to fill it in."}</p>
+    <div class="kpis">
+      <div class="kpi"><div class="v">${o.pct}%</div><div class="k">Overall progress</div></div>
+      <div class="kpi"><div class="v">${o.done}/${o.total}</div><div class="k">Lessons completed</div></div>
+      <div class="kpi"><div class="v">${totalXP().toLocaleString()}</div><div class="k">XP earned</div></div>
+      <div class="kpi"><div class="v">${streak()}</div><div class="k">Day streak</div></div>
+    </div>
+    <h2 style="margin:1.4rem 0 .6rem;font-size:1.2rem">Modules</h2>
+    <div class="lesson-list" style="max-width:680px">
+      ${activeModules.map(m=>{const p=moduleProgress(m);return `<a class="li" href="#/module/${m.id}">
+        <span class="num">${m.n}</span><div style="flex:1"><div class="ti">${esc(m.title)}</div>
+        <div class="mt">${p.done}/${p.total} lessons</div></div>
+        <span style="font-weight:800;color:var(--green-600)">${p.pct}%</span></a>`;}).join("")}
+    </div>
+    <h2 style="margin:1.4rem 0 .6rem;font-size:1.2rem">Achievements</h2>
+    <div class="card pad" style="max-width:680px">
+      ${ach.map(a=>`<div class="ach ${a.got?'':'locked'}"><span class="ic" style="background:var(--green-50)">${IC[a.ic]}</span>
+      <div><div class="ti">${esc(a.ti)}</div><div class="sub">${esc(a.sub)}</div></div><span class="xp">+${a.xp} XP</span></div>`).join("")}
+    </div>
+  </div>`;
+}
+function renderStub(view){
+  const map={courses:["📚","Courses","Guided sequences through the modules are coming. For now, dive into the Module Library."],
+             practice:["🎯","Practice","Spaced-repetition drills and mini-challenges will live here. Coming as the catalog grows."]};
+  const [em,ti,desc]=map[view]||["🛰️","Soon","Coming soon."];
+  $("#app").innerHTML=`<div class="view" style="grid-column:1/-1"><div class="stub"><div class="em">${em}</div>
+    <h2>${ti}</h2><p>${desc}</p><a class="btn btn-primary" href="#/" style="margin-top:1rem">Browse modules ${IC.arrowR}</a></div></div>`;
+}
+
+/* ============================================================
+   In-browser Python (Pyodide) — lazy loaded on first lesson
+   ============================================================ */
+const PYV=["v0.29.0","v0.28.0","v0.26.4","v0.26.3"];
+let pyodide=null,runCell=null,pyReady=false,pyBooting=false;
+function showPyStatus(){ $("#pystatus").classList.add("show"); }
+function setPy(state,txt){ const s=$("#pystatus"); s.className="show "+state; s.querySelector(".txt").textContent=txt; }
+function loadScript(src){return new Promise((res,rej)=>{const s=document.createElement("script");s.src=src;s.onload=res;s.onerror=()=>rej(src);document.head.appendChild(s);});}
+async function loadPyo(){ for(const v of PYV){ try{ await loadScript(`https://cdn.jsdelivr.net/pyodide/${v}/full/pyodide.js`); if(window.loadPyodide){window.__PYV=v;return;} }catch(e){} } throw new Error("no pyodide"); }
+const KERNEL=`
+import sys, io, base64, json, traceback
+import matplotlib
+matplotlib.use("AGG")
+import matplotlib.pyplot as plt
+plt.rcParams.update({"figure.dpi":110,"savefig.bbox":"tight","font.size":10,"axes.titlesize":11,"figure.facecolor":"white"})
+_NS={"__name__":"__cell__"}
+def _run_cell(src):
+    buf=io.StringIO(); old=(sys.stdout,sys.stderr); sys.stdout=sys.stderr=buf; imgs=[]; err=None
+    try:
+        plt.close("all"); exec(src,_NS)
+        for n in plt.get_fignums():
+            b=io.BytesIO(); plt.figure(n).savefig(b,format="png",facecolor="white"); imgs.append(base64.b64encode(b.getvalue()).decode())
+        plt.close("all")
+    except Exception:
+        err=traceback.format_exc()
+    finally:
+        sys.stdout,sys.stderr=old
+    return json.dumps({"out":buf.getvalue(),"imgs":imgs,"err":err})
+`;
+async function ensurePython(){
+  if(pyReady||pyBooting) return; pyBooting=true; showPyStatus(); setPy("","booting Python…");
+  try{
+    await loadPyo(); pyodide=await loadPyodide();
+    setPy("","loading libraries…");
+    await pyodide.loadPackage(["numpy","pandas","scipy","matplotlib"]);
+    await pyodide.runPythonAsync(KERNEL); runCell=pyodide.globals.get("_run_cell");
+    pyReady=true; setPy("ready","Python ready");
+    document.querySelectorAll(".run").forEach(b=>{b.disabled=false;b.querySelector(".lbl").textContent="Run";});
+  }catch(e){ setPy("","runtime unavailable"); console.error(e);
+    document.querySelectorAll(".run").forEach(b=>{b.disabled=false;b.querySelector(".lbl").textContent="Run";}); }
+}
+function getCode(cell){ return cell._cm?cell._cm.getValue():cell.querySelector("textarea").value; }
+async function runCellEl(cell){
+  if(!pyReady){ await ensurePython(); if(!pyReady) return; }
+  const btn=cell.querySelector(".run"), out=cell.querySelector(".out");
+  btn.classList.add("busy"); btn.disabled=true; setPy("busy","running…");
+  out.classList.add("show"); out.innerHTML='<pre class="hint">running…</pre>';
+  await new Promise(r=>setTimeout(r,15));
+  let res; try{ res=JSON.parse(runCell(getCode(cell))); }catch(e){ res={out:"",imgs:[],err:String(e)}; }
+  let html=""; if(res.out) html+="<pre>"+esc(res.out)+"</pre>";
+  for(const b of res.imgs) html+='<img alt="figure" src="data:image/png;base64,'+b+'">';
+  if(res.err) html+='<pre class="err">'+esc(res.err)+"</pre>";
+  if(!html) html='<pre class="hint">(ran with no text output)</pre>';
+  out.innerHTML=html; btn.classList.remove("busy"); btn.disabled=false; setPy("ready","Python ready");
+}
+function enhanceCells(){
+  document.querySelectorAll(".cell").forEach(cell=>{
+    const ta=cell.querySelector("textarea");
+    if(window.CodeMirror){
+      cell._cm=CodeMirror.fromTextArea(ta,{mode:"python",theme:"spat",lineNumbers:true,indentUnit:4,viewportMargin:Infinity,
+        extraKeys:{"Ctrl-Enter":()=>runCellEl(cell),"Cmd-Enter":()=>runCellEl(cell),Tab:cm=>cm.replaceSelection("    ")}});
+    }else{
+      ta.addEventListener("keydown",e=>{ if(e.key==="Tab"){e.preventDefault();const s=ta.selectionStart;ta.value=ta.value.slice(0,s)+"    "+ta.value.slice(ta.selectionEnd);ta.selectionStart=ta.selectionEnd=s+4;}
+        if((e.ctrlKey||e.metaKey)&&e.key==="Enter"){e.preventDefault();runCellEl(cell);} });
+    }
+    const rb=cell.querySelector(".run"); rb.addEventListener("click",()=>runCellEl(cell));
+    if(pyReady){ rb.disabled=false; rb.querySelector(".lbl").textContent="Run"; }
+  });
+}
+
+/* ---------- boot ---------- */
+window.addEventListener("hashchange",route);
+window.addEventListener("DOMContentLoaded",()=>{ renderTopbar(); route(); });
+</script>
+</body>
+</html>
