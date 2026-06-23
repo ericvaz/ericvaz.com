@@ -60,6 +60,10 @@ img{image-rendering:auto}
 .win.fold .body{max-height:62vh}
 .win.text{width:540px}
 .win.text .body{max-height:66vh;font-family:var(--read);font-size:14px;line-height:1.62;color:#111}
+.win.text.dark .body{background:#000;color:#eee}
+.win.text.dark .byline{color:#fff;border-bottom-color:#555}
+.win.text.dark .body h3{color:#fff}
+.win.text.dark a{color:#7cf}
 .win.text .body.read p{margin:0 0 1em}
 .win.text .body h3{font-family:var(--chicago);font-size:16px;margin:.2em 0 .1em}
 .win.text .byline{font-family:var(--chicago);font-size:12px;color:#444;border-bottom:1px solid #000;padding-bottom:8px;margin-bottom:12px}
@@ -91,6 +95,13 @@ img{image-rendering:auto}
 .gscore{font-family:var(--chicago);font-size:12px}
 .ghint{margin-left:auto;color:#555;font-size:10px}
 .game-cv{background:#fff;border:2px solid #000;image-rendering:pixelated;touch-action:none;max-width:100%}
+.radio-body{background:#cfcfcf!important;display:flex;flex-direction:column;gap:10px;padding:14px;max-height:none}
+.radio-name{font-family:var(--chicago);font-size:16px}
+.radio-sub{font-size:11px;color:#555;line-height:1.45}
+.radio-ctrls{display:flex;gap:10px;align-items:center}
+.rstatus{font-family:var(--chicago);font-size:11px;color:#222}
+.rvol{font-family:var(--chicago);font-size:11px;display:flex;gap:8px;align-items:center}
+.rstation{font-family:var(--read);font-size:12px;border:2px solid #000;background:#fff;padding:3px}
 .meta{border-collapse:collapse;width:100%;margin:0 0 14px;font-family:var(--read);font-size:13px}
 .meta td{border-bottom:1px solid #ccc;padding:4px 8px;vertical-align:top}
 .meta td.k{font-family:var(--chicago);font-size:12px;width:118px;white-space:nowrap}
@@ -154,6 +165,7 @@ y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
   <div class="mi" data-menu="view">View</div>
   <div class="mi" data-menu="special">Special</div>
   <div class="mi" data-menu="games">Games</div>
+  <div class="mi" data-menu="utilities">Utilities</div>
   <div class="spacer"></div>
   <div class="clock" id="clock">Tue 12:00 PM</div>
 </div>
@@ -182,6 +194,9 @@ y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
   <li data-act="game" data-game="draw">Draw</li>
   <li data-act="game" data-game="snake">Snake</li>
   <li data-act="game" data-game="blocks">Terra Blocks</li>
+</ul>
+<ul class="menu" id="menu-utilities">
+  <li data-act="radio">Radio</li>
 </ul>
 
 <div id="desk">
@@ -270,7 +285,7 @@ DATA.ventures.forEach((v,i)=>{DOCS["ven"+i]={title:v[0],kind:"text",
 FOLDERS["ventures"]={title:"Ventures",items:DATA.ventures.map((_,i)=>"ven"+i)};
 DATA.fiction.forEach((f,i)=>{
   let body=f.body; if(f.excerpt){body+=`<div class="readmore"><a href="${f.link}" target="_blank" rel="noopener">Read the full story at the publisher \u2192</a></div>`;}
-  DOCS["fic"+i]={title:f.title,kind:"text",
+  DOCS["fic"+i]={title:f.title,kind:"text",dark:true,
     html:`<div class="byline"><em>${esc(f.title)}</em> \u00b7 by ${esc(f.by)} \u00b7 ${esc(f.venue)}</div>`+body};
 });
 FOLDERS["fiction"]={title:"Fiction",items:DATA.fiction.map((_,i)=>"fic"+i)};
@@ -433,6 +448,7 @@ function openDoc(id){
  const d=DOCS[id]; if(!d)return;
  const w=document.createElement("div"); w.className="win text";
  const c=cascade(); w.style.left=c.left+"px"; w.style.top=c.top+"px"; w.style.zIndex=++ztop;
+ if(d.dark)w.classList.add("dark");
  w.innerHTML=frame(d.title,null); const body=$(".body",w); body.classList.add("read");
  if(d.kind==="about"){
    let m='<table class="meta">'+DATA.about.meta.map(r=>`<tr><td class="k">${esc(r[0])}</td><td>${esc(r[1])}</td></tr>`).join("")+'</table>';
@@ -516,8 +532,11 @@ function openTerminal(){
  body.innerHTML='<div class="term-out"></div><div class="term-line"><span class="term-ps">eric@terra ~ %</span><input class="term-in" autocomplete="off" spellcheck="false" aria-label="terminal input"></div>';
  const out=$(".term-out",body), inp=$(".term-in",body);
  function print(t,cls){const d=document.createElement("div");if(cls)d.className=cls;d.innerHTML=t;out.appendChild(d);body.scrollTop=body.scrollHeight;}
- print("Terra OS \u2014 terra.sh (v0.1)");
- print("Type <b>help</b> to begin. A conversational assistant is coming soon.");
+ print("Terra OS \u2014 terra.sh");
+ print("Welcome to the future. I am Eric\u2019s mind.");
+ print("I\u2019m being taught to converse with you and think through what Eric is working on \u2014 AI integration is being wired in.");
+ print("When it\u2019s live, our chat will be handled by AI, so be mindful of what you type.");
+ print("For now, type <b>help</b> for what I can already do \u2014 soon I\u2019ll help you find files, places, and ideas, and simply talk.");
  const CMD={
    help:()=>"commands: help, about, ls, open &lt;name&gt;, papers, whoami, date, clear, contact",
    about:()=>"Terra OS \u2014 an ecosystem from Eric Vaz's mind. Geography, spatial analysis, GeoAI.",
@@ -644,6 +663,31 @@ function gameBlocks(body){
  $(".gbtn",body).addEventListener("click",()=>{reset();draw();});
 }
 
+function openRadio(){
+ if(openWins["radio"]){focusWin(openWins["radio"]);return;}
+ var w=document.createElement("div");w.className="win radio-win";
+ var c=cascade();w.style.left=c.left+"px";w.style.top=c.top+"px";w.style.zIndex=++ztop;w.style.width="360px";
+ w.innerHTML=frame("Radio",null);
+ var body=$(".body",w);body.classList.add("radio-body");
+ var ST=[["The Classical Station - WCPE (MP3)","https://playerservices.streamtheworld.com/api/livestream-redirect/WCPE_FM.mp3"],["The Classical Station - WCPE (AAC, low bandwidth)","https://playerservices.streamtheworld.com/api/livestream-redirect/WCPE_FMAAC128.aac"]];
+ body.innerHTML='<div class="radio-name">The Classical Station</div><div class="radio-sub">WCPE &middot; great classical music, 24 hours a day &middot; listener-supported and non-commercial</div><div class="radio-ctrls"><button class="gbtn rtoggle">&#9654; Play</button><span class="rstatus">tap Play to tune in</span></div><label class="rvol">Vol <input type="range" min="0" max="100" value="80" class="rvolr"></label><select class="rstation">'+ST.map(function(s){return '<option value="'+s[1]+'">'+s[0]+'</option>';}).join("")+'</select>';
+ var audio=new Audio();audio.preload="none";audio.volume=0.8;
+ var sel=$(".rstation",body),btn=$(".rtoggle",body),stt=$(".rstatus",body),vol=$(".rvolr",body);
+ audio.src=sel.value;var playing=false;
+ function ss(t){stt.textContent=t;}
+ btn.addEventListener("click",function(){
+   if(playing){audio.pause();playing=false;btn.innerHTML="&#9654; Play";ss("paused");}
+   else{ss("tuning\u2026");audio.src=sel.value;var p=audio.play();if(p&&p.catch)p.catch(function(){ss("stream unavailable - try the other option");});playing=true;btn.innerHTML="&#9632; Stop";}
+ });
+ audio.addEventListener("playing",function(){ss("\u25cf on air");});
+ audio.addEventListener("error",function(){ss("stream unavailable - try the other option");});
+ audio.addEventListener("waiting",function(){ss("buffering\u2026");});
+ sel.addEventListener("change",function(){audio.src=sel.value;if(playing){ss("tuning\u2026");var p=audio.play();if(p&&p.catch)p.catch(function(){ss("stream unavailable");});}});
+ vol.addEventListener("input",function(){audio.volume=vol.value/100;});
+ mountWin(w,"radio");
+ var cl=$(".close",w);if(cl)cl.addEventListener("click",function(){try{audio.pause();audio.src="";}catch(e){}});
+}
+
 function makeIconDraggable(ic){
  let sx,sy,ox,oy,moved=false,active=false;
  ic.addEventListener("pointerdown",e=>{
@@ -704,6 +748,7 @@ document.querySelectorAll(".menu li").forEach(li=>{
    else if(a==="spatstat")go(spatstatURL());
    else if(a==="opensys")openFolder("system");
    else if(a==="terminal")openTerminal();
+   else if(a==="radio")openRadio();
    else if(a==="game")openGame(li.dataset.game);
    else if(a==="cleanup")cleanUp();
    else if(a==="restart"){try{localStorage.removeItem("terraos.visited");}catch(e){}location.reload();}
