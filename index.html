@@ -789,8 +789,8 @@ window.addEventListener("load",()=>{
  if(matchMedia("(prefers-reduced-motion:reduce)").matches){b.style.display="none";return;}
  if(!firstVisit()){ runLoader(4500); return; }
  const term=$("#boot .term"); let i=0;
- (function type(){ if(i<=BOOT_MSG.length){ term.innerHTML=esc(BOOT_MSG.slice(0,i))+'<span class="cur"></span>'; i++; setTimeout(type, i<3?260:28); }
-   else { setTimeout(()=>runLoader(6500), 900); } })();
+ (function type(){ if(i<=BOOT_MSG.length){ term.innerHTML=esc(BOOT_MSG.slice(0,i))+'<span class="cur"></span>'; i++; setTimeout(type, i<3?260:60); }
+   else { setTimeout(()=>runLoader(6500), 4500); } })();
 });
 
 /* ---- startup chime: original synth chord, fires on first interaction (autoplay-safe) ---- */
