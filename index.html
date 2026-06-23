@@ -830,16 +830,21 @@ window.addEventListener("load",()=>{
    window.removeEventListener("pointerdown",chime); window.removeEventListener("keydown",chime);
    try{
      const AC=window.AudioContext||window.webkitAudioContext; if(!AC)return;
-     const ctx=new AC(); const now=ctx.currentTime;
+     const ctx=new AC(); if(ctx.state==="suspended"&&ctx.resume)ctx.resume();
+     const now=ctx.currentTime;
      const g=ctx.createGain(); g.connect(ctx.destination);
      g.gain.setValueAtTime(0.0001,now);
-     g.gain.exponentialRampToValueAtTime(0.18,now+0.04);
-     g.gain.exponentialRampToValueAtTime(0.0001,now+1.6);
-     [261.63,329.63,392.00,523.25].forEach((f,k)=>{ // C major add-octave, warm
+     g.gain.exponentialRampToValueAtTime(0.42,now+0.25);
+     g.gain.setValueAtTime(0.42,now+4.2);
+     g.gain.exponentialRampToValueAtTime(0.0001,now+5.6);
+     [130.81,196.00,261.63,329.63,392.00,523.25].forEach((f,k)=>{ // warm rising C-major chord
        const o=ctx.createOscillator(); o.type="triangle"; o.frequency.value=f;
-       const og=ctx.createGain(); og.gain.value=k===3?0.5:0.8; o.connect(og); og.connect(g);
-       o.start(now+k*0.05); o.stop(now+1.7);
+       const og=ctx.createGain(); og.gain.value=k<2?0.5:0.85; o.connect(og); og.connect(g);
+       o.start(now+k*0.18); o.stop(now+5.7);
      });
+     const s=ctx.createOscillator(); s.type="sine"; s.frequency.value=783.99; // soft shimmer
+     const sg=ctx.createGain(); sg.gain.value=0.16; s.connect(sg); sg.connect(g);
+     s.start(now+1.0); s.stop(now+5.7);
    }catch(e){}
  }
  window.addEventListener("pointerdown",chime,{once:false});
