@@ -1,0 +1,353 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Eric Vaz — Geography, Spatial Analysis & GeoAI</title>
+<meta name="description" content="Eric Vaz, Full Professor of Geography & Environmental Studies at Toronto Metropolitan University — spatial analysis, regional science, GeoAI. Presented as Terra OS, a System-7-style desktop. About, research, books, fiction, and a classic-site door.">
+<meta name="author" content="Eric Vaz">
+<link rel="canonical" href="https://ericvaz.com/">
+<meta property="og:title" content="Eric Vaz — Terra OS">
+<meta property="og:description" content="An ecosystem from Eric's mind: a 1986-Macintosh-style portfolio. Geography, spatial analysis, regional science, GeoAI.">
+<link rel="preconnect" href="https://cdn.jsdelivr.net">
+<style>
+@import url("https://cdn.jsdelivr.net/npm/system.css@0.2.2/dist/system.css");
+:root{--chicago:"ChicagoFLF","Chicago","ChiKareGo2",Geneva,"Lucida Grande",Verdana,sans-serif;
+  --read:"Geneva","Lucida Grande",Verdana,system-ui,sans-serif;}
+*{box-sizing:border-box;-webkit-user-select:none;user-select:none}
+html,body{height:100%}
+body{margin:0;font-family:var(--chicago);font-size:14px;color:#000;background:#fff;
+ background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2' height='2'%3E%3Crect width='1' height='1' fill='%23000'/%3E%3Crect x='1' y='1' width='1' height='1' fill='%23000'/%3E%3C/svg%3E");
+ background-color:#fff;background-size:2px 2px;image-rendering:pixelated;overflow:hidden}
+img{image-rendering:auto}
+/* SEO layer hidden visually, available to crawlers/AT */
+#seo{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+#menubar{position:fixed;top:0;left:0;right:0;height:22px;background:#fff;border-bottom:2px solid #000;
+ display:flex;align-items:stretch;z-index:9000;padding:0 6px}
+#menubar .mi{display:flex;align-items:center;gap:6px;padding:0 11px;font-size:14px;line-height:1;cursor:default;height:100%}
+#menubar .mi:hover,#menubar .mi.open{background:#000;color:#fff}
+#menubar .mi.open svg, #menubar .mi:hover svg{filter:invert(1)}
+#menubar .spacer{flex:1}
+#menubar .clock{display:flex;align-items:center;padding:0 8px;font-size:13px}
+.menu{position:fixed;top:22px;background:#fff;border:2px solid #000;box-shadow:2px 2px 0 #000;z-index:9500;min-width:180px;padding:3px 0;display:none}
+.menu.show{display:block}
+.menu li{list-style:none;padding:3px 18px;font-size:14px;cursor:default;display:flex;justify-content:space-between;gap:18px}
+.menu li:hover:not(.sep):not(.dis){background:#000;color:#fff}
+.menu li.dis{color:#aaa}.menu li.sep{padding:0;margin:3px 0;border-top:1px solid #000;height:0;pointer-events:none}
+.menu li .sc{opacity:.6;font-size:12px}
+
+#desk{position:fixed;inset:22px 0 0 0;z-index:1}
+.icon{position:absolute;width:84px;text-align:center;cursor:default}
+.icon .glyph{width:48px;height:46px;margin:0 auto;display:block}
+.icon .lbl{display:inline-block;margin-top:3px;font-size:12px;line-height:1.05;padding:1px 3px;max-width:92px;word-wrap:break-word;font-family:var(--chicago)}
+.icon.sel .glyph{filter:invert(1)}.icon.sel .lbl{background:#000;color:#fff}
+#hd{top:14px;right:24px}#evdoc{top:108px;right:18px}#trash{bottom:14px;right:24px}
+
+.win{position:absolute;background:#fff;border:2px solid #000;box-shadow:2px 2px 0 rgba(0,0,0,.5);min-width:260px;display:flex;flex-direction:column;z-index:10}
+.win .title{height:20px;display:flex;align-items:center;position:relative;border-bottom:2px solid #000;cursor:grab;
+ background:repeating-linear-gradient(#000 0 1px,#fff 1px 3px)}
+.win .title.drag{cursor:grabbing}
+.win .title .name{position:absolute;left:50%;transform:translateX(-50%);background:#fff;padding:0 8px;font-size:13px;white-space:nowrap;max-width:80%;overflow:hidden;text-overflow:ellipsis}
+.win .close{width:12px;height:12px;border:2px solid #000;background:#fff;margin-left:8px;cursor:default;flex:none}
+.win .close:active{background:#000}
+.win .strip{height:20px;border-bottom:1px solid #000;display:flex;align-items:center;gap:14px;padding:0 10px;font-size:12px;background:#fff}
+.win .body{padding:14px;overflow:auto;background:#fff;position:relative}
+.win.fold .body{max-height:62vh}
+.win.text{width:540px}
+.win.text .body{max-height:66vh;font-family:var(--read);font-size:14px;line-height:1.62;color:#111}
+.win.text .body.read p{margin:0 0 1em}
+.win.text .body h3{font-family:var(--chicago);font-size:16px;margin:.2em 0 .1em}
+.win.text .byline{font-family:var(--chicago);font-size:12px;color:#444;border-bottom:1px solid #000;padding-bottom:8px;margin-bottom:12px}
+.win.text .grouptag{display:inline-block;font-family:var(--chicago);font-size:11px;border:1px solid #000;padding:1px 6px;margin-bottom:10px}
+.meta{border-collapse:collapse;width:100%;margin:0 0 14px;font-family:var(--read);font-size:13px}
+.meta td{border-bottom:1px solid #ccc;padding:4px 8px;vertical-align:top}
+.meta td.k{font-family:var(--chicago);font-size:12px;width:118px;white-space:nowrap}
+.creds{font-family:var(--read);font-size:13px;line-height:1.5;list-style:none;padding:0;margin:0 0 16px}
+.creds li{display:flex;gap:12px;padding:3px 0;border-bottom:1px solid #eee}
+.creds .y{font-family:var(--chicago);font-size:12px;width:70px;flex:none;color:#333}
+.col-h{font-family:var(--chicago);font-size:14px;border-bottom:2px solid #000;padding-bottom:4px;margin:0 0 8px}
+.readmore{margin-top:12px;font-family:var(--chicago);font-size:13px}
+.grid{display:flex;flex-wrap:wrap;gap:6px 12px;align-items:flex-start}
+.grid .icon{position:static;width:88px}
+.book-ic .cover{width:46px;height:60px;object-fit:cover;border:1px solid #000;display:block;margin:0 auto;background:#ddd}
+.book-ic .glyph{height:60px}
+.empty{text-align:center;padding:26px 8px;font-family:var(--read)}
+
+/* boot */
+#boot{position:fixed;inset:0;background:#000;z-index:99999;display:flex;align-items:center;justify-content:center}
+#boot.welcome-mode{background:#fff}
+#boot .term{color:#fff;font-family:"JetBrains Mono",Menlo,monospace;font-size:clamp(15px,2.4vw,20px);max-width:680px;
+ padding:0 26px;line-height:1.7;white-space:pre-wrap}
+#boot .term .cur{display:inline-block;width:9px;height:1.05em;background:#fff;vertical-align:-2px;margin-left:2px;animation:blink 1s step-end infinite}
+@keyframes blink{50%{opacity:0}}
+#boot .welcome{display:none;flex-direction:column;align-items:center;gap:12px;border:2px solid #000;padding:20px 34px;box-shadow:3px 3px 0 #000}
+#boot.welcome-mode .term{display:none}#boot.welcome-mode .welcome{display:flex}
+#boot .msg{font-family:var(--chicago);font-size:15px;text-align:center}
+#boot .msg small{display:block;color:#555;font-size:12px;margin-top:4px}
+#boot.hide{opacity:0;pointer-events:none;transition:opacity .4s}
+@media (prefers-reduced-motion:reduce){#boot{display:none}}
+
+.hint-touch{display:none;position:fixed;bottom:8px;left:0;right:0;text-align:center;font-size:11px;color:#fff;z-index:8000}
+@media (max-width:760px){
+ body{overflow:auto}#desk{position:static;padding:14px 10px 60px}
+ .icon{position:static!important;display:inline-block;width:80px;margin:6px}
+ #hd,#evdoc,#trash{position:static}
+ .win{position:static!important;width:100%!important;margin:12px 0;box-shadow:none}
+ .win .body{max-height:none!important}.hint-touch{display:block}
+}
+</style>
+</head>
+<body>
+<main id="seo" aria-label="Eric Vaz — full text"><h1>Eric Vaz</h1><p>Full Professor of Geography and Environmental Studies, Toronto Metropolitan University. Spatial analysis, regional science, GeoAI, applied machine learning.</p><h2>About</h2><p>Geography, properly practiced, is not description. It is a discipline for reading how people, capital, and risk arrange themselves across space, and what those arrangements tell us about which decisions will hold and which will break. My work treats spatial data as decision infrastructure: for the investor weighing a market, the lender pricing a portfolio, the operator choosing a site, and the policymaker allocating against constraint.</p><p>I am a Full Professor in the Department of Geography and Environmental Studies at Toronto Metropolitan University, where I directed the Laboratory for Geocomputation and served as Graduate Program Director for the Master of Spatial Analysis. Before Toronto, I led the GIScience Research Group at Heidelberg University, and earlier held positions at the University of the Algarve and NOVA University of Lisbon, where I earned my doctorate in Information Management.</p><p>Across two decades I have written seven Springer monographs and more than ninety peer-reviewed articles spanning real estate valuation, market and retail geography, regional risk, and applied spatial machine learning. I currently serve on the editorial boards of Humanities & Social Sciences Communications (Springer Nature), Habitat International (Elsevier), REGION, and Data, and was Editor-in-Chief of the Canadian Journal of Regional Science.</p><p>In 2012 I was named a Rising Star by the Regional Science Association International. In 2023 I was ranked among the top scholars globally in the field of Human Habitat by ScholarGPS. My work has been highlighted by NASA Earth Observatory and Elsevier. From 2018 to 2021 I served as President of the Canadian Regional Science Association.</p><p>I move regularly between scholarship and its wider relevance. Alongside research and graduate teaching, I deliver invited lectures on GeoAI and regional science, and work to translate academic methods (hedonic models, spatial machine learning, satellite-derived indicators) into forms that other researchers and institutions can build on.</p><h2>Research Themes</h2><h3>I. Real Estate &amp; Market Geography</h3><p>Hedonic valuation, geodemographics, retail and investor location, wealth distribution, and the spatial logics of property and consumer markets. The geography of where capital chooses to land.</p><h3>II. Regional Intelligence &amp; Risk</h3><p>A framework developed across several monographs: how spatial evidence informs regional and urban decisions under uncertainty — investment risk, infrastructure exposure, and the limits of traditional models in the Anthropocene.</p><h3>III. GeoAI &amp; Computational Geography</h3><p>Spatial machine learning, cellular automata, spatial econometrics, and quantum methods in spatial analysis. Together they form the methodological toolkit that lets data of place speak to questions of value, risk, and growth.</p><h3>IV. Urban &amp; Regional Systems</h3><p>Land-use change, urban sprawl, metropolitan dynamics, and the role of small and medium towns in the geography of peripheral regions. Where regions move, why, and what that means for those exposed to the move.</p><h3>V. Spatial Epidemiology &amp; Health</h3><p>Injury landscapes, access to care, and the spatial structure of well-being and pathology in cities — work that increasingly speaks to insurers, urban operators, and population-health planners.</p><h3>VI. Environmental &amp; Climate Risk</h3><p>Wetland and habitat change, coastal erosion, and the climate forces reshaping the physical landscape, read as inputs to asset risk, insurability, and the changing geography of liveable place.</p><h3>VII. Heritage &amp; Cultural Landscapes</h3><p>Urban pressure on heritage sites, archaeological geography, and the cultural assets that anchor regional identity (and tourism economies) under conditions of rapid change.</p><h3>VIII. Subjective Geography</h3><p>The spatial structure of subjective well-being. Where people report feeling happy, what those geographies reveal about the places we build, and what they imply for the markets that serve them.</p><h2>Selected Projects</h2><h3>32Parts — Health, Neurodiversity &amp; Wellbeing</h3><p>An early-stage personal project exploring data-informed approaches to health and wellbeing.</p><h3>NeuroPilot — Health, Neurodiversity &amp; Wellbeing</h3><p>A concept focused on neurodiversity and attention, designed around how people with differing cognitive styles actually plan and work.</p><h3>DUAT — Creative Technology</h3><p>A narrative card game built around authentic Egyptology, pairing play with a genuine educational layer.</p><h2>Books</h2><p>Seven Springer monographs on space, region, and change.</p><h2>Fiction</h2><h3>Finger — Flash Fiction North, 2025</h3><p>There is this strange lingering sensation on the tip of my finger. This finger has pointed all its life in the right direction. Sometimes, wrong directions, too. Most of all, this finger, which now nudges toward a corner made of plastic, pointed my two daughters toward the constellations. “See Aries rising slowly northwest of that tree, right over there.” Her eager smile juxtaposed with a yawn at 10 pm. The other rascal runs back through the cabin. Well, that very finger, stretching towards something that feels like a button, no less, once held a lock of hair with my wife’s smile open and shining brightly over an Aegean sunset. In winter, it cleaned the frozen bits off my old Suzuki Samurai, anno 1987, second hand, when my house was the size of a washroom.</p><p>I wish my finger hadn’t aged with blemishes, some of them caught by surprise, with a reverie of the unknown. With a cadence of blame and a tainting of time. I’ve often cut my nails and cleaned the corners of that finger with my grandfather’s pocketknife. Now, it resides quietly next to me, encumbered by no movement. This finger dug potatoes in spring and scraped the corners of too many pages of things useless to memorize in college. It followed the minuscule handwriting of my advisor’s notes hastily, with red curvilinear ink, only to celebrate my dissertation’s defence three years later.</p><p>Time has surprised me, and so has my finger in its ruggedness, marking the passage of things beyond my wildest imagination when I was caught up in a tenure-track position and finally became tenured. This finger pointed nonchalantly and half-tipsy at my best friend and colleague during twenty Christmas parties, and with some hesitation, wrote notes on the sexiest beast I could muster sitting next to me in LaGuardia — flight of several hours, direction unknown, who cared.</p><p>It did a fairly good job of not being totally butchered by an electric saw while cutting a Christmas tree in the sticks, and it mustered its way out of a shady accident, which I swear wasn’t my fault. As I look at it resting on this very red button tied to the rim of the bed, I can’t help but wonder how lucky of a bastard my index finger has been. Its nail, as usual, cleverly cut. As days go softly here with a hospital gown and someone trims it just right for me, I can’t help but wonder, in the last days of yearning freedom and the upset stomach that bewilders my hands, will I be so lucky as having it point towards the sun when I am gone? For now, it serves to call the nurse as I, as well as the finger, do go too gentle into that good night.</p><h3>Salam in the Garage — Flash Fiction North, July 2025</h3><p>It was 5:08 p.m. when I pulled in. Tavira Plaza’s underground garage yawned cool and shadowed, echoing with the low boom of bass. Portuguese summer. A Peugeot — dented, silver, tired — sat idling across two spots. Its windows were open. Inside, three young men. South Asian, maybe Pakistani. Loud Arabic trap throbbed from a speaker duct-taped to the dash. Tires dirty, hood clean. One of them leaned out the window, flicking ash from a cigarette. The other laughed too loud at something on a phone.</p><p>And I — I was supposed to just walk past. Like everyone else, the groceries done. My newspaper resting between my arm, just coincidental of its own space of being very much Portuguese. Proper Lisbon sway, eclectic gaze, espresso and Tom Ford — Grey Vetiver. Sapatos de vela. But I didn’t. I slowed my step. A half-second of fear, not for safety, but for being misunderstood. My autism does go beyond the facade of intentions. The unmasking. I could still turn around. Just get my coffee and go home. Be a man of silence. Dream mitigation. But my soul tugged forward. My body shrugged. I stepped into the wave of music and raised my hand lightly to my chest.</p><p>“Salam alaikum,” I said. Not performative. Not exaggerated. Just honest. I was unmasked. “I read the Qur’an. I’m not Muslim… but I found peace in it.”</p><p>The music didn’t stop — but the world did. It left an empty space. The boy in the passenger seat blinked. His smirk collapsed into something soft. The one smoking straightened in his seat, like someone remembering their own name. The driver nodded — once, slow. The space became the warmth of sand dunes.</p><p>“Wa alaikum salam, senhor,” he replied, in Portuguese-accented Arabic. “That… that means a lot.” Broken English.</p><p>I smiled. I wasn’t there to convert or praise or correct. I was just one proud Canadian-Portuguese man speaking to another man in exile. Caught between the providence of Tim Hortons and the scent of summer. “Shukran,” I added.</p><p>The driver turned down the music. Not off. Just… lower. And for a moment — beneath the concrete and dust, under the weight of difference — two worlds that touch.</p><p>I walked on. Espresso and Pedras Salgadas still to be had. Groceries still to buy. But the air behind me now buzzed not with trap beats, but with something older. Something holy. Back in my car, Paulo Gonzo sings “É nas pedras da calçada que a canção nos sai melhor.” Bismillah to the good people of love.</p><h3>A Grave and a Pebble — White Wall Review, January 2025</h3><p>Whenever I ventured north from Keswick, past Craigmawr Beach, I felt the cool breeze from Cook’s Bay urge me onward. The ethereal quality of Lake Simcoe seemed to wash over me and soften the edges of my memories. Near the boundary of Georgina Island, I always found myself drawn to a solitary grave. As I recalled from my younger days, the grave had sat in a meadow facing the lake’s southern expanse for centuries, nameless and unmarked. Its headstone bore faint carvings, with only a few letters still visible — an “E” in the first name and a “W” and “T” in the last. The snow and rain had worn away most of the inscription, leaving the rest of the name lost to time, and no colour remained to bring clarity to the weathered stone.</p><p>Moss had formed a green path leading eastward from the grave, inviting the curious to explore. About thirty years ago, another grave appeared beside it — a woman was laid to rest there, yet she remained as nameless as her eternal neighbour.</p><p>Without a sense of foreboding, the neighbours had always viewed her behaviour as rather sullen. Each evening, she would stand overlooking the bay, beyond the picket fence that separated the hill from where the sky met the sea. Her lips moved in a murmur, sounding more like a prayer than anything else. Her expression — somewhere between devotion and eagerness — was enigmatic as she held a weathered stone between her fingers, chanting words that hinted at Gaelic origins…</p><h2>Recognition</h2><ul><li>2023 — Highly Ranked Scholar in Human Habitat (#18) — ScholarGPS global ranking</li><li>2021 — Dean&#x27;s Scholarly, Research &amp; Creative Activity Award — Faculty of Arts, TMU (Tenured)</li><li>2020 — Elsevier Highlighted Articles · NASA Earth Observatory Report</li><li>2018–21 — President, Canadian Regional Science Association</li><li>2018 — NASA Earth Observatory Research Highlight</li><li>2015 — Dean&#x27;s SRC Award, Faculty of Arts — TMU (Tenure-Track)</li><li>2013–25 — Director, Laboratory for Geocomputation — Dept. of Geography &amp; Environmental Studies, TMU</li><li>2015–18 — Vice President for Research, CIEO — University of the Algarve</li><li>2012, 2013 — Best Researcher Award — CIEO (Portugal)</li><li>2012 — Rising Star Award — Regional Science Association International</li><li>2010 — Best Paper, WSEA — selected for ESA Advanced Training, European Space Agency</li><li>2025– — Editorial Board, Humanities &amp; Social Sciences Communications — Springer Nature</li><li>2019–20 — Editor-in-Chief, Canadian Journal of Regional Science</li><li>2015–18 — Associate Editor, Habitat International — Elsevier</li><li>2017– — Editorial Board, REGION — European Regional Science Association</li><li>2014– — Editorial Board, Habitat International — Elsevier</li><li>2015– — Editorial Board, Data — MDPI</li><li>2018– — Member, Research Unit for Monitoring of Public Policies — University of Évora</li><li>2024 — Expert, International Science Council</li><li>2024 — Reviewer, NSERC (Canada)</li><li>2019 — Reviewer, NWO (Netherlands)</li><li>2016 — Reviewer, DAAD (Germany)</li></ul></main>
+
+<div id="boot"><div class="term"></div>
+  <div class="welcome"><svg width="52" height="58" viewBox="0 0 56 62" fill="none" stroke="#000" stroke-width="2"><rect x="3" y="3" width="50" height="56" rx="4"/><rect x="9" y="9" width="38" height="30"/><circle cx="21" cy="22" r="2" fill="#000"/><circle cx="35" cy="22" r="2" fill="#000"/><path d="M20 29 Q28 35 36 29"/><line x1="14" y1="48" x2="42" y2="48"/><circle cx="44" cy="52" r="1.5" fill="#000"/></svg><div class="msg">Welcome to Terra OS<small>An Ecosystem from Eric&rsquo;s Mind</small></div></div>
+</div>
+
+<div id="menubar">
+  <div class="mi" data-menu="apple"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2"><circle cx="12" cy="12" r="9"/><ellipse cx="12" cy="12" rx="4" ry="9"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="4.5" y1="7" x2="19.5" y2="7"/><line x1="4.5" y1="17" x2="19.5" y2="17"/></svg></div>
+  <div class="mi" data-menu="file">File</div>
+  <div class="mi" data-menu="edit">Edit</div>
+  <div class="mi" data-menu="view">View</div>
+  <div class="mi" data-menu="special">Special</div>
+  <div class="spacer"></div>
+  <div class="clock" id="clock">Tue 12:00 PM</div>
+</div>
+
+<ul class="menu" id="menu-apple">
+  <li data-act="about">About Terra OS&hellip;</li>
+  <li class="sep"></li>
+  <li data-act="opensys">Terra HD</li>
+  <li data-act="spatstat">Spatial Statistics</li>
+  <li class="sep"></li>
+  <li data-act="ext" data-url="/">ericvaz.com (classic site)</li>
+</ul>
+<ul class="menu" id="menu-file">
+  <li data-act="opensys">Open Terra HD <span class="sc">&#8984;O</span></li>
+  <li class="sep"></li>
+  <li data-act="ext" data-url="/">Open ericvaz.com</li>
+</ul>
+<ul class="menu" id="menu-edit">
+  <li class="dis">Undo <span class="sc">&#8984;Z</span></li><li class="sep"></li>
+  <li class="dis">Cut <span class="sc">&#8984;X</span></li><li class="dis">Copy <span class="sc">&#8984;C</span></li><li class="dis">Paste <span class="sc">&#8984;V</span></li>
+</ul>
+<ul class="menu" id="menu-view"><li class="dis">by Icon</li><li class="dis">by Name</li><li class="dis">by Date</li></ul>
+<ul class="menu" id="menu-special"><li data-act="restart">Restart</li></ul>
+
+<div id="desk">
+  <div class="icon" id="hd" data-open="system">
+    <svg class="glyph" viewBox="0 0 48 46" fill="none" stroke="#000" stroke-width="2">
+      <rect x="6" y="12" width="36" height="20" rx="2" fill="#fff"/><rect x="10" y="16" width="20" height="3" fill="#000" stroke="none"/><circle cx="36" cy="22" r="2.2" fill="#000" stroke="none"/></svg>
+    <span class="lbl">Terra HD</span>
+  </div>
+  <div class="icon" id="evdoc" data-act="ext" data-url="/">
+    <svg class="glyph" viewBox="0 0 48 46" fill="none" stroke="#000" stroke-width="2">
+      <path d="M12 4 h18 l8 8 v30 h-26 z" fill="#fff"/><path d="M30 4 v8 h8"/>
+      <line x1="17" y1="20" x2="33" y2="20"/><line x1="17" y1="25" x2="33" y2="25"/><line x1="17" y1="30" x2="28" y2="30"/></svg>
+    <span class="lbl">ericvaz.com</span>
+  </div>
+  <div class="icon" id="trash" data-act="noop">
+    <svg class="glyph" viewBox="0 0 48 46" fill="none" stroke="#000" stroke-width="2">
+      <path d="M14 14 h20 l-2 28 h-16 z" fill="#fff"/><rect x="12" y="10" width="24" height="4"/>
+      <line x1="20" y1="19" x2="20" y2="37"/><line x1="28" y1="19" x2="28" y2="37"/></svg>
+    <span class="lbl">Trash</span>
+  </div>
+</div>
+<div class="hint-touch">tap an icon to open</div>
+
+<script id="terra" type="application/json">{"about": {"body": "<p>Geography, properly practiced, is not description. It is a discipline for reading how people, capital, and risk arrange themselves across space, and what those arrangements tell us about which decisions will hold and which will break. My work treats spatial data as decision infrastructure: for the investor weighing a market, the lender pricing a portfolio, the operator choosing a site, and the policymaker allocating against constraint.</p><p>I am a Full Professor in the Department of Geography and Environmental Studies at Toronto Metropolitan University, where I directed the Laboratory for Geocomputation and served as Graduate Program Director for the Master of Spatial Analysis. Before Toronto, I led the GIScience Research Group at Heidelberg University, and earlier held positions at the University of the Algarve and NOVA University of Lisbon, where I earned my doctorate in Information Management.</p><p>Across two decades I have written seven Springer monographs and more than ninety peer-reviewed articles spanning real estate valuation, market and retail geography, regional risk, and applied spatial machine learning. I currently serve on the editorial boards of Humanities & Social Sciences Communications (Springer Nature), Habitat International (Elsevier), REGION, and Data, and was Editor-in-Chief of the Canadian Journal of Regional Science.</p><p>In 2012 I was named a Rising Star by the Regional Science Association International. In 2023 I was ranked among the top scholars globally in the field of Human Habitat by ScholarGPS. My work has been highlighted by NASA Earth Observatory and Elsevier. From 2018 to 2021 I served as President of the Canadian Regional Science Association.</p><p>I move regularly between scholarship and its wider relevance. Alongside research and graduate teaching, I deliver invited lectures on GeoAI and regional science, and work to translate academic methods (hedonic models, spatial machine learning, satellite-derived indicators) into forms that other researchers and institutions can build on.</p>", "meta": [["Current", "Full Professor — Dept. of Geography & Environmental Studies, Toronto Metropolitan University"], ["Doctorate", "Ph.D., Information Management — NOVA University of Lisbon"], ["Post-Doctorate", "GIS & Science — Heidelberg University, Germany"], ["Previously", "Group Leader, GIScience — Heidelberg University"], ["Languages", "English · Português · Deutsch (trilingual native speaker)"]]}, "research": [["I. Real Estate & Market Geography", "Hedonic valuation, geodemographics, retail and investor location, wealth distribution, and the spatial logics of property and consumer markets. The geography of where capital chooses to land."], ["II. Regional Intelligence & Risk", "A framework developed across several monographs: how spatial evidence informs regional and urban decisions under uncertainty — investment risk, infrastructure exposure, and the limits of traditional models in the Anthropocene."], ["III. GeoAI & Computational Geography", "Spatial machine learning, cellular automata, spatial econometrics, and quantum methods in spatial analysis. Together they form the methodological toolkit that lets data of place speak to questions of value, risk, and growth."], ["IV. Urban & Regional Systems", "Land-use change, urban sprawl, metropolitan dynamics, and the role of small and medium towns in the geography of peripheral regions. Where regions move, why, and what that means for those exposed to the move."], ["V. Spatial Epidemiology & Health", "Injury landscapes, access to care, and the spatial structure of well-being and pathology in cities — work that increasingly speaks to insurers, urban operators, and population-health planners."], ["VI. Environmental & Climate Risk", "Wetland and habitat change, coastal erosion, and the climate forces reshaping the physical landscape, read as inputs to asset risk, insurability, and the changing geography of liveable place."], ["VII. Heritage & Cultural Landscapes", "Urban pressure on heritage sites, archaeological geography, and the cultural assets that anchor regional identity (and tourism economies) under conditions of rapid change."], ["VIII. Subjective Geography", "The spatial structure of subjective well-being. Where people report feeling happy, what those geographies reveal about the places we build, and what they imply for the markets that serve them."]], "ventures": [["32Parts", "Health, Neurodiversity & Wellbeing", "An early-stage personal project exploring data-informed approaches to health and wellbeing."], ["NeuroPilot", "Health, Neurodiversity & Wellbeing", "A concept focused on neurodiversity and attention, designed around how people with differing cognitive styles actually plan and work."], ["DUAT", "Creative Technology", "A narrative card game built around authentic Egyptology, pairing play with a genuine educational layer."]], "recognition": {"honours": [["2023", "Highly Ranked Scholar in Human Habitat (#18) — ScholarGPS global ranking"], ["2021", "Dean's Scholarly, Research & Creative Activity Award — Faculty of Arts, TMU (Tenured)"], ["2020", "Elsevier Highlighted Articles · NASA Earth Observatory Report"], ["2018–21", "President, Canadian Regional Science Association"], ["2018", "NASA Earth Observatory Research Highlight"], ["2015", "Dean's SRC Award, Faculty of Arts — TMU (Tenure-Track)"], ["2013–25", "Director, Laboratory for Geocomputation — Dept. of Geography & Environmental Studies, TMU"], ["2015–18", "Vice President for Research, CIEO — University of the Algarve"], ["2012, 2013", "Best Researcher Award — CIEO (Portugal)"], ["2012", "Rising Star Award — Regional Science Association International"], ["2010", "Best Paper, WSEA — selected for ESA Advanced Training, European Space Agency"]], "editorial": [["2025–", "Editorial Board, Humanities & Social Sciences Communications — Springer Nature"], ["2019–20", "Editor-in-Chief, Canadian Journal of Regional Science"], ["2015–18", "Associate Editor, Habitat International — Elsevier"], ["2017–", "Editorial Board, REGION — European Regional Science Association"], ["2014–", "Editorial Board, Habitat International — Elsevier"], ["2015–", "Editorial Board, Data — MDPI"], ["2018–", "Member, Research Unit for Monitoring of Public Policies — University of Évora"], ["2024", "Expert, International Science Council"], ["2024", "Reviewer, NSERC (Canada)"], ["2019", "Reviewer, NWO (Netherlands)"], ["2016", "Reviewer, DAAD (Germany)"]]}, "fiction": [{"title": "Finger", "venue": "Flash Fiction North, 2025", "by": "Eric Vaz", "body": "<p>There is this strange lingering sensation on the tip of my finger. This finger has pointed all its life in the right direction. Sometimes, wrong directions, too. Most of all, this finger, which now nudges toward a corner made of plastic, pointed my two daughters toward the constellations. “See Aries rising slowly northwest of that tree, right over there.” Her eager smile juxtaposed with a yawn at 10 pm. The other rascal runs back through the cabin. Well, that very finger, stretching towards something that feels like a button, no less, once held a lock of hair with my wife’s smile open and shining brightly over an Aegean sunset. In winter, it cleaned the frozen bits off my old Suzuki Samurai, anno 1987, second hand, when my house was the size of a washroom.</p><p>I wish my finger hadn’t aged with blemishes, some of them caught by surprise, with a reverie of the unknown. With a cadence of blame and a tainting of time. I’ve often cut my nails and cleaned the corners of that finger with my grandfather’s pocketknife. Now, it resides quietly next to me, encumbered by no movement. This finger dug potatoes in spring and scraped the corners of too many pages of things useless to memorize in college. It followed the minuscule handwriting of my advisor’s notes hastily, with red curvilinear ink, only to celebrate my dissertation’s defence three years later.</p><p>Time has surprised me, and so has my finger in its ruggedness, marking the passage of things beyond my wildest imagination when I was caught up in a tenure-track position and finally became tenured. This finger pointed nonchalantly and half-tipsy at my best friend and colleague during twenty Christmas parties, and with some hesitation, wrote notes on the sexiest beast I could muster sitting next to me in LaGuardia — flight of several hours, direction unknown, who cared.</p><p>It did a fairly good job of not being totally butchered by an electric saw while cutting a Christmas tree in the sticks, and it mustered its way out of a shady accident, which I swear wasn’t my fault. As I look at it resting on this very red button tied to the rim of the bed, I can’t help but wonder how lucky of a bastard my index finger has been. Its nail, as usual, cleverly cut. As days go softly here with a hospital gown and someone trims it just right for me, I can’t help but wonder, in the last days of yearning freedom and the upset stomach that bewilders my hands, will I be so lucky as having it point towards the sun when I am gone? For now, it serves to call the nurse as I, as well as the finger, do go too gentle into that good night.</p>", "link": "https://www.flashfictionnorth.com/fictionarchive"}, {"title": "Salam in the Garage", "venue": "Flash Fiction North, July 2025", "by": "Eric Vaz", "body": "<p>It was 5:08 p.m. when I pulled in. Tavira Plaza’s underground garage yawned cool and shadowed, echoing with the low boom of bass. Portuguese summer. A Peugeot — dented, silver, tired — sat idling across two spots. Its windows were open. Inside, three young men. South Asian, maybe Pakistani. Loud Arabic trap throbbed from a speaker duct-taped to the dash. Tires dirty, hood clean. One of them leaned out the window, flicking ash from a cigarette. The other laughed too loud at something on a phone.</p><p>And I — I was supposed to just walk past. Like everyone else, the groceries done. My newspaper resting between my arm, just coincidental of its own space of being very much Portuguese. Proper Lisbon sway, eclectic gaze, espresso and Tom Ford — Grey Vetiver. Sapatos de vela. But I didn’t. I slowed my step. A half-second of fear, not for safety, but for being misunderstood. My autism does go beyond the facade of intentions. The unmasking. I could still turn around. Just get my coffee and go home. Be a man of silence. Dream mitigation. But my soul tugged forward. My body shrugged. I stepped into the wave of music and raised my hand lightly to my chest.</p><p>“Salam alaikum,” I said. Not performative. Not exaggerated. Just honest. I was unmasked. “I read the Qur’an. I’m not Muslim… but I found peace in it.”</p><p>The music didn’t stop — but the world did. It left an empty space. The boy in the passenger seat blinked. His smirk collapsed into something soft. The one smoking straightened in his seat, like someone remembering their own name. The driver nodded — once, slow. The space became the warmth of sand dunes.</p><p>“Wa alaikum salam, senhor,” he replied, in Portuguese-accented Arabic. “That… that means a lot.” Broken English.</p><p>I smiled. I wasn’t there to convert or praise or correct. I was just one proud Canadian-Portuguese man speaking to another man in exile. Caught between the providence of Tim Hortons and the scent of summer. “Shukran,” I added.</p><p>The driver turned down the music. Not off. Just… lower. And for a moment — beneath the concrete and dust, under the weight of difference — two worlds that touch.</p><p>I walked on. Espresso and Pedras Salgadas still to be had. Groceries still to buy. But the air behind me now buzzed not with trap beats, but with something older. Something holy. Back in my car, Paulo Gonzo sings “É nas pedras da calçada que a canção nos sai melhor.” Bismillah to the good people of love.</p>", "link": "https://www.flashfictionnorth.com/fictionarchive"}, {"title": "A Grave and a Pebble", "venue": "White Wall Review, January 2025", "by": "Eric Vaz", "body": "<p>Whenever I ventured north from Keswick, past Craigmawr Beach, I felt the cool breeze from Cook’s Bay urge me onward. The ethereal quality of Lake Simcoe seemed to wash over me and soften the edges of my memories. Near the boundary of Georgina Island, I always found myself drawn to a solitary grave. As I recalled from my younger days, the grave had sat in a meadow facing the lake’s southern expanse for centuries, nameless and unmarked. Its headstone bore faint carvings, with only a few letters still visible — an “E” in the first name and a “W” and “T” in the last. The snow and rain had worn away most of the inscription, leaving the rest of the name lost to time, and no colour remained to bring clarity to the weathered stone.</p><p>Moss had formed a green path leading eastward from the grave, inviting the curious to explore. About thirty years ago, another grave appeared beside it — a woman was laid to rest there, yet she remained as nameless as her eternal neighbour.</p><p>Without a sense of foreboding, the neighbours had always viewed her behaviour as rather sullen. Each evening, she would stand overlooking the bay, beyond the picket fence that separated the hill from where the sky met the sea. Her lips moved in a murmur, sounding more like a prayer than anything else. Her expression — somewhere between devotion and eagerness — was enigmatic as she held a weathered stone between her fingers, chanting words that hinted at Gaelic origins…</p>", "link": "https://whitewallreview.com/a-grave-and-a-pebble/", "excerpt": true}]}</script>
+<script>
+const DATA = JSON.parse(document.getElementById("terra").textContent);
+const $=(s,r=document)=>r.querySelector(s);
+const desk=$("#desk"); const TOUCH=matchMedia("(hover:none)").matches;
+let ztop=20; const openWins={};
+function spatstatURL(){return "../spatstat/";}
+function go(u){window.location.href=u;}
+
+/* ---- build doc + folder registry from DATA ---- */
+const DOCS={}, FOLDERS={};
+DOCS["about"]={title:"About — Eric Vaz",kind:"about"};
+DATA.research.forEach((r,i)=>{DOCS["res"+i]={title:r[0],kind:"text",html:`<h3>${esc(r[0])}</h3><p>${esc(r[1])}</p>`};});
+FOLDERS["research"]={title:"Research",items:DATA.research.map((_,i)=>"res"+i)};
+DATA.ventures.forEach((v,i)=>{DOCS["ven"+i]={title:v[0],kind:"text",
+  html:`<span class="grouptag">${esc(v[1])}</span><h3>${esc(v[0])}</h3><p>${esc(v[2])}</p>`};});
+FOLDERS["ventures"]={title:"Ventures",items:DATA.ventures.map((_,i)=>"ven"+i)};
+DATA.fiction.forEach((f,i)=>{
+  let body=f.body; if(f.excerpt){body+=`<div class="readmore"><a href="${f.link}" target="_blank" rel="noopener">Read the full story at the publisher \u2192</a></div>`;}
+  DOCS["fic"+i]={title:f.title,kind:"text",
+    html:`<div class="byline"><em>${esc(f.title)}</em> \u00b7 by ${esc(f.by)} \u00b7 ${esc(f.venue)}</div>`+body};
+});
+FOLDERS["fiction"]={title:"Fiction",items:DATA.fiction.map((_,i)=>"fic"+i)};
+DOCS["recognition"]={title:"Recognition",kind:"recognition"};
+FOLDERS["system"]={title:"Terra HD",items:["about","research","ventures","fiction","recognition","books","spatstat","evdoc-in"]};
+FOLDERS["books"]={title:"Books \u2014 7 items",books:true};
+
+const BOOKS=[
+ {t:"Regional & Urban Change & GIScience: Northern Canada",y:2026,isbn:"978-3-032-19210-3"},
+ {t:"Regional Knowledge Economies",y:2024,isbn:"978-3-031-76906-1"},
+ {t:"Regional & Urban Change & GIScience: Ontario",y:2023,isbn:"978-3-031-24731-6"},
+ {t:"Geography of Happiness",y:2023,isbn:"978-3-031-19871-7"},
+ {t:"Sustainable Development in Southern Europe",y:2020,isbn:"978-3-662-62177-6"},
+ {t:"Regional Intelligence",y:2020,isbn:"978-3-030-36479-3"},
+ {t:"Resilience & Regional Dynamics",y:2018,isbn:"978-3-319-95135-5"},
+];
+const SPRINGER=i=>"https://link.springer.com/book/10.1007/"+i;
+const GLYPH={
+ folder:`<svg class="glyph" viewBox="0 0 48 46" fill="none" stroke="#000" stroke-width="2"><path d="M5 15 h13 l4 4 h21 v22 h-38 z" fill="#fff"/><path d="M5 15 v-3 h11 l4 4" fill="#fff"/></svg>`,
+ doc:`<svg class="glyph" viewBox="0 0 48 46" fill="none" stroke="#000" stroke-width="2"><path d="M12 4 h18 l8 8 v30 h-26 z" fill="#fff"/><path d="M30 4 v8 h8"/><line x1="17" y1="20" x2="33" y2="20"/><line x1="17" y1="25" x2="33" y2="25"/><line x1="17" y1="30" x2="28" y2="30"/></svg>`,
+ app:`<svg class="glyph" viewBox="0 0 48 46" fill="none" stroke="#000" stroke-width="2"><path d="M24 5 L44 23 L24 41 L4 23 Z" fill="#fff"/><path d="M14 23 h20 M24 15 v16"/><circle cx="24" cy="23" r="3" fill="#000" stroke="none"/></svg>`,
+};
+const CHILD={
+ about:{label:"About",glyph:"doc",doc:"about"},
+ research:{label:"Research",glyph:"folder",open:"research"},
+ ventures:{label:"Ventures",glyph:"folder",open:"ventures"},
+ fiction:{label:"Fiction",glyph:"folder",open:"fiction"},
+ recognition:{label:"Recognition",glyph:"doc",doc:"recognition"},
+ books:{label:"Books",glyph:"folder",open:"books"},
+ spatstat:{label:"Spatial Statistics",glyph:"app",act:"spatstat"},
+ "evdoc-in":{label:"ericvaz.com",glyph:"doc",act:"ext",url:"/"},
+};
+function esc(s){return String(s).replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));}
+
+/* ---- windows ---- */
+function cascade(){const n=Object.keys(openWins).length;return{left:54+n*26,top:50+n*24};}
+function frame(title,count){
+ return `<div class="title"><span class="close"></span><span class="name">${esc(title)}</span></div>`+
+   (count!=null?`<div class="strip"><span>${count} item${count!==1?"s":""}</span><span>\u2014</span><span>403K available</span></div>`:"")+
+   `<div class="body"></div>`;
+}
+function mountWin(w,id){
+ $(".close",w).addEventListener("click",e=>{e.stopPropagation();w.remove();delete openWins[id];});
+ makeDraggable(w,$(".title",w)); w.addEventListener("pointerdown",()=>focusWin(w));
+ desk.appendChild(w); openWins[id]=w; focusWin(w);
+}
+function focusWin(w){w.style.zIndex=++ztop;}
+
+function openFolder(id){
+ if(openWins[id]){focusWin(openWins[id]);return;}
+ const def=FOLDERS[id]; if(!def)return;
+ const w=document.createElement("div"); w.className="win fold";
+ const c=cascade(); w.style.left=c.left+"px"; w.style.top=c.top+"px"; w.style.zIndex=++ztop;
+ const count=def.books?BOOKS.length:def.items.length;
+ w.innerHTML=frame(def.title,count);
+ const g=document.createElement("div"); g.className="grid"; const body=$(".body",w);
+ if(def.books){
+   BOOKS.forEach(b=>{const ic=document.createElement("div");ic.className="icon book-ic";
+     ic.innerHTML=`<span class="glyph"><img class="cover" src="../covers/${b.isbn}.webp" alt="" onerror="this.style.display='none';this.parentNode.innerHTML=document.getElementById('tpl-doc').innerHTML;"></span><span class="lbl">${esc(b.t)} (${b.y})</span>`;
+     bindOpen(ic,()=>window.open(SPRINGER(b.isbn),"_blank","noopener")); g.appendChild(ic);});
+ } else {
+   def.items.forEach(cid=>{const c2=CHILD[cid]; if(!c2)return;
+     const ic=document.createElement("div");ic.className="icon";
+     ic.innerHTML=GLYPH[c2.glyph]+`<span class="lbl">${esc(c2.label)}</span>`;
+     bindOpen(ic,()=>{ if(c2.open)openFolder(c2.open); else if(c2.doc)openDoc(c2.doc); else if(c2.act==="ext")go(c2.url); else if(c2.act==="spatstat")go(spatstatURL()); });
+     g.appendChild(ic);});
+ }
+ body.appendChild(g); mountWin(w,id);
+}
+
+function openDoc(id){
+ if(openWins["doc-"+id]){focusWin(openWins["doc-"+id]);return;}
+ const d=DOCS[id]; if(!d)return;
+ const w=document.createElement("div"); w.className="win text";
+ const c=cascade(); w.style.left=c.left+"px"; w.style.top=c.top+"px"; w.style.zIndex=++ztop;
+ w.innerHTML=frame(d.title,null); const body=$(".body",w); body.classList.add("read");
+ if(d.kind==="about"){
+   let m='<table class="meta">'+DATA.about.meta.map(r=>`<tr><td class="k">${esc(r[0])}</td><td>${esc(r[1])}</td></tr>`).join("")+'</table>';
+   body.innerHTML=m+DATA.about.body;
+ } else if(d.kind==="recognition"){
+   const list=a=>'<ul class="creds">'+a.map(x=>`<li><span class="y">${esc(x[0])}</span><span>${esc(x[1])}</span></li>`).join("")+'</ul>';
+   body.innerHTML=`<div class="col-h">Honours &amp; Leadership</div>${list(DATA.recognition.honours)}<div class="col-h">Editorial &amp; Scientific Service</div>${list(DATA.recognition.editorial)}`;
+ } else {
+   body.innerHTML=d.html;
+ }
+ mountWin(w,"doc-"+id);
+}
+
+function makeDraggable(w,handle){
+ let sx,sy,ox,oy,drag=false;
+ handle.addEventListener("pointerdown",e=>{
+   if(e.target.classList.contains("close"))return;
+   if(matchMedia("(max-width:760px)").matches)return;
+   drag=true;handle.classList.add("drag");handle.setPointerCapture(e.pointerId);
+   sx=e.clientX;sy=e.clientY;ox=parseInt(w.style.left);oy=parseInt(w.style.top);focusWin(w);});
+ handle.addEventListener("pointermove",e=>{if(!drag)return;
+   let nx=ox+(e.clientX-sx),ny=Math.max(24,oy+(e.clientY-sy));
+   w.style.left=Math.max(-w.offsetWidth+60,nx)+"px";w.style.top=ny+"px";});
+ const end=()=>{drag=false;handle.classList.remove("drag");};
+ handle.addEventListener("pointerup",end);handle.addEventListener("pointercancel",end);
+}
+function bindOpen(el,fn){
+ if(TOUCH){el.addEventListener("click",e=>{e.stopPropagation();fn();});}
+ else{el.addEventListener("click",e=>{e.stopPropagation();sel(el);});el.addEventListener("dblclick",e=>{e.stopPropagation();fn();});}
+}
+function sel(el){document.querySelectorAll(".icon.sel").forEach(i=>i.classList.remove("sel"));el.classList.add("sel");}
+
+document.querySelectorAll("#desk > .icon").forEach(ic=>{
+ bindOpen(ic,()=>{ if(ic.dataset.open)openFolder(ic.dataset.open); else if(ic.dataset.act==="ext")go(ic.dataset.url); });
+});
+desk.addEventListener("click",()=>document.querySelectorAll(".icon.sel").forEach(i=>i.classList.remove("sel")));
+
+/* about box (apple menu) */
+function openAbout(){
+ if(openWins.aboutmac){focusWin(openWins.aboutmac);return;}
+ const w=document.createElement("div");w.className="win text";w.style.width="330px";
+ const c=cascade();w.style.left=c.left+"px";w.style.top=c.top+"px";w.style.zIndex=++ztop;
+ w.innerHTML=frame("About Terra OS",null);
+ $(".body",w).innerHTML=`<div class="col-h">Terra OS</div>
+   <table class="meta">
+   <tr><td class="k">Author</td><td>Eric Vaz</td></tr>
+   <tr><td class="k">System</td><td>7.0 \u00b7 \u201cTerra\u201d</td></tr>
+   <tr><td class="k">Discipline</td><td>Geography \u00b7 Spatial analysis</td></tr>
+   <tr><td class="k">Monographs</td><td>7</td></tr>
+   <tr><td class="k">Total Memory</td><td>\u221e K</td></tr></table>
+   <p style="font-family:var(--read);font-size:13px;color:#444">An ecosystem from Eric\u2019s mind. Double-click a folder; open the books; read the fiction. Or open <u>ericvaz.com</u> for the classic site.</p>`;
+ mountWin(w,"aboutmac");
+}
+
+/* menus */
+let curMenu=null;
+function closeMenu(){if(curMenu){curMenu.el.classList.remove("show");curMenu.mi.classList.remove("open");curMenu=null;}}
+document.querySelectorAll("#menubar .mi[data-menu]").forEach(mi=>{
+ const menu=$("#menu-"+mi.dataset.menu);
+ mi.addEventListener("click",e=>{e.stopPropagation();
+   if(curMenu&&curMenu.el===menu){closeMenu();return;}
+   closeMenu();const r=mi.getBoundingClientRect();menu.style.left=r.left+"px";
+   menu.classList.add("show");mi.classList.add("open");curMenu={el:menu,mi};});
+});
+document.querySelectorAll(".menu li").forEach(li=>{
+ if(li.classList.contains("sep")||li.classList.contains("dis"))return;
+ li.addEventListener("click",e=>{e.stopPropagation();closeMenu();const a=li.dataset.act;
+   if(a==="about")openAbout();
+   else if(a==="ext")go(li.dataset.url);
+   else if(a==="spatstat")go(spatstatURL());
+   else if(a==="opensys")openFolder("system");
+   else if(a==="restart"){try{localStorage.removeItem("terraos.visited");}catch(e){}location.reload();}
+ });
+});
+document.addEventListener("click",closeMenu);
+
+/* clock */
+function tick(){const d=new Date(),D=["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
+ let h=d.getHours(),m=d.getMinutes(),ap=h<12?"AM":"PM";h=h%12||12;
+ $("#clock").textContent=D[d.getDay()]+" "+h+":"+String(m).padStart(2,"0")+" "+ap;}
+tick();setInterval(tick,15000);
+
+/* ---- boot: typed intro first visit only ---- */
+const BOOT_MSG="Hello. This is the information age that made my screen turn greyscale. To reconsider computation in the age of AI, this is the beginning of the return. Enjoy the website.";
+function firstVisit(){ try{ if(localStorage.getItem("terraos.visited"))return false; localStorage.setItem("terraos.visited","1"); return true; }catch(e){ return true; } }
+function finishBoot(){const b=$("#boot");b.classList.add("hide");setTimeout(()=>b.style.display="none",450);}
+function showWelcome(ms){const b=$("#boot");b.classList.add("welcome-mode");setTimeout(finishBoot,ms);}
+window.addEventListener("load",()=>{
+ const b=$("#boot");
+ if(matchMedia("(prefers-reduced-motion:reduce)").matches){b.style.display="none";return;}
+ if(!firstVisit()){ showWelcome(900); return; }
+ const term=$("#boot .term"); let i=0;
+ (function type(){ if(i<=BOOT_MSG.length){ term.innerHTML=esc(BOOT_MSG.slice(0,i))+'<span class="cur"></span>'; i++; setTimeout(type, i<3?260:28); }
+   else { setTimeout(()=>showWelcome(1300), 800); } })();
+});
+
+const tpl=document.createElement("div");tpl.id="tpl-doc";tpl.style.display="none";tpl.innerHTML=GLYPH.doc;document.body.appendChild(tpl);
+</script>
+</body>
+</html>
