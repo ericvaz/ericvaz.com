@@ -689,20 +689,28 @@ function openRadio(){
  var c=cascade();w.style.left=c.left+"px";w.style.top=c.top+"px";w.style.zIndex=++ztop;w.style.width="360px";
  w.innerHTML=frame("Radio",null);
  var body=$(".body",w);body.classList.add("radio-body");
- var ST=[["The Classical Station - WCPE (MP3)","https://playerservices.streamtheworld.com/api/livestream-redirect/WCPE_FM.mp3"],["The Classical Station - WCPE (AAC, low bandwidth)","https://playerservices.streamtheworld.com/api/livestream-redirect/WCPE_FMAAC128.aac"]];
- body.innerHTML='<div class="radio-name">The Classical Station</div><div class="radio-sub">WCPE &middot; great classical music, 24 hours a day &middot; listener-supported and non-commercial</div><div class="radio-ctrls"><button class="gbtn rtoggle">&#9654; Play</button><span class="rstatus">tap Play to tune in</span></div><label class="rvol">Vol <input type="range" min="0" max="100" value="80" class="rvolr"></label><select class="rstation">'+ST.map(function(s){return '<option value="'+s[1]+'">'+s[0]+'</option>';}).join("")+'</select>';
+ var ST=[
+  {n:"The Classical Station",s:"WCPE - great classical music, 24 hours a day",u:"https://playerservices.streamtheworld.com/api/livestream-redirect/WCPE_FM.mp3",l:"Classical - WCPE"},
+  {n:"Metal Detector",s:"SomaFM - the angrier side of metal, doom to thrash",u:"https://ice1.somafm.com/metal-128-mp3",l:"Heavy Metal - Metal Detector"},
+  {n:"Sonic Universe",s:"SomaFM - eclectic, avant-garde takes on jazz",u:"https://ice1.somafm.com/sonicuniverse-128-mp3",l:"Jazz - Sonic Universe"},
+  {n:"Left Coast 70s",s:"SomaFM - mellow album rock from the Seventies",u:"https://ice1.somafm.com/seventies-128-mp3",l:"Rock - Left Coast 70s"},
+  {n:"The Classical Station",s:"WCPE - low-bandwidth AAC fallback",u:"https://playerservices.streamtheworld.com/api/livestream-redirect/WCPE_FMAAC128.aac",l:"Classical - WCPE (AAC)"}
+ ];
+ body.innerHTML='<div class="radio-name"></div><div class="radio-sub"></div><div class="radio-ctrls"><button class="gbtn rtoggle">&#9654; Play</button><span class="rstatus">tap Play to tune in</span></div><label class="rvol">Vol <input type="range" min="0" max="100" value="80" class="rvolr"></label><select class="rstation">'+ST.map(function(s,i){return '<option value="'+i+'">'+s.l+'</option>';}).join("")+'</select>';
  var audio=new Audio();audio.preload="none";audio.volume=0.8;
- var sel=$(".rstation",body),btn=$(".rtoggle",body),stt=$(".rstatus",body),vol=$(".rvolr",body);
- audio.src=sel.value;var playing=false;
+ var sel=$(".rstation",body),btn=$(".rtoggle",body),stt=$(".rstatus",body),vol=$(".rvolr",body),nm=$(".radio-name",body),sb=$(".radio-sub",body);
+ function cur(){return ST[parseInt(sel.value,10)||0];}
+ function meta(){var st=cur();nm.textContent=st.n;sb.textContent=st.s;}
+ meta();audio.src=cur().u;var playing=false;
  function ss(t){stt.textContent=t;}
  btn.addEventListener("click",function(){
    if(playing){audio.pause();playing=false;btn.innerHTML="&#9654; Play";ss("paused");}
-   else{ss("tuning\u2026");audio.src=sel.value;var p=audio.play();if(p&&p.catch)p.catch(function(){ss("stream unavailable - try the other option");});playing=true;btn.innerHTML="&#9632; Stop";}
+   else{ss("tuning...");audio.src=cur().u;var pr=audio.play();if(pr&&pr.catch)pr.catch(function(){ss("stream unavailable");});playing=true;btn.innerHTML="&#9632; Stop";}
  });
- audio.addEventListener("playing",function(){ss("\u25cf on air");});
- audio.addEventListener("error",function(){ss("stream unavailable - try the other option");});
- audio.addEventListener("waiting",function(){ss("buffering\u2026");});
- sel.addEventListener("change",function(){audio.src=sel.value;if(playing){ss("tuning\u2026");var p=audio.play();if(p&&p.catch)p.catch(function(){ss("stream unavailable");});}});
+ audio.addEventListener("playing",function(){ss("on air");});
+ audio.addEventListener("error",function(){ss("stream unavailable");});
+ audio.addEventListener("waiting",function(){ss("buffering...");});
+ sel.addEventListener("change",function(){meta();audio.src=cur().u;if(playing){ss("tuning...");var pr=audio.play();if(pr&&pr.catch)pr.catch(function(){ss("stream unavailable");});}});
  vol.addEventListener("input",function(){audio.volume=vol.value/100;});
  mountWin(w,"radio");
  var cl=$(".close",w);if(cl)cl.addEventListener("click",function(){try{audio.pause();audio.src="";}catch(e){}});
