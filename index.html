@@ -94,7 +94,7 @@ img{image-rendering:auto}
 .gbtn:active{background:#000;color:#fff}
 .gscore{font-family:var(--chicago);font-size:12px}
 .ghint{margin-left:auto;color:#555;font-size:10px}
-.game-cv{background:#fff;border:2px solid #000;image-rendering:pixelated;touch-action:none;max-width:100%}
+.game-cv{background:#fff;border:2px solid #000;image-rendering:pixelated;touch-action:none;max-width:100%;width:100%;height:auto}
 .radio-body{background:#cfcfcf!important;display:flex;flex-direction:column;gap:10px;padding:14px;max-height:none}
 .radio-name{font-family:var(--chicago);font-size:16px}
 .radio-sub{font-size:11px;color:#555;line-height:1.45}
@@ -590,7 +590,7 @@ function openGame(name){
  const titles={draw:"Draw",snake:"Snake",blocks:"Terra Blocks"};
  const w=document.createElement("div"); w.className="win game-win";
  const c=cascade(); w.style.left=c.left+"px"; w.style.top=c.top+"px"; w.style.zIndex=++ztop;
- w.innerHTML=frame(titles[name]||"Game",null);
+ w.style.width="360px"; w.innerHTML=frame(titles[name]||"Game",null);
  const body=$(".body",w); body.classList.add("game-body");
  mountWin(w,id);
  if(name==="draw") gameDraw(body);
