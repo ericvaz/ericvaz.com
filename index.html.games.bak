@@ -94,7 +94,7 @@ img{image-rendering:auto}
 .gbtn:active{background:#000;color:#fff}
 .gscore{font-family:var(--chicago);font-size:12px}
 .ghint{margin-left:auto;color:#555;font-size:10px}
-.game-cv{background:#fff;border:2px solid #000;image-rendering:pixelated;touch-action:none;max-width:100%;width:100%;height:auto}
+.game-cv{background:#fff;border:2px solid #000;image-rendering:pixelated;touch-action:none;max-width:100%}
 .radio-body{background:#cfcfcf!important;display:flex;flex-direction:column;gap:10px;padding:14px;max-height:none}
 .radio-name{font-family:var(--chicago);font-size:16px}
 .radio-sub{font-size:11px;color:#555;line-height:1.45}
@@ -223,23 +223,55 @@ y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
     <svg class="glyph" viewBox="0 0 48 46" fill="none" stroke="#000" stroke-width="2"><rect x="6" y="12" width="36" height="20" rx="2" fill="#fff"/><rect x="10" y="16" width="20" height="3" fill="#000" stroke="none"/><circle cx="36" cy="22" r="2.2" fill="#000" stroke="none"/></svg>
     <span class="lbl">Terra HD</span>
   </div>
-  <div class="icon" data-open="documents" style="left:24px;top:104px">
+  <div class="icon" data-open="research" style="left:24px;top:104px">
     <svg class="glyph" viewBox="0 0 48 46" fill="none" stroke="#000" stroke-width="2"><path d="M5 15 h13 l4 4 h21 v22 h-38 z" fill="#fff"/><path d="M5 15 v-3 h11 l4 4" fill="#fff"/></svg>
-    <span class="lbl">Documents</span>
+    <span class="lbl">Research</span>
   </div>
-  <div class="icon" data-open="books" style="left:24px;top:196px">
+  <div class="icon" data-open="publications" style="left:24px;top:196px">
+    <svg class="glyph" viewBox="0 0 48 46" fill="none" stroke="#000" stroke-width="2"><path d="M5 15 h13 l4 4 h21 v22 h-38 z" fill="#fff"/><path d="M5 15 v-3 h11 l4 4" fill="#fff"/></svg>
+    <span class="lbl">Publications</span>
+  </div>
+  <div class="icon" data-open="teaching" style="left:24px;top:288px">
+    <svg class="glyph" viewBox="0 0 48 46" fill="none" stroke="#000" stroke-width="2"><path d="M5 15 h13 l4 4 h21 v22 h-38 z" fill="#fff"/><path d="M5 15 v-3 h11 l4 4" fill="#fff"/></svg>
+    <span class="lbl">Teaching</span>
+  </div>
+  <div class="icon" data-open="talks" style="left:24px;top:380px">
+    <svg class="glyph" viewBox="0 0 48 46" fill="none" stroke="#000" stroke-width="2"><path d="M5 15 h13 l4 4 h21 v22 h-38 z" fill="#fff"/><path d="M5 15 v-3 h11 l4 4" fill="#fff"/></svg>
+    <span class="lbl">Talks</span>
+  </div>
+  <div class="icon" data-doc="about" style="left:128px;top:12px">
+    <svg class="glyph" viewBox="0 0 48 46" fill="none" stroke="#000" stroke-width="2"><path d="M12 4 h18 l8 8 v30 h-26 z" fill="#fff"/><path d="M30 4 v8 h8"/><line x1="17" y1="20" x2="33" y2="20"/><line x1="17" y1="25" x2="33" y2="25"/><line x1="17" y1="30" x2="28" y2="30"/></svg>
+    <span class="lbl">About</span>
+  </div>
+  <div class="icon" data-doc="cv" style="left:128px;top:104px">
+    <svg class="glyph" viewBox="0 0 48 46" fill="none" stroke="#000" stroke-width="2"><path d="M12 4 h18 l8 8 v30 h-26 z" fill="#fff"/><path d="M30 4 v8 h8"/><line x1="17" y1="20" x2="33" y2="20"/><line x1="17" y1="25" x2="33" y2="25"/><line x1="17" y1="30" x2="28" y2="30"/></svg>
+    <span class="lbl">Curriculum Vitae</span>
+  </div>
+  <div class="icon" data-open="ventures" style="left:128px;top:196px">
+    <svg class="glyph" viewBox="0 0 48 46" fill="none" stroke="#000" stroke-width="2"><path d="M5 15 h13 l4 4 h21 v22 h-38 z" fill="#fff"/><path d="M5 15 v-3 h11 l4 4" fill="#fff"/></svg>
+    <span class="lbl">Ventures</span>
+  </div>
+  <div class="icon" data-open="fiction" style="left:128px;top:288px">
+    <svg class="glyph" viewBox="0 0 48 46" fill="none" stroke="#000" stroke-width="2"><path d="M5 15 h13 l4 4 h21 v22 h-38 z" fill="#fff"/><path d="M5 15 v-3 h11 l4 4" fill="#fff"/></svg>
+    <span class="lbl">Fiction</span>
+  </div>
+  <div class="icon" data-doc="recognition" style="left:128px;top:380px">
+    <svg class="glyph" viewBox="0 0 48 46" fill="none" stroke="#000" stroke-width="2"><path d="M12 4 h18 l8 8 v30 h-26 z" fill="#fff"/><path d="M30 4 v8 h8"/><line x1="17" y1="20" x2="33" y2="20"/><line x1="17" y1="25" x2="33" y2="25"/><line x1="17" y1="30" x2="28" y2="30"/></svg>
+    <span class="lbl">Recognition</span>
+  </div>
+  <div class="icon" data-open="books" style="left:236px;top:12px">
     <svg class="glyph" viewBox="0 0 48 46" fill="none" stroke="#000" stroke-width="2"><path d="M5 15 h13 l4 4 h21 v22 h-38 z" fill="#fff"/><path d="M5 15 v-3 h11 l4 4" fill="#fff"/></svg>
     <span class="lbl">Books</span>
   </div>
-  <div class="icon" data-act="spatstat" style="left:128px;top:12px">
+  <div class="icon" data-act="spatstat" style="left:236px;top:104px">
     <svg class="glyph" viewBox="0 0 48 46" fill="none" stroke="#000" stroke-width="2"><path d="M24 5 L44 23 L24 41 L4 23 Z" fill="#fff"/><path d="M14 23 h20 M24 15 v16"/><circle cx="24" cy="23" r="3" fill="#000" stroke="none"/></svg>
     <span class="lbl">Spatial Statistics</span>
   </div>
-  <div class="icon" data-act="terminal" style="left:128px;top:104px">
+  <div class="icon" data-act="terminal" style="left:236px;top:196px">
     <svg class="glyph" viewBox="0 0 48 46" fill="none" stroke="#000" stroke-width="2"><rect x="6" y="9" width="36" height="28" rx="2" fill="#fff"/><path d="M12 18 l5 4 l-5 4" stroke-width="2.4"/><line x1="22" y1="28" x2="32" y2="28"/></svg>
     <span class="lbl">Terminal</span>
   </div>
-  <div class="icon" id="evdoc" data-act="ext" data-url="/classic/" style="left:128px;top:196px">
+  <div class="icon" id="evdoc" data-act="ext" data-url="/classic/" style="left:236px;top:288px">
     <svg class="glyph" viewBox="0 0 48 46" fill="none" stroke="#000" stroke-width="2"><path d="M12 4 h18 l8 8 v30 h-26 z" fill="#fff"/><path d="M30 4 v8 h8"/><line x1="17" y1="20" x2="33" y2="20"/><line x1="17" y1="25" x2="33" y2="25"/><line x1="17" y1="30" x2="28" y2="30"/></svg>
     <span class="lbl">ericvaz.com</span>
   </div>
@@ -249,7 +281,7 @@ y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
       <line x1="20" y1="19" x2="20" y2="37"/><line x1="28" y1="19" x2="28" y2="37"/></svg>
     <span class="lbl">Trash</span>
   </div>
-  </div>
+</div>
 <div class="hint-touch">tap an icon to open</div>
 <div id="mnote"><div class="dlg"><div class="dt">Terra OS</div><div class="db"><b>Best on desktop.</b><br>On mobile, close each window before opening another — they stack.</div><div class="da"><button id="mnoteok">OK</button></div></div></div>
 
@@ -271,7 +303,6 @@ DATA.ventures.forEach((v,i)=>{DOCS["ven"+i]={title:v[0],kind:"text",
   html:`<span class="grouptag">${esc(v[1])}</span><h3>${esc(v[0])}</h3><p>${esc(v[2])}</p>`+
        (v[3]?`<div class="readmore"><a href="${v[3]}" target="_blank" rel="noopener">Open &rarr;</a></div>`:"")};});
 FOLDERS["ventures"]={title:"Ventures",items:DATA.ventures.map((_,i)=>"ven"+i)};
-FOLDERS["documents"]={title:"Documents",items:["about","cv","research","publications","teaching","talks","ventures","fiction","recognition"]};
 DATA.fiction.forEach((f,i)=>{
   let body=f.body; if(f.excerpt){body+=`<div class="readmore"><a href="${f.link}" target="_blank" rel="noopener">Read the full story at the publisher \u2192</a></div>`;}
   DOCS["fic"+i]={title:f.title,kind:"text",dark:true,
@@ -559,7 +590,7 @@ function openGame(name){
  const titles={draw:"Draw",snake:"Snake",blocks:"Terra Blocks"};
  const w=document.createElement("div"); w.className="win game-win";
  const c=cascade(); w.style.left=c.left+"px"; w.style.top=c.top+"px"; w.style.zIndex=++ztop;
- w.style.width="360px"; w.innerHTML=frame(titles[name]||"Game",null);
+ w.innerHTML=frame(titles[name]||"Game",null);
  const body=$(".body",w); body.classList.add("game-body");
  mountWin(w,id);
  if(name==="draw") gameDraw(body);
