@@ -157,6 +157,7 @@ function buildModule(mod) {
 <div class="bar"><div class="bar-in">
   <a href="/spatstat/">Spatial Statistics</a>
   <span class="crumb">/ <b>${esc(mod.title)}</b></span>
+  <a href="https://ericvaz.com/" title="Eric Vaz — home">Eric Vaz &#8599;</a>
   <a class="run" href="/spatstat/#/module/${mod.id}">Run it interactively →</a>
 </div></div>
 <main>
@@ -168,7 +169,7 @@ function buildModule(mod) {
   <div class="coffee"><div><b>Found this useful?</b><span>It's free and always will be. A coffee keeps new modules coming.</span></div><a href="https://www.buymeacoffee.com/${BMC}" target="_blank" rel="noopener">&#9749; Buy me a coffee</a></div>
   ${moreHTML}
 </main>
-<footer>A free learning resource at <a href="/spatstat/">ericvaz.com/spatstat</a>. Lessons run real Python in your browser via Pyodide; data is fetched live from open repositories. &copy; Eric Vaz — reuse freely with attribution. See more on <a href="${SCHOLAR}">Google Scholar</a>.</footer>
+<footer>A free learning resource by <a href="https://ericvaz.com/">Eric Vaz</a>, part of <a href="https://ericvaz.com/">ericvaz.com</a>. Lessons run real Python in your browser via Pyodide; data is fetched live from open repositories. &copy; Eric Vaz — reuse freely with attribution. See more on <a href="${SCHOLAR}">Google Scholar</a>.</footer>
 </body>
 </html>
 `;
