@@ -19,6 +19,7 @@ const C = eval("(" + m[1] + ")");
 
 const esc = s => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 const SCHOLAR = "https://scholar.google.com/citations?user=EfpbSEYAAAAJ&hl=en";
+const BMC = "ericvaz"; // Buy Me a Coffee handle
 
 // module-specific SEO copy (targets the real search clusters)
 const SEO = {
@@ -94,6 +95,10 @@ pre{margin:0;padding:.85rem 1rem;background:var(--term-bg);color:var(--term-fg);
 .more h2{border:0;padding:0;margin:0 0 .7rem;font-size:1.15rem}
 .more a{display:block;padding:.6rem .2rem;text-decoration:none;color:var(--ink);font-weight:600;border-bottom:1px solid var(--line)}
 .more a:hover{color:var(--green-700)}
+.coffee{display:flex;gap:1rem;align-items:center;flex-wrap:wrap;justify-content:space-between;margin-top:1.8rem;padding:1.1rem 1.25rem;border:1px solid var(--line);border-radius:13px;background:#fff}
+.coffee b{font-size:1.02rem}.coffee span{display:block;color:var(--gray);font-weight:400;font-size:.9rem;margin-top:.15rem}
+.coffee a{display:inline-flex;gap:.5rem;align-items:center;font-weight:700;background:#ffdd00;color:#3a2a12;border-radius:999px;padding:.6rem 1.1rem;text-decoration:none;white-space:nowrap}
+.coffee a:hover{filter:brightness(.96)}
 footer{max-width:820px;margin:0 auto;padding:1.4rem 1.2rem 3rem;color:var(--muted);font-size:.85rem}
 footer a{color:var(--gray)}`;
 
@@ -160,6 +165,7 @@ function buildModule(mod) {
   <p class="lede">${esc(mod.blurb)} Written by Eric Vaz. Read it here, or open the interactive version to write and run the Python yourself, in your browser, on real open data.</p>
   <a class="cta" href="/spatstat/#/module/${mod.id}">Open the interactive version (write &amp; run the code) →</a>
   ${lessonsHTML}
+  <div class="coffee"><div><b>Found this useful?</b><span>It's free and always will be. A coffee keeps new modules coming.</span></div><a href="https://www.buymeacoffee.com/${BMC}" target="_blank" rel="noopener">&#9749; Buy me a coffee</a></div>
   ${moreHTML}
 </main>
 <footer>A free learning resource at <a href="/spatstat/">ericvaz.com/spatstat</a>. Lessons run real Python in your browser via Pyodide; data is fetched live from open repositories. &copy; Eric Vaz — reuse freely with attribution. See more on <a href="${SCHOLAR}">Google Scholar</a>.</footer>
