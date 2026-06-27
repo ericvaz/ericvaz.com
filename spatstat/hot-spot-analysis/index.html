@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hot Spot Analysis &amp; LISA in Python — free tutorial (Local Moran's I)</title>
+<meta name="description" content="Learn hot-spot analysis and LISA in Python: compute Local Moran's I, classify HH/LL/HL/LH quadrants, test significance with conditional permutation, and draw a LISA cluster map of significant hot and cold spots. Free and interactive.">
+<meta name="keywords" content="LISA cluster map, local Moran's I python, hot spot analysis python, cold spot, Anselin local indicators of spatial association, LISA python, cluster and outlier analysis">
+<meta name="author" content="Eric Vaz">
+<link rel="canonical" href="https://ericvaz.com/spatstat/hot-spot-analysis/">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://ericvaz.com/spatstat/hot-spot-analysis/">
+<meta property="og:title" content="Hot Spot Analysis &amp; LISA in Python — free tutorial (Local Moran's I)">
+<meta property="og:description" content="Learn hot-spot analysis and LISA in Python: compute Local Moran's I, classify HH/LL/HL/LH quadrants, test significance with conditional permutation, and draw a LISA cluster map of significant hot and cold spots. Free and interactive.">
+<meta property="og:site_name" content="ericvaz.com">
+<meta property="og:image" content="https://ericvaz.com/banner.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Hot Spot Analysis &amp; LISA in Python — free tutorial (Local Moran's I)">
+<meta name="twitter:description" content="Learn hot-spot analysis and LISA in Python: compute Local Moran's I, classify HH/LL/HL/LH quadrants, test significance with conditional permutation, and draw a LISA cluster map of significant hot and cold spots. Free and interactive.">
+<meta name="twitter:image" content="https://ericvaz.com/banner.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Person","@id":"https://ericvaz.com/#eric","name":"Eric Vaz","url":"https://ericvaz.com/","jobTitle":"Full Professor of Geography and Environmental Studies","affiliation":{"@type":"CollegeOrUniversity","name":"Toronto Metropolitan University"},"sameAs":["https://scholar.google.com/citations?user=EfpbSEYAAAAJ&hl=en","https://orcid.org/0000-0003-1738-2677","https://www.linkedin.com/in/ericnvaz","https://open.spotify.com/show/0ECGFXqx3F9GSlr7YksOAo","https://podcasts.apple.com/ca/podcast/geography-of-opportunity/id1851837987","https://ericvazshow.substack.com/"]},{"@type":"LearningResource","@id":"https://ericvaz.com/spatstat/hot-spot-analysis/#resource","name":"Hot Spot Analysis & LISA in Python — free tutorial (Local Moran's I)","description":"Learn hot-spot analysis and LISA in Python: compute Local Moran's I, classify HH/LL/HL/LH quadrants, test significance with conditional permutation, and draw a LISA cluster map of significant hot and cold spots. Free and interactive.","url":"https://ericvaz.com/spatstat/hot-spot-analysis/","inLanguage":"en","isAccessibleForFree":true,"learningResourceType":"tutorial","teaches":["Where the clusters are (LISA)"],"isPartOf":{"@id":"https://ericvaz.com/spatstat/#course"},"author":{"@id":"https://ericvaz.com/#eric"}},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Spatial Statistics","item":"https://ericvaz.com/spatstat/"},{"@type":"ListItem","position":2,"name":"Hot Spot Analysis","item":"https://ericvaz.com/spatstat/hot-spot-analysis/"}]}]}</script>
+<style>*{box-sizing:border-box}
+:root{--green:#1f9d63;--green-700:#136e44;--green-50:#e9f6ef;--green-100:#d6efe0;--ink:#14181f;--ink-2:#2a2f39;--gray:#5f6b7a;--muted:#8b94a3;--bg:#f5f7f9;--card:#fff;--line:#e9ecf0;--term-bg:#0e1726;--term-fg:#e6eaf2;--sans:"Inter",system-ui,-apple-system,Segoe UI,Roboto,sans-serif;--mono:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,monospace}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.65;-webkit-font-smoothing:antialiased}
+a{color:var(--green-700)}
+.bar{position:sticky;top:0;z-index:5;background:rgba(255,255,255,.9);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.bar-in{max-width:820px;margin:0 auto;padding:.7rem 1.2rem;display:flex;align-items:center;gap:1rem;font-weight:600;font-size:.92rem}
+.bar a{color:var(--gray);text-decoration:none}.bar a:hover{color:var(--green-700)}
+.bar .crumb{flex:1;color:var(--muted)}.bar .crumb b{color:var(--ink)}
+.bar .run{background:var(--green);color:#fff;border-radius:9px;padding:.45rem .85rem;font-weight:700;white-space:nowrap}
+main{max-width:820px;margin:0 auto;padding:1.6rem 1.2rem 4rem}
+.eyebrow{color:var(--green-700);font-weight:800;font-size:.74rem;letter-spacing:.08em;text-transform:uppercase}
+h1{font-size:2.1rem;letter-spacing:-.02em;margin:.3rem 0 .5rem;line-height:1.12}
+h2{font-size:1.45rem;letter-spacing:-.02em;margin:2.2rem 0 .4rem;padding-top:1.2rem;border-top:1px solid var(--line)}
+h3{font-size:1.1rem;margin:1.2rem 0 .3rem}
+.lede{font-size:1.12rem;color:var(--gray);margin:.2rem 0 1.2rem}
+.cta{display:inline-flex;align-items:center;gap:.5rem;background:var(--green);color:#fff;font-weight:700;text-decoration:none;border-radius:11px;padding:.8rem 1.3rem;margin:.3rem 0 1.4rem}
+.cta:hover{background:var(--green-700)}
+.prose{margin:.9rem 0}.prose code{font-family:var(--mono);font-size:.86em;background:#eef1f4;padding:.06em .35em;border-radius:5px;color:#28415f}
+.prose ul{padding-left:1.2rem}
+.aside{border-left:3px solid var(--green);background:var(--green-50);padding:.7rem 1rem;border-radius:0 10px 10px 0;margin:1.2rem 0;color:var(--ink-2)}
+.aside strong{color:var(--green-700)}
+.hh{color:#e5573f;font-weight:800}.ll{color:#3b82c4;font-weight:800}.hl{color:#f3a594;font-weight:800}.lh{color:#9cc2e6;font-weight:800}
+figure.code{margin:1.3rem 0;border:1px solid var(--line);border-radius:13px;overflow:hidden;background:#fff;box-shadow:0 1px 2px rgba(16,24,40,.05)}
+figure.code.ex{border-color:var(--green-100)}
+figcaption{font-family:var(--mono);font-size:.74rem;color:var(--gray);padding:.55rem .8rem;background:#fbfcfd;border-bottom:1px solid var(--line)}
+.tag{display:inline-block;font-size:.6rem;font-weight:800;text-transform:uppercase;letter-spacing:.06em;padding:.13rem .44rem;border-radius:6px;margin-right:.5rem;background:#eef1f4;color:#5f6b7a}
+.tag-task{background:var(--green);color:#fff}
+.ex-prompt{padding:.75rem .9rem;font-size:.96rem;color:var(--ink-2);border-bottom:1px solid var(--line)}
+.ex-prompt code{font-family:var(--mono);font-size:.85em;background:#eef1f4;padding:.05em .3em;border-radius:5px}
+pre{margin:0;padding:.85rem 1rem;background:var(--term-bg);color:var(--term-fg);overflow-x:auto;font-family:var(--mono);font-size:13px;line-height:1.55}
+.ex-note{margin:0;padding:.55rem .9rem;font-size:.82rem;color:var(--muted);background:#fbfcfd;border-top:1px solid var(--line)}
+.further{border:1px solid var(--green-100);background:linear-gradient(120deg,var(--green-50),#fff 70%);border-radius:13px;padding:1rem 1.15rem;margin:1.6rem 0}
+.further .ey{font-size:.7rem;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:var(--green-700)}
+.further h3{margin:.25rem 0 .5rem}.further ul{margin:.2rem 0;padding-left:1.1rem}
+.more{margin-top:2.4rem;border-top:1px solid var(--line);padding-top:1.4rem}
+.more h2{border:0;padding:0;margin:0 0 .7rem;font-size:1.15rem}
+.more a{display:block;padding:.6rem .2rem;text-decoration:none;color:var(--ink);font-weight:600;border-bottom:1px solid var(--line)}
+.more a:hover{color:var(--green-700)}
+footer{max-width:820px;margin:0 auto;padding:1.4rem 1.2rem 3rem;color:var(--muted);font-size:.85rem}
+footer a{color:var(--gray)}</style>
+</head>
+<body>
+<div class="bar"><div class="bar-in">
+  <a href="/spatstat/">Spatial Statistics</a>
+  <span class="crumb">/ <b>Hot Spot Analysis</b></span>
+  <a class="run" href="/spatstat/#/module/hot-spot-analysis">Run it interactively →</a>
+</div></div>
+<main>
+  <p class="eyebrow">Module 7 · Patterns · Free &amp; interactive</p>
+  <h1>Hot Spot Analysis &amp; LISA in Python</h1>
+  <p class="lede">Identify statistically significant hot and cold spots. Written by Eric Vaz. Read it here, or open the interactive version to write and run the Python yourself, in your browser, on real open data.</p>
+  <a class="cta" href="/spatstat/#/module/hot-spot-analysis">Open the interactive version (write &amp; run the code) →</a>
+  <section><h2>Where the clusters are (LISA)</h2><div class="prose"><p>A single global statistic hides geography: it says clustering exists, not <em>where</em>. <strong>Local Moran's I</strong> (Anselin 1995) computes a contribution for every unit and classifies each into one of four types: high surrounded by high (<span class="hh">HH</span>, a hot spot), low by low (<span class="ll">LL</span>, a cold spot), or the spatial outliers <span class="hl">HL</span> and <span class="lh">LH</span>.</p></div>
+<figure class="code"><figcaption><span class="tag">Example</span>Set up: states, log density, neighbours (run me first)</figcaption><pre><code>import numpy as np, json
+from pyodide.http import open_url
+from scipy.spatial import cKDTree
+gj = json.load(open_url("https://cdn.jsdelivr.net/gh/PublicaMundi/MappingAPI@master/data/geojson/us-states.json"))
+def feature_polys(f):
+    g = f["geometry"]; return g["coordinates"] if g["type"]=="MultiPolygon" else [g["coordinates"]]
+def state_centroid(f):
+    best, ba = None, -1
+    for poly in feature_polys(f):
+        rr = np.array(poly[0]); aa = abs(0.5*np.sum(rr[:-1,0]*rr[1:,1]-rr[1:,0]*rr[:-1,1]))
+        if aa &gt; ba: ba, best = aa, (rr[:,0].mean(), rr[:,1].mean())
+    return best
+drop = {"Alaska","Hawaii","Puerto Rico"}
+feats = [f for f in gj["features"] if f["properties"]["name"] not in drop]
+dens  = np.array([f["properties"]["density"] for f in feats]); y = np.log(dens)
+cent  = np.array([state_centroid(f) for f in feats])
+def knn_W(coords, k=6):
+    n = len(coords); tree = cKDTree(coords); _, idx = tree.query(coords, k=k+1)
+    W = np.zeros((n, n))
+    for i in range(n):
+        for j in idx[i, 1:]: W[i, j] = 1.0
+    return W / W.sum(1, keepdims=True)
+W = knn_W(cent, 6)
+print(len(feats), "states ready | global Moran lag corr:", round(float(np.corrcoef(y, W@y)[0,1]), 3))</code></pre></figure>
+<figure class="code ex"><figcaption><span class="tag tag-task">Try it yourself</span>Local Moran's I</figcaption>
+      <div class="ex-prompt">The local statistic for unit i is (z&#7522; / m&#8322;) &middot; (W z)&#7522;, with m&#8322; the average squared deviation. Fill m&#8322; (<code>np.sum(z**2)/len(y)</code>) and the lag (<code>W @ z</code>).</div>
+      <pre><code>import numpy as np
+def local_moran(y, W):
+    z  = y - y.mean()
+    m2 = np.sum(z**2) / len(y)
+    Ii = (z / m2) * (W @ z)
+    return Ii
+
+Ii = local_moran(y, W)
+print("most positive local I:", round(float(Ii.max()), 2), "| most negative:", round(float(Ii.min()), 2))</code></pre>
+      <p class="ex-note">In the <a href="/spatstat/#/module/hot-spot-analysis">interactive version</a> this line is blanked out and you write it yourself, with a hint, a solution, and an automatic check.</p></figure>
+<div class="prose"><p>Significance comes from a <em>conditional</em> permutation test: hold unit <em>i</em> fixed and reshuffle only the rest, many times. Run the example to classify each unit into a quadrant and flag the significant ones.</p></div>
+<figure class="code"><figcaption><span class="tag">Example</span>Classify quadrants + significance (run me)</figcaption><pre><code>def local_moran_p(y, W, permutations=199, seed=0):
+    z  = y - y.mean(); m2 = np.sum(z**2)/len(y); Ii = (z/m2)*(W@z)
+    rng = np.random.default_rng(seed); n = len(y); p = np.zeros(n)
+    for i in range(n):
+        nb = np.where(W[i] &gt; 0)[0]; wi = W[i, nb]; others = np.delete(z, i)
+        sims = np.array([(z[i]/m2)*np.sum(wi*rng.choice(others, size=len(nb), replace=False)) for _ in range(permutations)])
+        p[i] = (np.sum(np.abs(sims) &gt;= abs(Ii[i])) + 1) / (permutations + 1)
+    return Ii, p
+Ii, p = local_moran_p(y, W, permutations=199)
+zy = (y - y.mean())/y.std(); zlag = W @ zy
+quad = np.where((zy&gt;0)&amp;(zlag&gt;0), "HH", np.where((zy&lt;0)&amp;(zlag&lt;0), "LL", np.where((zy&gt;0)&amp;(zlag&lt;0), "HL", "LH")))
+sig = p &lt; 0.05
+for q in ["HH","LL","HL","LH"]:
+    names = [f["properties"]["name"] for f,qq,s in zip(feats,quad,sig) if s and qq==q]
+    print(f"{q}  ({len(names):2d}): {', '.join(names) if names else '-'}")</code></pre></figure>
+<figure class="code ex"><figcaption><span class="tag tag-task">Try it yourself</span>The LISA cluster map</figcaption>
+      <div class="ex-prompt">Colour only the significant units by their quadrant type; leave the rest grey. Fill the list comprehension: <code>colmap[q]</code> if significant (<code>s</code>), else <code>"#e9ecef"</code>.</div>
+      <pre><code>import matplotlib.pyplot as plt
+from matplotlib.path import Path
+from matplotlib.patches import PathPatch, Patch
+from matplotlib.collections import PatchCollection
+colmap = {"HH":"#b2182b", "LL":"#2166ac", "HL":"#ef8a62", "LH":"#67a9cf"}
+cols = [colmap[q] if s else "#e9ecef" for q, s in zip(quad, sig)]
+fig, ax = plt.subplots(figsize=(7.4, 4.4)); patches, pc = [], []
+for f, c in zip(feats, cols):
+    for poly in feature_polys(f):
+        patches.append(PathPatch(Path(np.array(poly[0])))); pc.append(c)
+ax.add_collection(PatchCollection(patches, facecolor=pc, edgecolor="white", linewidth=.4))
+ax.autoscale(); ax.set_aspect(1.3); ax.axis("off")
+ax.set_title("Local Moran clusters of log population density (p &lt; 0.05)")
+ax.legend(handles=[Patch(facecolor=colmap[k], label=k) for k in colmap], loc="lower left", ncol=4, fontsize=8, frameon=False)</code></pre>
+      <p class="ex-note">In the <a href="/spatstat/#/module/hot-spot-analysis">interactive version</a> this line is blanked out and you write it yourself, with a hint, a solution, and an automatic check.</p></figure>
+<div class="further"><div class="ey">Go deeper / cite</div><h3>Hot-spot and cluster analysis in regional science</h3><ul><li><a href="https://scholar.google.com/citations?user=EfpbSEYAAAAJ&hl=en" target="_blank" rel="noopener">Eric Vaz — Google Scholar profile</a> — LISA and local indicators applied to land use, tourism and urban change</li><li><a href="https://ericvaz.com/" target="_blank" rel="noopener">Selected publications on ericvaz.com</a></li></ul></div></section>
+  <div class="more"><h2>More free modules</h2><a href="/spatstat/spatial-autocorrelation/">Spatial Autocorrelation — Understand how spatial relationships create patterns.</a><a href="/spatstat/interpolation/">Interpolation &amp; Kriging — Predict values at unsampled locations.</a><a href="/spatstat/">All modules &amp; the interactive course →</a></div>
+</main>
+<footer>A free learning resource at <a href="/spatstat/">ericvaz.com/spatstat</a>. Lessons run real Python in your browser via Pyodide; data is fetched live from open repositories. &copy; Eric Vaz — reuse freely with attribution. See more on <a href="https://scholar.google.com/citations?user=EfpbSEYAAAAJ&hl=en">Google Scholar</a>.</footer>
+</body>
+</html>

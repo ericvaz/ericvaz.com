@@ -1,0 +1,224 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Spatial Autocorrelation &amp; Moran's I in Python — free tutorial</title>
+<meta name="description" content="Learn spatial autocorrelation and Moran's I in Python: build a spatial weights matrix, form the spatial lag, code Moran's I, run a permutation test, and read a Moran scatterplot. Free, interactive, runs in your browser.">
+<meta name="keywords" content="spatial autocorrelation python, Moran's I python, spatial weights matrix, spatial lag, Moran scatterplot, permutation test, global spatial autocorrelation, spatial statistics tutorial">
+<meta name="author" content="Eric Vaz">
+<link rel="canonical" href="https://ericvaz.com/spatstat/spatial-autocorrelation/">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://ericvaz.com/spatstat/spatial-autocorrelation/">
+<meta property="og:title" content="Spatial Autocorrelation &amp; Moran's I in Python — free tutorial">
+<meta property="og:description" content="Learn spatial autocorrelation and Moran's I in Python: build a spatial weights matrix, form the spatial lag, code Moran's I, run a permutation test, and read a Moran scatterplot. Free, interactive, runs in your browser.">
+<meta property="og:site_name" content="ericvaz.com">
+<meta property="og:image" content="https://ericvaz.com/banner.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Spatial Autocorrelation &amp; Moran's I in Python — free tutorial">
+<meta name="twitter:description" content="Learn spatial autocorrelation and Moran's I in Python: build a spatial weights matrix, form the spatial lag, code Moran's I, run a permutation test, and read a Moran scatterplot. Free, interactive, runs in your browser.">
+<meta name="twitter:image" content="https://ericvaz.com/banner.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Person","@id":"https://ericvaz.com/#eric","name":"Eric Vaz","url":"https://ericvaz.com/","jobTitle":"Full Professor of Geography and Environmental Studies","affiliation":{"@type":"CollegeOrUniversity","name":"Toronto Metropolitan University"},"sameAs":["https://scholar.google.com/citations?user=EfpbSEYAAAAJ&hl=en","https://orcid.org/0000-0003-1738-2677","https://www.linkedin.com/in/ericnvaz","https://open.spotify.com/show/0ECGFXqx3F9GSlr7YksOAo","https://podcasts.apple.com/ca/podcast/geography-of-opportunity/id1851837987","https://ericvazshow.substack.com/"]},{"@type":"LearningResource","@id":"https://ericvaz.com/spatstat/spatial-autocorrelation/#resource","name":"Spatial Autocorrelation & Moran's I in Python — free tutorial","description":"Learn spatial autocorrelation and Moran's I in Python: build a spatial weights matrix, form the spatial lag, code Moran's I, run a permutation test, and read a Moran scatterplot. Free, interactive, runs in your browser.","url":"https://ericvaz.com/spatstat/spatial-autocorrelation/","inLanguage":"en","isAccessibleForFree":true,"learningResourceType":"tutorial","teaches":["Your browser is the computer","Spatial data, fetched from the cloud","Look before you model","Who is next to whom","Spatial autocorrelation"],"isPartOf":{"@id":"https://ericvaz.com/spatstat/#course"},"author":{"@id":"https://ericvaz.com/#eric"}},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Spatial Statistics","item":"https://ericvaz.com/spatstat/"},{"@type":"ListItem","position":2,"name":"Spatial Autocorrelation","item":"https://ericvaz.com/spatstat/spatial-autocorrelation/"}]}]}</script>
+<style>*{box-sizing:border-box}
+:root{--green:#1f9d63;--green-700:#136e44;--green-50:#e9f6ef;--green-100:#d6efe0;--ink:#14181f;--ink-2:#2a2f39;--gray:#5f6b7a;--muted:#8b94a3;--bg:#f5f7f9;--card:#fff;--line:#e9ecf0;--term-bg:#0e1726;--term-fg:#e6eaf2;--sans:"Inter",system-ui,-apple-system,Segoe UI,Roboto,sans-serif;--mono:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,monospace}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.65;-webkit-font-smoothing:antialiased}
+a{color:var(--green-700)}
+.bar{position:sticky;top:0;z-index:5;background:rgba(255,255,255,.9);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.bar-in{max-width:820px;margin:0 auto;padding:.7rem 1.2rem;display:flex;align-items:center;gap:1rem;font-weight:600;font-size:.92rem}
+.bar a{color:var(--gray);text-decoration:none}.bar a:hover{color:var(--green-700)}
+.bar .crumb{flex:1;color:var(--muted)}.bar .crumb b{color:var(--ink)}
+.bar .run{background:var(--green);color:#fff;border-radius:9px;padding:.45rem .85rem;font-weight:700;white-space:nowrap}
+main{max-width:820px;margin:0 auto;padding:1.6rem 1.2rem 4rem}
+.eyebrow{color:var(--green-700);font-weight:800;font-size:.74rem;letter-spacing:.08em;text-transform:uppercase}
+h1{font-size:2.1rem;letter-spacing:-.02em;margin:.3rem 0 .5rem;line-height:1.12}
+h2{font-size:1.45rem;letter-spacing:-.02em;margin:2.2rem 0 .4rem;padding-top:1.2rem;border-top:1px solid var(--line)}
+h3{font-size:1.1rem;margin:1.2rem 0 .3rem}
+.lede{font-size:1.12rem;color:var(--gray);margin:.2rem 0 1.2rem}
+.cta{display:inline-flex;align-items:center;gap:.5rem;background:var(--green);color:#fff;font-weight:700;text-decoration:none;border-radius:11px;padding:.8rem 1.3rem;margin:.3rem 0 1.4rem}
+.cta:hover{background:var(--green-700)}
+.prose{margin:.9rem 0}.prose code{font-family:var(--mono);font-size:.86em;background:#eef1f4;padding:.06em .35em;border-radius:5px;color:#28415f}
+.prose ul{padding-left:1.2rem}
+.aside{border-left:3px solid var(--green);background:var(--green-50);padding:.7rem 1rem;border-radius:0 10px 10px 0;margin:1.2rem 0;color:var(--ink-2)}
+.aside strong{color:var(--green-700)}
+.hh{color:#e5573f;font-weight:800}.ll{color:#3b82c4;font-weight:800}.hl{color:#f3a594;font-weight:800}.lh{color:#9cc2e6;font-weight:800}
+figure.code{margin:1.3rem 0;border:1px solid var(--line);border-radius:13px;overflow:hidden;background:#fff;box-shadow:0 1px 2px rgba(16,24,40,.05)}
+figure.code.ex{border-color:var(--green-100)}
+figcaption{font-family:var(--mono);font-size:.74rem;color:var(--gray);padding:.55rem .8rem;background:#fbfcfd;border-bottom:1px solid var(--line)}
+.tag{display:inline-block;font-size:.6rem;font-weight:800;text-transform:uppercase;letter-spacing:.06em;padding:.13rem .44rem;border-radius:6px;margin-right:.5rem;background:#eef1f4;color:#5f6b7a}
+.tag-task{background:var(--green);color:#fff}
+.ex-prompt{padding:.75rem .9rem;font-size:.96rem;color:var(--ink-2);border-bottom:1px solid var(--line)}
+.ex-prompt code{font-family:var(--mono);font-size:.85em;background:#eef1f4;padding:.05em .3em;border-radius:5px}
+pre{margin:0;padding:.85rem 1rem;background:var(--term-bg);color:var(--term-fg);overflow-x:auto;font-family:var(--mono);font-size:13px;line-height:1.55}
+.ex-note{margin:0;padding:.55rem .9rem;font-size:.82rem;color:var(--muted);background:#fbfcfd;border-top:1px solid var(--line)}
+.further{border:1px solid var(--green-100);background:linear-gradient(120deg,var(--green-50),#fff 70%);border-radius:13px;padding:1rem 1.15rem;margin:1.6rem 0}
+.further .ey{font-size:.7rem;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:var(--green-700)}
+.further h3{margin:.25rem 0 .5rem}.further ul{margin:.2rem 0;padding-left:1.1rem}
+.more{margin-top:2.4rem;border-top:1px solid var(--line);padding-top:1.4rem}
+.more h2{border:0;padding:0;margin:0 0 .7rem;font-size:1.15rem}
+.more a{display:block;padding:.6rem .2rem;text-decoration:none;color:var(--ink);font-weight:600;border-bottom:1px solid var(--line)}
+.more a:hover{color:var(--green-700)}
+footer{max-width:820px;margin:0 auto;padding:1.4rem 1.2rem 3rem;color:var(--muted);font-size:.85rem}
+footer a{color:var(--gray)}</style>
+</head>
+<body>
+<div class="bar"><div class="bar-in">
+  <a href="/spatstat/">Spatial Statistics</a>
+  <span class="crumb">/ <b>Spatial Autocorrelation</b></span>
+  <a class="run" href="/spatstat/#/module/spatial-autocorrelation">Run it interactively →</a>
+</div></div>
+<main>
+  <p class="eyebrow">Module 1 · Foundations · Free &amp; interactive</p>
+  <h1>Spatial Autocorrelation &amp; Moran's I in Python</h1>
+  <p class="lede">Understand how spatial relationships create patterns. Written by Eric Vaz. Read it here, or open the interactive version to write and run the Python yourself, in your browser, on real open data.</p>
+  <a class="cta" href="/spatstat/#/module/spatial-autocorrelation">Open the interactive version (write &amp; run the code) →</a>
+  <section><h2>Your browser is the computer</h2><div class="prose"><p>This is a hands-on course. Every dark panel is a live Python session running <em>inside your browser tab</em> (NumPy, pandas, SciPy and Matplotlib are loaded the first time you Run). The session is shared down the page, so a variable you make in one cell is still there in the next.</p><p><strong>How the lessons work:</strong> grey <span class="tag tag-ex" style="margin:0">Example</span> cells are worked code, run them to see the pattern. Green <span class="tag tag-task" style="margin:0">Your turn</span> cells have a blank you fill in: write the line, press <b>Run</b>, and it checks your answer. Stuck? Use <b>Hint</b> or <b>Show solution</b>.</p></div>
+<figure class="code"><figcaption><span class="tag">Example</span>Check the runtime</figcaption><pre><code>import sys, numpy as np, pandas as pd, scipy
+print("Python", sys.version.split()[0])
+print("NumPy", np.__version__, "| pandas", pd.__version__, "| SciPy", scipy.__version__)
+print()
+print("This ran inside your browser. Nothing was sent to a server.")</code></pre></figure>
+<figure class="code ex"><figcaption><span class="tag tag-task">Try it yourself</span>Say hello</figcaption>
+      <div class="ex-prompt">Your first line of code. Replace the blank so it prints a message of your choice with <code>print("...")</code>.</div>
+      <pre><code>msg = "ready to learn spatial statistics"
+print("You said:", msg)</code></pre>
+      <p class="ex-note">In the <a href="/spatstat/#/module/spatial-autocorrelation">interactive version</a> this line is blanked out and you write it yourself, with a hint, a solution, and an automatic check.</p></figure></section>
+<section><h2>Spatial data, fetched from the cloud</h2><div class="prose"><p>Spatial analysis starts with one of two data models. <em>Point</em> data records a value at a coordinate (an elevation sounding, an air-quality sensor). <em>Areal</em> data attaches a value to a region (a census tract, a state). The tools differ between them.</p><p>Pyodide ships <code>pyodide.http.open_url</code>, which fetches a text resource over the network as a file-like object: perfect for <code>pandas.read_csv</code> or <code>json.load</code>. We pull from jsDelivr, a CDN that mirrors public GitHub repos with open CORS headers.</p></div>
+<figure class="code"><figcaption><span class="tag">Example</span>Load a point dataset (run me)</figcaption><pre><code>from pyodide.http import open_url
+import pandas as pd
+
+# 52 elevation soundings on a 6x6 field (MASS::topo): the classic teaching set.
+TOPO = "https://cdn.jsdelivr.net/gh/vincentarelbundock/Rdatasets@master/csv/MASS/topo.csv"
+topo = pd.read_csv(open_url(TOPO))[["x", "y", "z"]]
+print("POINTS  topo:", topo.shape, "-&gt; columns x, y, z(elevation)")
+print(topo.head(3).to_string(index=False))</code></pre></figure>
+<figure class="code ex"><figcaption><span class="tag tag-task">Try it yourself</span>Load the areal dataset</figcaption>
+      <div class="ex-prompt">The points used <code>pd.read_csv(open_url(url))</code>. A GeoJSON file is loaded the same way but with <code>json.load</code>. Fill the blank to fetch the US states polygons.</div>
+      <pre><code>import json
+STATES = "https://cdn.jsdelivr.net/gh/PublicaMundi/MappingAPI@master/data/geojson/us-states.json"
+gj = json.load(open_url(STATES))
+print("AREAS  states:", len(gj["features"]), "polygons")
+print("first feature props:", gj["features"][0]["properties"])</code></pre>
+      <p class="ex-note">In the <a href="/spatstat/#/module/spatial-autocorrelation">interactive version</a> this line is blanked out and you write it yourself, with a hint, a solution, and an automatic check.</p></figure>
+<aside class="aside"><strong>What changed since the 2010s.</strong> The classic workflow was R with <code>sp</code> and <code>gstat</code>, reading a local file off your desktop. The 2026 version is Python, the data lives in the cloud under version control, and it all runs in a browser tab. Same statistics, far less friction.</aside></section>
+<section><h2>Look before you model</h2><div class="prose"><p>Before any statistic, look at the data in space. For the topo points, colour each location by its value. This map and the choropleth below are two of the most common figures in the field.</p></div>
+<figure class="code ex"><figcaption><span class="tag tag-task">Try it yourself</span>Colour the points by elevation</figcaption>
+      <div class="ex-prompt">Make a scatter of the topo points coloured by elevation. Fill the <code>c=</code> argument with the column that holds the value.</div>
+      <pre><code>import matplotlib.pyplot as plt
+fig, ax = plt.subplots(figsize=(4.8, 3.8))
+sc = ax.scatter(topo.x, topo.y, c=topo.z, cmap="viridis", s=80, edgecolor="k", linewidth=.4)
+ax.set(title="Elevation soundings", xlabel="x", ylabel="y"); ax.set_aspect("equal")
+plt.colorbar(sc, ax=ax, label="elevation")</code></pre>
+      <p class="ex-note">In the <a href="/spatstat/#/module/spatial-autocorrelation">interactive version</a> this line is blanked out and you write it yourself, with a hint, a solution, and an automatic check.</p></figure>
+<div class="prose"><p>For polygons we need two helpers: one to pull coordinate rings out of a GeoJSON feature (it may be a <code>Polygon</code> or a <code>MultiPolygon</code>), and one for each polygon's centroid (we'll need centroids next lesson). Population density is wildly skewed (New Jersey vs Wyoming), so we analyse its <em>logarithm</em>, and we drop Alaska, Hawaii and Puerto Rico so the neighbour graph isn't distorted by far-flung exclaves.</p></div>
+<figure class="code"><figcaption><span class="tag">Example</span>Helpers + drop the islands (run me)</figcaption><pre><code>import numpy as np
+
+def feature_polys(f):
+    g = f["geometry"]
+    return g["coordinates"] if g["type"] == "MultiPolygon" else [g["coordinates"]]
+
+def state_centroid(f):
+    best, best_area = None, -1
+    for poly in feature_polys(f):
+        r = np.array(poly[0])
+        a = abs(0.5*np.sum(r[:-1,0]*r[1:,1] - r[1:,0]*r[:-1,1]))   # shoelace
+        if a &gt; best_area:
+            best_area, best = a, (r[:,0].mean(), r[:,1].mean())
+    return best
+
+drop  = {"Alaska", "Hawaii", "Puerto Rico"}
+feats = [f for f in gj["features"] if f["properties"]["name"] not in drop]
+dens  = np.array([f["properties"]["density"] for f in feats])
+print(len(feats), "contiguous states + DC; raw density spans %.0fx" % (dens.max()/dens.min()))</code></pre></figure>
+<figure class="code ex"><figcaption><span class="tag tag-task">Try it yourself</span>Tame the skew</figcaption>
+      <div class="ex-prompt">Density spans thousands of times over, so a raw choropleth is unreadable. Define <code>y</code> as the natural log of <code>dens</code> (NumPy's <code>np.log</code>). This is the variable we'll analyse from here on.</div>
+      <pre><code>y    = np.log(dens)
+cent = np.array([state_centroid(f) for f in feats])
+print("y ranges", round(float(y.min()),2), "to", round(float(y.max()),2))
+print("centroids:", cent.shape)</code></pre>
+      <p class="ex-note">In the <a href="/spatstat/#/module/spatial-autocorrelation">interactive version</a> this line is blanked out and you write it yourself, with a hint, a solution, and an automatic check.</p></figure>
+<figure class="code"><figcaption><span class="tag">Example</span>A choropleth, the honest way (run me)</figcaption><pre><code>import matplotlib as mpl
+from matplotlib.path import Path
+from matplotlib.patches import PathPatch
+from matplotlib.collections import PatchCollection
+
+def choropleth(feats, values, title, cmap="viridis"):
+    norm = mpl.colors.Normalize(values.min(), values.max()); cm = plt.get_cmap(cmap)
+    fig, ax = plt.subplots(figsize=(7.2, 4.3)); patches, colors = [], []
+    for f, v in zip(feats, values):
+        for poly in feature_polys(f):
+            patches.append(PathPatch(Path(np.array(poly[0])))); colors.append(cm(norm(v)))
+    ax.add_collection(PatchCollection(patches, facecolor=colors, edgecolor="white", linewidth=.4))
+    ax.autoscale(); ax.set_aspect(1.3); ax.axis("off"); ax.set_title(title)
+    fig.colorbar(mpl.cm.ScalarMappable(norm=norm, cmap=cm), ax=ax, shrink=.7)
+
+choropleth(feats, y, "log population density by state")</code></pre></figure></section>
+<section><h2>Who is next to whom</h2><div class="prose"><p>To measure whether nearby places resemble each other, you first have to define <em>nearby</em>. That is the <strong>spatial weights matrix</strong> <code>W</code>: <code>W[i, j] &gt; 0</code> when <code>j</code> is a neighbour of <code>i</code>. Common families: <strong>contiguity</strong> (share a border), <strong>distance band</strong> (within radius <em>d</em>), and <strong>k-nearest</strong> (the <em>k</em> closest, so no unit is ever isolated).</p><p>We'll build k-nearest weights from the centroids, then <em>row-standardise</em> so each row sums to one, turning a weighted sum over neighbours into a neighbour <em>average</em>.</p></div>
+<figure class="code ex"><figcaption><span class="tag tag-task">Try it yourself</span>Build k-nearest weights</figcaption>
+      <div class="ex-prompt">The neighbour lookup is done. Finish <code>knn_W</code> by <b>row-standardising</b>: divide <code>W</code> by each row's sum so every row totals 1. Fill the blank.</div>
+      <pre><code>from scipy.spatial import cKDTree
+import numpy as np
+
+def knn_W(coords, k=6, row_standardize=True):
+    n = len(coords); tree = cKDTree(coords)
+    _, idx = tree.query(coords, k=k+1)        # k+1: the nearest point is itself
+    W = np.zeros((n, n))
+    for i in range(n):
+        for j in idx[i, 1:]:                  # skip self (column 0)
+            W[i, j] = 1.0
+    if row_standardize:
+        W = W / W.sum(1, keepdims=True)
+    return W
+
+W = knn_W(cent, k=6)
+print("W is", W.shape, "| every row sums to 1:", np.allclose(W.sum(1), 1))</code></pre>
+      <p class="ex-note">In the <a href="/spatstat/#/module/spatial-autocorrelation">interactive version</a> this line is blanked out and you write it yourself, with a hint, a solution, and an automatic check.</p></figure>
+<figure class="code ex"><figcaption><span class="tag tag-task">Try it yourself</span>Form the spatial lag</figcaption>
+      <div class="ex-prompt">The <strong>spatial lag</strong> of <code>y</code> is each unit's neighbour-average: the matrix product of <code>W</code> and <code>y</code>. Compute it with the <code>@</code> operator.</div>
+      <pre><code>ylag = W @ y
+print("corr(value, neighbour average):", round(float(np.corrcoef(y, ylag)[0, 1]), 3))</code></pre>
+      <p class="ex-note">In the <a href="/spatstat/#/module/spatial-autocorrelation">interactive version</a> this line is blanked out and you write it yourself, with a hint, a solution, and an automatic check.</p></figure>
+<aside class="aside"><strong>The lag is the whole game.</strong> Almost every areal statistic (Moran's I, spatial lag regression, LISA) is built from <code>W @ y</code>. Get the weights right and the rest follows; get them wrong and every downstream number inherits the mistake.</aside></section>
+<section><h2>Spatial autocorrelation</h2><div class="prose"><p>&ldquo;Everything is related to everything else, but near things are more related than distant things.&rdquo; <strong>Moran's I</strong> turns that into a number: a correlation between each value and the average of its neighbours, running from about &minus;1 (a checkerboard) through 0 (no pattern) to +1 (strong clustering).</p></div>
+<figure class="code ex"><figcaption><span class="tag tag-task">Try it yourself</span>Code Moran's I</figcaption>
+      <div class="ex-prompt">Moran's I = (n / S0) &middot; &Sigma; W&middot;(z&#8407;z&#8407;) / &Sigma; z&#178;, where <code>z</code> is the mean-centred value and <code>S0</code> the sum of all weights. Fill the numerator (sum of <code>W * np.outer(z, z)</code>) and denominator (sum of <code>z**2</code>).</div>
+      <pre><code>import numpy as np
+def morans_I(y, W):
+    z  = y - y.mean()
+    S0 = W.sum()
+    return (len(y)/S0) * np.sum(W * np.outer(z, z)) / np.sum(z**2)
+
+I = morans_I(y, W)
+print("Moran's I (log density) =", round(float(I), 3))</code></pre>
+      <p class="ex-note">In the <a href="/spatstat/#/module/spatial-autocorrelation">interactive version</a> this line is blanked out and you write it yourself, with a hint, a solution, and an automatic check.</p></figure>
+<div class="prose"><p>There's no clean theoretical null for most real maps, so we test by <strong>permutation</strong>: shuffle the values across locations many times, recompute I each time, and see where the real I falls in that reference distribution.</p></div>
+<figure class="code ex"><figcaption><span class="tag tag-task">Try it yourself</span>Test it by permutation</figcaption>
+      <div class="ex-prompt">Build the reference distribution: recompute Moran's I on 999 reshuffles of <code>y</code>. Fill the blank with a shuffled copy of <code>y</code> (use <code>rng.permutation</code>).</div>
+      <pre><code>rng = np.random.default_rng(42)
+ref = np.array([morans_I(rng.permutation(y), W) for _ in range(999)])
+p   = (np.sum(ref &gt;= I) + 1) / (999 + 1)
+print(f"pseudo p-value = {p:.3f}")
+print("expected if random =", round(-1/(len(y)-1), 3))</code></pre>
+      <p class="ex-note">In the <a href="/spatstat/#/module/spatial-autocorrelation">interactive version</a> this line is blanked out and you write it yourself, with a hint, a solution, and an automatic check.</p></figure>
+<div class="prose"><p>The <strong>Moran scatterplot</strong> makes it visual: standardised value on the x-axis, its spatial lag on the y-axis. The slope of the fitted line <em>is</em> Moran's I.</p></div>
+<figure class="code ex"><figcaption><span class="tag tag-task">Try it yourself</span>The Moran scatterplot</figcaption>
+      <div class="ex-prompt">Plot the standardised value against its spatial lag. Fill the blank with the spatial lag of the standardised values <code>zy</code>.</div>
+      <pre><code>import matplotlib.pyplot as plt
+zy   = (y - y.mean())/y.std()
+zlag = W @ zy
+fig, ax = plt.subplots(figsize=(4.8, 4.8))
+ax.axhline(0, color="#aaa", lw=.8); ax.axvline(0, color="#aaa", lw=.8)
+ax.scatter(zy, zlag, s=32, color="#14233D")
+slope = np.polyfit(zy, zlag, 1)[0]
+xs = np.linspace(zy.min(), zy.max(), 2)
+ax.plot(xs, slope*xs, color="#D6552F", lw=2, label=f"slope = Moran's I = {slope:.3f}")
+ax.set(xlabel="value (standardised)", ylabel="spatial lag", title="Moran scatterplot"); ax.legend()</code></pre>
+      <p class="ex-note">In the <a href="/spatstat/#/module/spatial-autocorrelation">interactive version</a> this line is blanked out and you write it yourself, with a hint, a solution, and an automatic check.</p></figure>
+<div class="further"><div class="ey">Go deeper / cite</div><h3>Spatial autocorrelation in applied research</h3><ul><li><a href="https://scholar.google.com/citations?user=EfpbSEYAAAAJ&hl=en" target="_blank" rel="noopener">Eric Vaz — Google Scholar profile</a> — land-use change, regional science and GeoAI applications of these methods</li><li><a href="https://ericvaz.com/" target="_blank" rel="noopener">Selected publications on ericvaz.com</a></li></ul></div></section>
+  <div class="more"><h2>More free modules</h2><a href="/spatstat/interpolation/">Interpolation &amp; Kriging — Predict values at unsampled locations.</a><a href="/spatstat/hot-spot-analysis/">Hot Spot Analysis — Identify statistically significant hot and cold spots.</a><a href="/spatstat/">All modules &amp; the interactive course →</a></div>
+</main>
+<footer>A free learning resource at <a href="/spatstat/">ericvaz.com/spatstat</a>. Lessons run real Python in your browser via Pyodide; data is fetched live from open repositories. &copy; Eric Vaz — reuse freely with attribution. See more on <a href="https://scholar.google.com/citations?user=EfpbSEYAAAAJ&hl=en">Google Scholar</a>.</footer>
+</body>
+</html>
