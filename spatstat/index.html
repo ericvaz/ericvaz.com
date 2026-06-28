@@ -722,21 +722,13 @@ function renderTopbar(){
   $("#topbar").innerHTML = `<div class="topbar-in">
     <a class="brand" href="#/"><span class="mark">${markSVG()}</span>${esc(C.product.name)}</a>
     <nav class="nav" id="nav">
-      <a href="#/courses" data-r="courses">Courses</a>
-      <a href="#/" data-r="modules">Modules</a>
-      <a href="#/practice" data-r="practice">Practice</a>
-      <a href="#/progress" data-r="progress">Progress</a>
+      <a href="#/" data-r="modules">Lessons</a>
       <a href="https://ericvaz.com/" title="Eric Vaz — home">Eric Vaz &#8599;</a>
     </nav>
     <div class="topspace"></div>
-    <label class="search"><span>${IC.search}</span><input id="q" placeholder="Search topics or modules…" autocomplete="off"></label>
-    <span class="pill"><span class="flame">${IC.flame}</span>${streak()} day streak</span>
-    <button class="icon-btn" title="Notifications">${IC.bell}<span class="dot"></span></button>
-    <span class="avatar">${esc((S.name||"You").slice(0,2).toUpperCase())}</span>
     <button class="menu-btn" id="menu">${IC.list}</button>
   </div>`;
-  $("#q").addEventListener("input",e=>{ SEARCH=e.target.value.trim().toLowerCase(); if(currentRoute().view==="modules") renderModules(); });
-  $("#menu").addEventListener("click",()=>$("#nav").classList.toggle("open"));
+  const mb=$("#menu"); if(mb) mb.addEventListener("click",()=>$("#nav").classList.toggle("open"));
 }
 function markSVG(){ return `<svg viewBox="0 0 32 32" fill="none"><rect x="3" y="3" width="26" height="26" rx="8" fill="#e9f6ef"/>
   <path d="M16 8l7 4v8l-7 4-7-4v-8l7-4Z" fill="#1f9d63"/><path d="M16 12l3.5 2v4L16 20l-3.5-2v-4L16 12Z" fill="#fff"/></svg>`; }
@@ -762,93 +754,26 @@ function route(){
   renderTopbar();
   setNavActive(r.view);
   $("#nav").classList.remove("open");
-  if(r.view==="modules") renderDashboard();
-  else if(r.view==="module") renderModule(r.id);
+  if(r.view==="module") renderModule(r.id);
   else if(r.view==="lesson") renderLesson(r.moduleId,r.lessonId);
-  else if(r.view==="progress") renderProgress();
-  else renderStub(r.view);
+  else renderDashboard();
   window.scrollTo(0,0);
 }
 
 /* ---------- dashboard ---------- */
 function renderDashboard(){
-  const o=overall();
   $("#app").innerHTML = `
-    <aside class="sidebar">${sidebarHTML(o)}</aside>
-    <div class="main">
+    <div class="main" style="grid-column:1/-1;max-width:1120px;margin:0 auto">
       ${heroHTML()}
       <div>
-        <div class="lib-head">
-          <div><h2>Module Library</h2><div class="sub">Explore modules and build your spatial statistics expertise.</div></div>
-          <div class="lib-tools">
-            <select class="select" id="pathsel">
-              <option value="all">All Modules</option>
-              ${PATHS.map(p=>`<option value="${p.id}" ${PATH_FILTER===p.id?'selected':''}>${esc(p.name)}</option>`).join("")}
-            </select>
-            <div class="toggle">
-              <button id="tg-grid" class="${VIEW_MODE==='grid'?'active':''}" title="Grid">${IC.grid}</button>
-              <button id="tg-list" class="${VIEW_MODE==='list'?'active':''}" title="List">${IC.list}</button>
-            </div>
-          </div>
-        </div>
-        <div id="modgrid" class="grid ${VIEW_MODE==='list'?'list':''}" style="margin-top:1rem"></div>
+        <div class="lib-head"><div><h2>Interactive lessons</h2><div class="sub">Free, hands-on spatial statistics. Write the code and run it right in your browser.</div></div></div>
+        <div id="modgrid" class="grid" style="margin-top:1rem"></div>
       </div>
       ${featuredHTML()}
       ${coffeeHTML()}
     </div>`;
-  bindSidebar(); 
-  $("#pathsel").addEventListener("change",e=>{PATH_FILTER=e.target.value;renderModules();});
-  $("#tg-grid").addEventListener("click",()=>{VIEW_MODE="grid";renderModules();syncToggle();});
-  $("#tg-list").addEventListener("click",()=>{VIEW_MODE="list";renderModules();syncToggle();});
   bindFeatured();
   renderModules();
-}
-function syncToggle(){ const g=$("#tg-grid"),l=$("#tg-list"); if(g&&l){g.classList.toggle("active",VIEW_MODE==="grid");l.classList.toggle("active",VIEW_MODE==="list");$("#modgrid").classList.toggle("list",VIEW_MODE==="list");} }
-
-function sidebarHTML(o){
-  const ach=ACHIEVEMENTS.map(a=>({...a,got:a.test()}));
-  const recent=ach.filter(a=>a.got).slice(-2).reverse();
-  const shown=recent.length?recent:ach.slice(0,2).map(a=>({...a,got:false}));
-  const wd=weekDone(), wg=S.weeklyGoal||6;
-  return `
-  <div class="card ring-card">
-    ${ringSVG(o.pct)}
-    <div class="stat-col">
-      <div class="stat"><div class="k">XP</div><div class="v">${totalXP().toLocaleString()}</div></div>
-      <div class="stat"><div class="k">Lessons</div><div class="v"><small>${o.done} / ${o.total}</small></div></div>
-    </div>
-  </div>
-  <div class="card pad">
-    <div class="s-label">Learning Path</div>
-    <div class="path-list">
-      ${PATHS.map(p=>{const ct=MODULES.filter(m=>m.path===p.id).length;
-        return `<button class="path ${PATH_FILTER===p.id?'active':''}" data-path="${p.id}">
-          <span class="tile">${IC[p.icon]||IC.grid}</span>${esc(p.name)}<span class="ct">${ct}</span></button>`;}).join("")}
-    </div>
-  </div>
-  <div class="card pad goal">
-    <div class="s-label">Weekly Goal <a href="#/progress">Edit</a></div>
-    <div class="row"><span class="big">${wd} / ${wg} lessons</span>
-      <span class="star">${IC.star}</span></div>
-    <div class="bar"><i style="width:${Math.min(100,Math.round(100*wd/wg))}%"></i></div>
-    <div class="hint">${wd>=wg?"Goal smashed — nice.":wd>0?"You're on track! Keep it up.":"Set the pace — one lesson to start."}</div>
-  </div>
-  <div class="card pad">
-    <div class="s-label">Recent Achievements</div>
-    ${shown.map(a=>`<div class="ach ${a.got?'':'locked'}">
-      <span class="ic" style="background:var(--green-50)">${IC[a.ic]||IC.star}</span>
-      <div><div class="ti">${esc(a.ti)}</div><div class="sub">${esc(a.sub)}</div></div>
-      <span class="xp">+${a.xp} XP</span></div>`).join("")}
-    <div style="margin-top:.6rem"><a href="#/progress" style="color:var(--green-600);font-weight:700;font-size:.84rem">View all achievements →</a></div>
-  </div>`;
-}
-function bindSidebar(){
-  document.querySelectorAll(".path[data-path]").forEach(b=>b.addEventListener("click",()=>{
-    PATH_FILTER = (PATH_FILTER===b.dataset.path)?"all":b.dataset.path;
-    const sel=$("#pathsel"); if(sel) sel.value=PATH_FILTER;
-    document.querySelectorAll(".path[data-path]").forEach(x=>x.classList.toggle("active",x.dataset.path===PATH_FILTER));
-    renderModules();
-  }));
 }
 function heroHTML(){
   return `<section class="hero">
@@ -865,29 +790,21 @@ function heroHTML(){
 }
 function renderModules(){
   const host=$("#modgrid"); if(!host) return;
-  let list=MODULES.filter(m=>PATH_FILTER==="all"||m.path===PATH_FILTER);
-  if(SEARCH){ list=list.filter(m=>(m.title+" "+m.blurb).toLowerCase().includes(SEARCH)); }
-  if(!list.length){ host.innerHTML=`<div class="stub" style="grid-column:1/-1;margin:2rem auto"><div class="em">🛰️</div><h2>No modules match</h2><p>Try a different search or path.</p></div>`; return; }
-  host.innerHTML=list.map(moduleCard).join("");
+  host.innerHTML=activeModules.map(moduleCard).join("");
   host.querySelectorAll("[data-go]").forEach(b=>b.addEventListener("click",()=>{ location.hash="#/module/"+b.dataset.go; }));
 }
 function moduleCard(m){
-  const p=moduleProgress(m); const soon=m.status!=="active";
-  const done=p.total&&p.done===p.total;
-  const foot = soon
-    ? `<span class="badge soon">Coming soon</span><span class="pct" style="margin-left:auto;color:var(--muted)">Planned</span>`
-    : `<span class="lessons">${p.total} lesson${p.total!==1?'s':''}</span>
-       <span class="pbar"><i style="width:${p.pct}%"></i></span>
-       ${done?`<span class="badge done">${IC.check} Done</span>`:`<span class="pct">${p.pct}%</span>`}`;
-  return `<button class="mod ${VIEW_MODE==='list'?'list':''} ${soon?'soon':''}" ${soon?'':'data-go="'+m.id+'"'}>
+  const n=m.lessons.length;
+  return `<button class="mod" data-go="${m.id}">
     <div class="top">
       <span class="thumb">${thumbSVG(m.thumb)}</span>
       <div class="body">
-        <h3><span class="n">${m.n}.</span>${esc(m.title)}</h3>
+        <h3>${esc(m.title)}</h3>
         <div class="desc">${esc(m.blurb)}</div>
       </div>
     </div>
-    <div class="foot">${foot}</div>
+    <div class="foot"><span class="lessons">${n} lesson${n!==1?'s':''}</span>
+      <span class="pct" style="margin-left:auto;display:inline-flex;align-items:center;gap:.3rem;color:var(--green-600)">Start ${IC.arrowR}</span></div>
   </button>`;
 }
 function featuredHTML(){
@@ -918,24 +835,21 @@ function coffeeHTML(){
 /* ---------- module view ---------- */
 function renderModule(id){
   const m=moduleById(id);
-  if(!m||m.status!=="active"){ renderStub("modules"); location.hash="#/"; return; }
-  const p=moduleProgress(m);
+  if(!m||m.status!=="active"){ location.hash="#/"; return; }
   $("#app").innerHTML = `<div class="view" style="grid-column:1/-1">
-    <div class="crumb"><a href="#/">Modules</a> ${IC.chevR} <span>${esc(m.title)}</span></div>
+    <div class="crumb"><a href="#/">Lessons</a> ${IC.chevR} <span>${esc(m.title)}</span></div>
     <div class="mod-hero">
       <span class="thumb">${thumbSVG(m.thumb)}</span>
       <div style="flex:1;min-width:240px">
-        <h1>${m.n}. ${esc(m.title)}</h1>
+        <h1>${esc(m.title)}</h1>
         <p>${esc(m.blurb)}</p>
         <div class="meta" style="display:flex;gap:1rem;color:var(--muted);font-weight:600;font-size:.85rem;margin-top:.7rem">
-          <span>${p.total} lessons</span><span>${p.done} completed</span><span>${p.pct}% done</span></div>
-        <div style="height:6px;background:var(--line);border-radius:999px;max-width:420px;margin-top:.6rem;overflow:hidden">
-          <i style="display:block;height:100%;width:${p.pct}%;background:var(--green);border-radius:999px"></i></div>
+          <span>${m.lessons.length} lessons</span><span>Free &middot; interactive</span></div>
       </div>
     </div>
     <div class="lesson-list">
-      ${m.lessons.map((l,i)=>`<button class="li ${isDone(l.id)?'done':''}" data-go="${l.id}">
-        <span class="num">${isDone(l.id)?IC.check:(i+1)}</span>
+      ${m.lessons.map((l,i)=>`<button class="li" data-go="${l.id}">
+        <span class="num">${i+1}</span>
         <div><div class="ti">${esc(l.title)}</div><div class="mt">${l.minutes||5} min${l.interactive?' · interactive':''}</div></div>
         <span class="go">${IC.chevR}</span></button>`).join("")}
     </div>
@@ -960,14 +874,9 @@ function renderLesson(moduleId,lessonId){
     ${body}
     <div class="lesson-nav">
       <div>${prev?`<a class="btn btn-ghost" href="#/lesson/${m.id}/${prev.id}">← ${esc(prev.title)}</a>`:""}</div>
-      <button class="complete-btn ${isDone(l.id)?'is-done':''}" id="donebtn">${isDone(l.id)?IC.check+' Completed':'Mark complete'}</button>
-      <div>${next?`<a class="btn btn-primary" href="#/lesson/${m.id}/${next.id}">${esc(next.title)} →</a>`:`<a class="btn btn-primary" href="#/module/${m.id}">Back to module →</a>`}</div>
+      <div>${next?`<a class="btn btn-primary" href="#/lesson/${m.id}/${next.id}">${esc(next.title)} →</a>`:`<a class="btn btn-primary" href="#/module/${m.id}">Back to lessons →</a>`}</div>
     </div>
   </div></div>`;
-  $("#donebtn").addEventListener("click",()=>{
-    if(isDone(l.id)){ if(!DEMO){markIncomplete(l.id);} } else { markComplete(l.id); }
-    route(); // re-render to reflect progress & achievements
-  });
   enhanceCells();
   bindExercises();
   ensurePython();           // start booting the runtime for this lesson
@@ -1032,40 +941,6 @@ function citeHTML(b){
   </div>`;
 }
 
-/* ---------- progress / stubs ---------- */
-function renderProgress(){
-  const o=overall();
-  const ach=ACHIEVEMENTS.map(a=>({...a,got:a.test()}));
-  $("#app").innerHTML=`<div class="view" style="grid-column:1/-1">
-    <h1 style="font-size:1.8rem">Your progress</h1>
-    <p style="color:var(--gray);max-width:60ch">${DEMO?"Demo mode is on — these are sample numbers. Set <code>DEMO=false</code> in the file to track real progress in your browser.":"Tracked locally in this browser. Complete lessons to fill it in."}</p>
-    <div class="kpis">
-      <div class="kpi"><div class="v">${o.pct}%</div><div class="k">Overall progress</div></div>
-      <div class="kpi"><div class="v">${o.done}/${o.total}</div><div class="k">Lessons completed</div></div>
-      <div class="kpi"><div class="v">${totalXP().toLocaleString()}</div><div class="k">XP earned</div></div>
-      <div class="kpi"><div class="v">${streak()}</div><div class="k">Day streak</div></div>
-    </div>
-    <h2 style="margin:1.4rem 0 .6rem;font-size:1.2rem">Modules</h2>
-    <div class="lesson-list" style="max-width:680px">
-      ${activeModules.map(m=>{const p=moduleProgress(m);return `<a class="li" href="#/module/${m.id}">
-        <span class="num">${m.n}</span><div style="flex:1"><div class="ti">${esc(m.title)}</div>
-        <div class="mt">${p.done}/${p.total} lessons</div></div>
-        <span style="font-weight:800;color:var(--green-600)">${p.pct}%</span></a>`;}).join("")}
-    </div>
-    <h2 style="margin:1.4rem 0 .6rem;font-size:1.2rem">Achievements</h2>
-    <div class="card pad" style="max-width:680px">
-      ${ach.map(a=>`<div class="ach ${a.got?'':'locked'}"><span class="ic" style="background:var(--green-50)">${IC[a.ic]}</span>
-      <div><div class="ti">${esc(a.ti)}</div><div class="sub">${esc(a.sub)}</div></div><span class="xp">+${a.xp} XP</span></div>`).join("")}
-    </div>
-  </div>`;
-}
-function renderStub(view){
-  const map={courses:["📚","Courses","Guided sequences through the modules are coming. For now, dive into the Module Library."],
-             practice:["🎯","Practice","Spaced-repetition drills and mini-challenges will live here. Coming as the catalog grows."]};
-  const [em,ti,desc]=map[view]||["🛰️","Soon","Coming soon."];
-  $("#app").innerHTML=`<div class="view" style="grid-column:1/-1"><div class="stub"><div class="em">${em}</div>
-    <h2>${ti}</h2><p>${desc}</p><a class="btn btn-primary" href="#/" style="margin-top:1rem">Browse modules ${IC.arrowR}</a></div></div>`;
-}
 
 /* ============================================================
    In-browser Python (Pyodide) — lazy loaded on first lesson
