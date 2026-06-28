@@ -536,7 +536,6 @@ window.SPATSTAT_CURRICULUM = {
    ============================================================ */
 const DEMO = false;                // real per-browser progress (set true to preview a populated demo account)
 const BMC  = "ericvaz";            // <— your Buy Me a Coffee handle
-const XP_PER_LESSON = 50;
 const STORE_KEY = "spatstat.v1";
 
 const C = window.SPATSTAT_CURRICULUM;
@@ -581,26 +580,6 @@ function overall(){
   const t = allLessons.length, d = allLessons.filter(l=>isDone(l.id)).length;
   return { done:d, total:t, pct: t? Math.round(100*d/t):0 };
 }
-const totalXP = () => Object.keys(S.completed).length * XP_PER_LESSON;
-function streak(){
-  const set = new Set(S.activeDates);
-  let n=0; let d=new Date();
-  // allow streak to count if active today or yesterday
-  if(!set.has(d.toISOString().slice(0,10))) d.setDate(d.getDate()-1);
-  while(set.has(d.toISOString().slice(0,10))){ n++; d.setDate(d.getDate()-1); }
-  return n;
-}
-function weekDone(){
-  const now=new Date(); const monday=new Date(now); const day=(now.getDay()+6)%7;
-  monday.setDate(now.getDate()-day); monday.setHours(0,0,0,0);
-  return Object.values(S.completed).filter(ds=> new Date(ds) >= monday).length;
-}
-const ACHIEVEMENTS = [
-  {id:"first",   ti:"First Steps",  sub:"Completed your first lesson", xp:50,  ic:"star",  test:()=>overall().done>=1},
-  {id:"explorer",ti:"Map Explorer", sub:"Completed 5 lessons",        xp:150, ic:"map",   test:()=>overall().done>=5},
-  {id:"streak",  ti:"Hot Streak",   sub:"7 days in a row",            xp:200, ic:"flame", test:()=>streak()>=7},
-  {id:"master",  ti:"Module Master",sub:"Finished a whole module",    xp:250, ic:"trophy",test:()=>activeModules.some(m=>{const p=moduleProgress(m);return p.total&&p.done===p.total;})},
-];
 
 /* ---------- tiny helpers ---------- */
 const $ = (s,r=document)=>r.querySelector(s);
