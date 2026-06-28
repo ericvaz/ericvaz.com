@@ -67,6 +67,10 @@ img{max-width:100%}
 .nav a.active::after{content:"";position:absolute;left:.8rem;right:.8rem;bottom:-.72rem;height:2.5px;
   background:var(--green);border-radius:2px}
 .topspace{flex:1}
+.powered{font-size:.82rem;color:var(--muted);font-weight:600;white-space:nowrap;display:inline-flex;align-items:center;gap:.1rem}
+.powered b{color:var(--green-600);font-weight:800}
+.powered:hover b{color:var(--green-700)}
+@media(max-width:760px){.powered .pre{display:none}.powered{font-size:.76rem}}
 .search{display:flex;align-items:center;gap:.5rem;background:var(--card);border:1px solid var(--line);
   border-radius:999px;padding:.5rem .9rem;min-width:230px;color:var(--muted)}
 .search:focus-within{border-color:var(--green-200);box-shadow:0 0 0 3px var(--green-50)}
@@ -809,6 +813,7 @@ function renderTopbar(){
       <a href="https://ericvaz.com/" title="Eric Vaz — home">Eric Vaz &#8599;</a>
     </nav>
     <div class="topspace"></div>
+    <a class="powered" href="https://geo-data.io/" target="_blank" rel="noopener" title="Free, CORS-enabled open-data API"><span class="pre">Powered by </span><b>geo-data.io</b>&#8201;&#8599;</a>
     <button class="menu-btn" id="menu">${IC.list}</button>
   </div>`;
   const mb=$("#menu"); if(mb) mb.addEventListener("click",()=>$("#nav").classList.toggle("open"));
