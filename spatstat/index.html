@@ -378,6 +378,7 @@ footer a{color:var(--gray);text-decoration:underline}
 <footer>
   A free learning platform by <a href="https://ericvaz.com/">Eric Vaz</a>, part of <a href="https://ericvaz.com/">ericvaz.com</a>.
   Lessons run real Python in your browser via Pyodide (WebAssembly); data is fetched live from open, CORS-enabled repositories.
+  Real-world datasets powered by <a href="https://geo-data.io/">geo-data.io</a>.
   Progress is stored only in your browser. &copy; Eric Vaz — reuse freely with attribution.
 </footer>
 <div id="pystatus"><span class="dot"></span><span class="txt">Python</span></div>
@@ -517,6 +518,121 @@ window.SPATSTAT_CURRICULUM = {
             { kind: "cite", eyebrow: "Go deeper / cite", title: "Hot-spot and cluster analysis in regional science", items: [
               { url: "https://scholar.google.com/citations?user=EfpbSEYAAAAJ&hl=en", text: "Eric Vaz — Google Scholar profile", note: "LISA and local indicators applied to land use, tourism and urban change" },
               { url: "https://ericvaz.com/", text: "Selected publications on ericvaz.com" }
+            ] }
+          ]
+        }
+      ]
+    },
+    {
+      id: "india-live", n: 9, path: "applications", title: "Real Data: India, Live",
+      blurb: "Run spatial statistics on India's 725 districts, pulled live from the free geo-data.io API.",
+      thumb: "autocorr", status: "active",
+      lessons: [
+        {
+          id: "in-india", title: "Spatial autocorrelation across India (live API)", minutes: 12, interactive: true,
+          blocks: [
+            { kind: "prose", html: `<p>Everything so far used teaching datasets. Now point the same methods at real data: the <strong>Census of India</strong> at the district level, pulled live from <a href="https://geo-data.io/" target="_blank" rel="noopener">geo-data.io</a>, a free, CORS-enabled open-geodata API (81 variables across 725 districts). This whole lesson runs on it, powered by geo-data.io.</p><p>Every variable is one URL: <code>https://geo-data.io/v1/india/&lt;key&gt;.json</code>. We'll map and test <em>literacy rate</em>, but you can swap in any of the 81 keys and re-run.</p>` },
+            { kind: "code", tag: "Example", caption: "Pull a variable from the geo-data.io API", code: `from pyodide.http import open_url
+import json
+
+VAR = "literacy_rate"     # try: density, pm25, sex_ratio, pct_internet, idx_affluence ...
+api = json.load(open_url(f"https://geo-data.io/v1/india/{VAR}.json"))
+print(api["label"], "|", api["unit"], "|", api["year"], "|", api["count"], "districts")
+
+vals = {r["dt_code"]: r["value"] for r in api["data"] if r["dt_code"] is not None}
+print("\\nHighest:")
+for r in api["data"][:5]:
+    print(f"  {r['district']:<22} {r['state']:<16} {r['value']}")` },
+            { kind: "code", tag: "Example", caption: "Get the geometry, join the values by dt_code", code: `import numpy as np
+
+gj = json.load(open_url("https://geo-data.io/india_districts.geojson"))
+
+def feature_polys(f):
+    g = f["geometry"]
+    return g["coordinates"] if g["type"] == "MultiPolygon" else [g["coordinates"]]
+
+def centroid(f):
+    best, best_area = None, -1
+    for poly in feature_polys(f):
+        r = np.array(poly[0])
+        a = abs(0.5*np.sum(r[:-1,0]*r[1:,1] - r[1:,0]*r[:-1,1]))   # shoelace
+        if a > best_area:
+            best_area, best = a, (r[:,0].mean(), r[:,1].mean())
+    return best
+
+feats = [f for f in gj["features"] if f["properties"].get("dt_code") in vals]
+y     = np.array([vals[f["properties"]["dt_code"]] for f in feats], float)
+cent  = np.array([centroid(f) for f in feats])
+print(len(feats), "districts joined to geometry")
+print("value range:", round(float(y.min()),1), "to", round(float(y.max()),1))` },
+            { kind: "exercise", caption: "Neighbours + Moran's I on India", prompt: `Build k-nearest weights from the district centroids and test for spatial autocorrelation. Fill two blanks: <b>row-standardise</b> the weights, and feed a <b>reshuffled</b> copy of the values into the permutation test.`, starter: `from scipy.spatial import cKDTree
+
+def knn_W(coords, k=6):
+    n = len(coords); tree = cKDTree(coords)
+    _, idx = tree.query(coords, k=k+1)         # k+1: nearest point is itself
+    W = np.zeros((n, n))
+    for i in range(n):
+        for j in idx[i, 1:]: W[i, j] = 1.0
+    return ____                                # row-standardise: divide each row by its sum
+
+W = knn_W(cent, 6)
+
+def morans_I(y, W):
+    z = y - y.mean(); S0 = W.sum()
+    return (len(y)/S0) * np.sum(W * np.outer(z, z)) / np.sum(z**2)
+
+I = morans_I(y, W)
+rng = np.random.default_rng(0)
+ref = np.array([morans_I(____, W) for _ in range(199)])   # a reshuffled copy of y each time
+p = (np.sum(ref >= I) + 1) / 200
+print(f"Moran's I ({api['label']}) = {I:.3f}   pseudo p = {p:.3f}")`, solution: `from scipy.spatial import cKDTree
+
+def knn_W(coords, k=6):
+    n = len(coords); tree = cKDTree(coords)
+    _, idx = tree.query(coords, k=k+1)         # k+1: nearest point is itself
+    W = np.zeros((n, n))
+    for i in range(n):
+        for j in idx[i, 1:]: W[i, j] = 1.0
+    return W / W.sum(1, keepdims=True)
+
+W = knn_W(cent, 6)
+
+def morans_I(y, W):
+    z = y - y.mean(); S0 = W.sum()
+    return (len(y)/S0) * np.sum(W * np.outer(z, z)) / np.sum(z**2)
+
+I = morans_I(y, W)
+rng = np.random.default_rng(0)
+ref = np.array([morans_I(rng.permutation(y), W) for _ in range(199)])
+p = (np.sum(ref >= I) + 1) / 200
+print(f"Moran's I ({api['label']}) = {I:.3f}   pseudo p = {p:.3f}")`, hint: `Row-standardise with <code>W / W.sum(1, keepdims=True)</code>; reshuffle with <code>rng.permutation(y)</code>.`, check: `I > 0.2 and p < 0.05`, success: `Strong, significant clustering: literacy in India is highly spatially structured, not random across districts.` },
+            { kind: "code", tag: "Example", caption: "Map India, and the Moran scatterplot", code: `import matplotlib.pyplot as plt, matplotlib as mpl
+from matplotlib.path import Path
+from matplotlib.patches import PathPatch
+from matplotlib.collections import PatchCollection
+
+norm = mpl.colors.Normalize(y.min(), y.max()); cm = plt.get_cmap("viridis")
+fig, ax = plt.subplots(1, 2, figsize=(10, 4.6))
+patches, colors = [], []
+for f, v in zip(feats, y):
+    for poly in feature_polys(f):
+        patches.append(PathPatch(Path(np.array(poly[0])))); colors.append(cm(norm(v)))
+ax[0].add_collection(PatchCollection(patches, facecolor=colors, edgecolor="white", linewidth=.15))
+ax[0].autoscale(); ax[0].set_aspect("equal"); ax[0].axis("off")
+ax[0].set_title(api["label"] + " by district")
+fig.colorbar(mpl.cm.ScalarMappable(norm=norm, cmap=cm), ax=ax[0], shrink=.6)
+
+zy = (y - y.mean())/y.std(); zlag = W @ zy
+ax[1].axhline(0, color="#aaa", lw=.8); ax[1].axvline(0, color="#aaa", lw=.8)
+ax[1].scatter(zy, zlag, s=10, color="#14233D")
+slope = np.polyfit(zy, zlag, 1)[0]; xs = np.linspace(zy.min(), zy.max(), 2)
+ax[1].plot(xs, slope*xs, color="#D6552F", lw=2, label=f"Moran's I = {slope:.3f}")
+ax[1].set(xlabel="value (standardised)", ylabel="spatial lag", title="Moran scatterplot"); ax[1].legend()
+plt.tight_layout()
+print("Each district coloured by the variable; the scatterplot slope is Moran's I.")` },
+            { kind: "cite", eyebrow: "Powered by geo-data.io", title: "This lesson runs on the free geo-data.io API", items: [
+              { url: "https://geo-data.io/v1/india/meta.json", text: "geo-data.io — India API catalogue", note: "81 variables, 725 districts; swap VAR for any key above and re-run" },
+              { url: "https://geo-data.io/", text: "geo-data.io — free, CORS-enabled open geodata API" }
             ] }
           ]
         }
