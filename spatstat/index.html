@@ -553,19 +553,7 @@ const HAS_LS = safeLS();
 
 function todayISO(){ return new Date().toISOString().slice(0,10); }
 
-function demoState(){
-  // a populated account that mirrors the mockup
-  const done = {};
-  const pick = ["sa-warmup","sa-data","sa-esda","hs-lisa","in-trend"]; // a believable spread
-  let d = new Date(); 
-  pick.forEach((id,i)=>{ const dd=new Date(d); dd.setDate(d.getDate()-(pick.length-i)); done[id]=dd.toISOString().slice(0,10); });
-  // a 12-day streak ending today
-  const dates=[]; for(let i=0;i<12;i++){ const dd=new Date(); dd.setDate(dd.getDate()-i); dates.push(dd.toISOString().slice(0,10)); }
-  return { completed: done, activeDates: dates, weeklyGoal: 6, name: "AR" };
-}
-
 function loadState(){
-  if(DEMO) return demoState();
   if(HAS_LS){
     try{ const s=JSON.parse(localStorage.getItem(STORE_KEY)); if(s) return s; }catch(e){}
   }
