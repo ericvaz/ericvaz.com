@@ -177,6 +177,40 @@
   .nav-links a:hover { color: var(--gold-deep, #8a6f1f); opacity: 1; }
   nav.scrolled .nav-links a { opacity: 1; font-weight: 400; }
 
+  /* dropdown nav (file-menu style) */
+  .has-menu { position: relative; }
+  .nav-top {
+    background: none; border: 0; cursor: pointer; padding: 4px 0;
+    font-family: inherit; color: var(--navy-deep); opacity: 0.72;
+    font-size: 11.5px; font-weight: 500; letter-spacing: 0.15em; text-transform: uppercase;
+    display: inline-flex; align-items: center; gap: 6px;
+    transition: color 0.25s ease, opacity 0.25s ease;
+  }
+  .has-menu:hover .nav-top, .nav-top:hover, .has-menu.open .nav-top { color: var(--gold-deep, #8a6f1f); opacity: 1; }
+  nav.scrolled .nav-top { color: var(--text-muted); opacity: 1; }
+  nav.scrolled .has-menu:hover .nav-top, nav.scrolled .has-menu.open .nav-top { color: var(--gold); }
+  .nav-top .caret { font-size: 7px; opacity: 0.65; transition: transform 0.2s ease; }
+  .has-menu:hover .nav-top .caret, .has-menu.open .nav-top .caret { transform: rotate(180deg); }
+  .nav-menu {
+    position: absolute; top: 100%; left: 0; margin: 0; padding: 7px;
+    min-width: 220px; list-style: none;
+    background: var(--ivory, #f5f1e8);
+    border: 1px solid rgba(10, 22, 40, 0.12); border-radius: 4px;
+    box-shadow: 0 20px 44px -22px rgba(10, 22, 40, 0.5);
+    opacity: 0; visibility: hidden; transform: translateY(8px);
+    transition: opacity 0.18s ease, transform 0.18s ease; z-index: 200;
+  }
+  .nav-menu::before { content: ''; position: absolute; top: -12px; left: 0; right: 0; height: 12px; }
+  .has-menu:last-child .nav-menu { left: auto; right: 0; }
+  .has-menu:hover .nav-menu, .has-menu.open .nav-menu { opacity: 1; visibility: visible; transform: translateY(0); }
+  .nav-menu a {
+    display: block; padding: 9px 14px; border-radius: 3px;
+    font-size: 10.5px; letter-spacing: 0.13em; text-transform: uppercase;
+    color: var(--navy-deep); opacity: 0.82; white-space: nowrap;
+    transition: background 0.18s ease, color 0.18s ease, opacity 0.18s ease;
+  }
+  .nav-menu a:hover { background: rgba(10, 22, 40, 0.05); color: var(--gold-deep, #8a6f1f); opacity: 1; }
+
   .hero {
     min-height: 100vh;
     display: flex;
@@ -2170,7 +2204,11 @@
     .theme { padding: 36px 28px; }
     .cred-col, .testimonial { padding: 36px 28px; }
     .hero-meta { gap: 28px; }
-    .nav-links li:not(:last-child):not(:first-child) { display: none; }
+    .nav-links { gap: 10px; }
+    .nav-top { font-size: 9.5px; letter-spacing: 0.06em; gap: 4px; }
+    .nav-top .caret { font-size: 6px; }
+    .nav-menu { min-width: 170px; max-width: calc(100vw - 32px); padding: 5px; }
+    .nav-menu a { font-size: 10px; padding: 9px 12px; letter-spacing: 0.1em; }
     .pubs-filters { width: 100%; }
     .bar-year { display: none; }
     .books-grid { grid-template-columns: 1fr; gap: 40px; max-width: 320px; margin: 0 auto; }
@@ -2187,15 +2225,37 @@
 <nav id="nav">
   <a href="#top" class="nav-logo">ERIC<span class="dot">·</span>VAZ</a>
   <ul class="nav-links">
-    <li><a href="#about">About</a></li>
-    <li><a href="#research">Research</a></li>
-    <li><a href="#practice">Practice</a></li>
-    <li><a href="#ventures">Ventures</a></li>
-    <li><a href="#engagement">Engagement</a></li>
-    <li><a href="#recognition">Recognition</a></li>
-    <li><a href="#publications">Publications</a></li>
-    <li><a href="#speaking">Speaking</a></li>
-    <li><a href="#contact">Contact</a></li>
+    <li class="has-menu">
+      <button class="nav-top" aria-haspopup="true" aria-expanded="false">About <span class="caret">&#9662;</span></button>
+      <ul class="nav-menu">
+        <li><a href="#about">Overview</a></li>
+        <li><a href="#recognition">Recognition &amp; Awards</a></li>
+      </ul>
+    </li>
+    <li class="has-menu">
+      <button class="nav-top" aria-haspopup="true" aria-expanded="false">Research <span class="caret">&#9662;</span></button>
+      <ul class="nav-menu">
+        <li><a href="#research">Research Themes</a></li>
+        <li><a href="#publications">Publications</a></li>
+        <li><a href="#speaking">Speaking &amp; Talks</a></li>
+      </ul>
+    </li>
+    <li class="has-menu">
+      <button class="nav-top" aria-haspopup="true" aria-expanded="false">Practice <span class="caret">&#9662;</span></button>
+      <ul class="nav-menu">
+        <li><a href="#practice">Applied Practice</a></li>
+        <li><a href="#ventures">Ventures</a></li>
+        <li><a href="#engagement">Advisory &amp; Engagement</a></li>
+      </ul>
+    </li>
+    <li class="has-menu">
+      <button class="nav-top" aria-haspopup="true" aria-expanded="false">Connect <span class="caret">&#9662;</span></button>
+      <ul class="nav-menu">
+        <li><a href="#contact">Contact</a></li>
+        <li><a href="https://www.torontomu.ca/geography/people/faculty/vaz-eric/" target="_blank" rel="noopener">Academic CV &#8599;</a></li>
+        <li><a href="https://scholar.google.com/citations?user=EfpbSEYAAAAJ&amp;hl=en" target="_blank" rel="noopener">Google Scholar &#8599;</a></li>
+      </ul>
+    </li>
   </ul>
 </nav>
 
@@ -3306,6 +3366,23 @@ document.addEventListener('DOMContentLoaded', () => {
   }, { threshold: 0.08 });
 
   document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+  // Dropdown nav (file-menu style): click/tap to toggle, outside-click + Esc to close
+  const closeMenus = () => document.querySelectorAll('#nav .has-menu.open').forEach(x => {
+    x.classList.remove('open');
+    const t = x.querySelector('.nav-top'); if (t) t.setAttribute('aria-expanded', 'false');
+  });
+  document.querySelectorAll('#nav .has-menu > .nav-top').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.preventDefault(); e.stopPropagation();
+      const li = btn.parentElement, isOpen = li.classList.contains('open');
+      closeMenus();
+      if (!isOpen) { li.classList.add('open'); btn.setAttribute('aria-expanded', 'true'); }
+    });
+  });
+  document.querySelectorAll('#nav .nav-menu a').forEach(a => a.addEventListener('click', closeMenus));
+  document.addEventListener('click', (e) => { if (!e.target.closest('#nav .has-menu')) closeMenus(); });
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeMenus(); });
 });
 </script>
 
