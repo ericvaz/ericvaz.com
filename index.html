@@ -975,6 +975,12 @@
     transition: background 0.3s ease;
   }
   .venture-item:hover { background: var(--navy); }
+  a.venture-item { text-decoration: none; color: inherit; cursor: pointer; }
+  .venture-logo { width: 46px; height: 46px; border-radius: 11px; flex: none; display: flex; align-items: center; justify-content: center; background: rgba(245, 241, 232, 0.05); border: 1px solid var(--line-soft); overflow: hidden; margin-bottom: 4px; }
+  .venture-logo img { width: 100%; height: 100%; object-fit: contain; padding: 8px; }
+  .venture-logo.mono { font-family: 'Cormorant Garamond', serif; font-size: 20px; font-weight: 500; color: var(--gold); }
+  a.venture-item:hover .venture-item-name { color: var(--gold); }
+  a.venture-item:hover .venture-item-link { border-bottom-color: var(--gold); }
   .venture-item-head {
     display: flex;
     align-items: baseline;
@@ -1007,7 +1013,7 @@
     font-weight: 300;
   }
 
-  /* ===== Engagement / UK & Europe section ===== */
+  /* ===== Engagement / Worldwide section ===== */
   .engagement-layout {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -2696,15 +2702,56 @@
     </p>
 
     <div class="ventures-group">
+      <div class="ventures-group-label">Geospatial Software &amp; Data</div>
+      <div class="ventures-list">
+        <a class="venture-item" href="https://www.visitbee.io" target="_blank" rel="noopener">
+          <span class="venture-logo"><img src="/logos/visitbee.svg" alt="VisitBee logo"></span>
+          <div class="venture-item-head">
+            <span class="venture-item-name">VisitBee</span>
+            <span class="venture-item-link">visitbee.io &#8599;</span>
+          </div>
+          <p>A day-trip planner that lives on a hotel's own website. Guests build a perfect day in seconds, and the property sees what they want, in aggregate, on a dashboard.</p>
+        </a>
+        <a class="venture-item" href="https://geo-data.io" target="_blank" rel="noopener">
+          <span class="venture-logo"><img src="/logos/geo-data.svg" alt="geo-data.io logo"></span>
+          <div class="venture-item-head">
+            <span class="venture-item-name">geo-data.io</span>
+            <span class="venture-item-link">geo-data.io &#8599;</span>
+          </div>
+          <p>A free, CORS-enabled open-geodata API. Harmonized census, economic, and environmental data, one clean endpoint per variable, starting with India.</p>
+        </a>
+        <a class="venture-item" href="https://www.terraed.ca" target="_blank" rel="noopener">
+          <span class="venture-logo mono">TE</span>
+          <div class="venture-item-head">
+            <span class="venture-item-name">TerraEd</span>
+            <span class="venture-item-link">terraed.ca &#8599;</span>
+          </div>
+          <p>Student neighbourhood intelligence: know the neighbourhood before you sign the lease, for safer, smarter housing decisions.</p>
+        </a>
+        <a class="venture-item" href="https://www.terrasignal.ca" target="_blank" rel="noopener">
+          <span class="venture-logo mono">TS</span>
+          <div class="venture-item-head">
+            <span class="venture-item-name">TerraSignal</span>
+            <span class="venture-item-link">terrasignal.ca &#8599;</span>
+          </div>
+          <p>Data-grounded neighbourhood intelligence reports for any address, with real, cited sources and an analyst's read.</p>
+        </a>
+      </div>
+    </div>
+
+    <div class="ventures-group">
       <div class="ventures-group-label">Health, Neurodiversity &amp; Wellbeing</div>
       <div class="ventures-list">
-        <div class="venture-item">
+        <a class="venture-item" href="https://apps.apple.com/us/app/32parts/id6756905451" target="_blank" rel="noopener">
+          <span class="venture-logo"><img src="/logos/32parts.png" alt="32Parts logo"></span>
           <div class="venture-item-head">
             <span class="venture-item-name">32Parts</span>
+            <span class="venture-item-link">App Store &#8599;</span>
           </div>
           <p>An early-stage personal project exploring data-informed approaches to health and wellbeing.</p>
-        </div>
+        </a>
         <div class="venture-item">
+          <span class="venture-logo mono">NP</span>
           <div class="venture-item-head">
             <span class="venture-item-name">NeuroPilot</span>
           </div>
@@ -2716,12 +2763,14 @@
     <div class="ventures-group">
       <div class="ventures-group-label">Creative Technology</div>
       <div class="ventures-list">
-        <div class="venture-item">
+        <a class="venture-item" href="https://testflight.apple.com/join/drXHZxnx" target="_blank" rel="noopener">
+          <span class="venture-logo"><img src="/logos/duat.png" alt="DUAT logo"></span>
           <div class="venture-item-head">
             <span class="venture-item-name">DUAT</span>
+            <span class="venture-item-link">TestFlight &#8599;</span>
           </div>
-          <p>A narrative card game built around authentic Egyptology, pairing play with a genuine educational layer.</p>
-        </div>
+          <p>A narrative card game built around authentic Egyptology, pairing play with a genuine educational layer. Now in public beta on TestFlight.</p>
+        </a>
       </div>
     </div>
   </div>
@@ -2731,8 +2780,8 @@
   <div class="section-inner">
     <div class="section-head">
       <span class="section-num">06 /</span>
-      <span class="section-eyebrow">UK &amp; Europe</span>
-      <h2>Open to <em>collaboration across the UK and Europe</em>.</h2>
+      <span class="section-eyebrow">Worldwide</span>
+      <h2>Open to <em>collaboration, worldwide</em>.</h2>
     </div>
 
     <div class="engagement-layout">
@@ -2740,7 +2789,7 @@
         <div class="engagement-eyebrow">Statement of Interest</div>
         <h3>Where the <em>research can travel</em>.</h3>
         <p>
-          I am open to UK and European academic and research collaborations in spatial analysis, regional science, GeoAI, and applied machine learning. My research record and editorial standing connect directly to the questions European institutions and research partners are asking of place.
+          I am open to academic, research, and advisory collaborations worldwide in spatial analysis, regional science, GeoAI, and applied machine learning. My research record and editorial standing connect directly to the questions institutions and research partners are asking of place, wherever they are.
         </p>
       </div>
       <div class="engagement-modes">
