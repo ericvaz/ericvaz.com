@@ -119,7 +119,7 @@ function buildModule(mod) {
   const ld = {
     "@context": "https://schema.org",
     "@graph": [
-      { "@type": "Person", "@id": "https://ericvaz.com/#eric", "name": "Eric Vaz", "url": "https://ericvaz.com/", "jobTitle": "Full Professor of Geography and Environmental Studies", "affiliation": { "@type": "CollegeOrUniversity", "name": "Toronto Metropolitan University" }, "sameAs": [SCHOLAR, "https://orcid.org/0000-0003-1738-2677", "https://www.linkedin.com/in/ericnvaz", "https://open.spotify.com/show/0ECGFXqx3F9GSlr7YksOAo", "https://podcasts.apple.com/ca/podcast/geography-of-opportunity/id1851837987", "https://ericvazshow.substack.com/"] },
+      { "@type": "Person", "@id": "https://ericvaz.com/#eric", "name": "Eric Vaz", "url": "https://ericvaz.com/", "jobTitle": "Full Professor of Geography and Environmental Studies", "affiliation": { "@type": "CollegeOrUniversity", "name": "Toronto Metropolitan University" }, "sameAs": [SCHOLAR, "https://orcid.org/0000-0003-1738-2677", "https://www.wikidata.org/wiki/Q140450430", "https://www.linkedin.com/in/ericnvaz", "https://open.spotify.com/show/0ECGFXqx3F9GSlr7YksOAo", "https://podcasts.apple.com/ca/podcast/geography-of-opportunity/id1851837987", "https://ericvazshow.substack.com/"] },
       { "@type": "LearningResource", "@id": url + "#resource", "name": seo.title, "description": seo.desc, "url": url, "inLanguage": "en", "isAccessibleForFree": true, "learningResourceType": "tutorial", "teaches": teaches, "isPartOf": { "@id": "https://ericvaz.com/spatstat/#course" }, "author": { "@id": "https://ericvaz.com/#eric" } },
       { "@type": "BreadcrumbList", "itemListElement": [
         { "@type": "ListItem", "position": 1, "name": "Spatial Statistics", "item": "https://ericvaz.com/spatstat/" },
